@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>KW-WPIS</title>
+	<style>
+		body {
+			font-family: 'Times New Roman', Times, serif;
+			font-size: 8pt;
+			width: 21cm;
+			border: solid 1px;
+		
+		}
+		h1{
+			font-size: 12pt;
+			font-weight: bold;
+		}
+		h2{
+			font-size: 9pt;
+			padding: 0;
+			margin: 0;
+			line-height: 1.5rem;
+		}
+		.nr-strony{
+			font-size: 8pt;
+			text-align: right;
+			margin-right: 0.5cm;
+		}
+		.container{
+			width: 17.87cm ;
+			margin: auto;
+			
+		}
+		.dark{
+			background-color: rgb(217, 217, 217);
+		}
+		.light{
+			background-color: rgb(242, 242, 242) ;
+		}
+		.white{
+			background-color: white;
+		}
+		.main{
+			width: 100%;
+			border: 2px solid black;
+			margin: 3px auto
+		}
+		table {
+			border-collapse: collapse;
+			line-height: 1rem;
+		}
+		tr,td {
+			border: 1px solid black;
+			padding: 4px;
+		}
+		.outside td{
+			padding: 4px 0 0 4px;
+		}
+		.inside{
+			width: 95%;
+			margin-left: auto;
+			line-height: 0.9rem;
+			font-style: italic;
+		}
+		table .inside td,tr{
+			border-bottom: 0;
+			border-right: 0;
+		}
+		table .outside{
+			padding-left: 0;
+			padding-bottom: 0;
+		}
+
+		.info {
+			font-style: italic;
+			padding-left: 1.5rem;
+		}
+		ul.info2 {
+			list-style: square;
+			padding-left: 1em;
+			line-height: 0.7rem;	
+		}
+		ul.info2 li {
+			margin:0.5rem 0rem ;
+		}
+		
+		
+		ul {
+			margin: 0;
+		}
+		
+		#box1 {
+			height: 3cm;
+		}
+		.topleft{
+			vertical-align: top;
+			text-align: left;
+		}
+		.center {
+			text-align: center;
+		}
+		#wpis {
+			height: 30%;
+		}
+		#rejestr{
+			height: 70%;
+		}
+		#nrdz{
+			width: 55%;
+		}
+		#oplata{
+			width: 45%;
+		}
+		#box2 {
+			vertical-align: top;
+			height: 2rem;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<table class="dark main" id="box1">
+			<tr>
+				<td class ="center" id="wpis"><b>KW-WPIS</b></td>
+				<td rowspan="2"class="center"><h1>Wniosek o wpis w księdze wieczystej</h1></td>
+				<td rowspan="2" class="light topleft"><i>Adnotacja o wpłynięciu wniosku:</i></td> <!-- Poprawione, teraz jest częścią pierwszego wiersza -->
+			</tr>
+			<tr>
+				<td class="center white" id="rejestr"><b>Rejestr Ksiąg Wieczystych</b></td>
+			</tr>
+		</table>
+		<table class="light main">
+			<tr>
+				<td id="nrdz"><i>Numer Dz.Kw:</i></td>
+				<td id="oplata"><i>Uiszczono opłatę w kwocie (w zł):</i></td>
+			</tr>
+		</table>
+		<table class="dark main">
+			<tr>
+				<td>
+					<h2>POUCZENIE</h2>
+					<ul class="info">
+						<li>Formularz należy wypełnić w języku polskim, czytelnie, drukowanymi literami, bez skreśleń i poprawek, na maszynie, na komputerze lub ręcznie, zgodnie z opisem pól.</li>
+						<li>Wnioskodawca wypełnia tylko pola jasne wniosku, z tym że pola niewypełnione należy przekreślić.</li>
+						<li>Wniosek można złożyć w biurze podawczym wydziału ksiąg wieczystych lub nadać w placówce pocztowej operatora pocztowego na adres tego wydziału.</li>
+					</ul>
+				</td>
+			</tr>
+
+		</table>
+		<table class="main dark outside">
+			<tr><td>
+				<h2>OZNACZENIE SĄDU I WYDZIAŁU, DO KTÓREGO SKŁADANY JEST WNIOSEK:</h2>
+				<table class="inside white">
+					<tr>
+						<td>1. Sąd Rejonowy</td>
+					</tr>
+					<tr>
+						<td>2. Wydział Ksiąg Wieczystych</td>
+					</tr>
+				</table>
+			</td></tr>
+		</table>
+		<table class="main dark outside">
+			<tr><td>
+				<h2>NUMER KSIĘGI WIECZYSTEJ, KTÓREJ DOTYCZY WNIOSEK:</h2>
+				<ul class="info">
+					<li>Jeżeli przedmiotem żądania jest odłączenie/wyodrębnienie z księgi wieczystej części nieruchomości i przyłączenie tej części do innej istniejącej księgi wieczystej, w polu nr 3 należy podać numer księgi wieczystej, z której część nieruchomości zostanie odłączona/wyodrębniona.</ul>
+					<table class="inside white">
+						<tr><td id="box2">3. Numer księgi wieczystej:</td></tr>
+					</table>
+				</li>
+			</td></tr>
+		</table>
+		<table class="main dark">
+			<tr>
+				<td>
+					<h2 class="center">NA PODSTAWIE ZAŁĄCZONYCH DOKUMENTÓW WNOSZĘ O:</h2>
+					<div class="inside">
+						<strong>Do wniosku należy dołączyć formularz „KW-ZAD Żądanie wpisu w księdze wieczystej”, jeżeli wnioskodawca wnosi o wpis, zmianę lub wykreślenie więcej niż dwóch:</strong>
+						<ul class="info2">
+							<li>współwłaścicieli, współużytkowników wieczystych lub współuprawnionych;</li>
+							<li>praw (innych niż własność, użytkowanie wieczyste, spółdzielcze własnościowe prawo do lokalu), roszczeń, ograniczeń w rozporządzaniu nieruchomością, hipotek.</li>
+						</ul>
+
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table class="main dark">
+			<tr>
+				<td>
+					<h2>TREŚĆ ŻĄDANIA:</h2>
+					
+				</td>
+			</tr>
+		</table>
+	</div>
+		
+
+</body>
+</html>
