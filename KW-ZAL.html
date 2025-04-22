@@ -4,201 +4,667 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>KW-WPIS</title>
+	<link rel="stylesheet" href="static/styles.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/regular.min.css" integrity="sha512-8hM9a+2hrLBhOuB3uiy+QIXBsu6Qk+snsP1CboFQW6pdt/yYz0IcDp/+CGv5m39r9doGUc/zw6aBpyLF6XFgzg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<style>
-		body {
-			font-family: 'Times New Roman', Times, serif;
-			font-size: 8pt;
-			width: 21cm;
-			border: solid 1px;
 		
-		}
-		h1{
-			font-size: 12pt;
-			font-weight: bold;
-		}
-		h2{
-			font-size: 9pt;
-			padding: 0;
-			margin: 0;
-			line-height: 1.5rem;
-		}
-		.nr-strony{
-			font-size: 8pt;
-			text-align: right;
-			margin-right: 0.5cm;
-		}
-		.container{
-			width: 17.87cm ;
-			margin: auto;
-			
-		}
-		.dark{
-			background-color: rgb(217, 217, 217);
-		}
-		.light{
-			background-color: rgb(242, 242, 242) ;
-		}
-		.white{
-			background-color: white;
-		}
-		.main{
-			width: 100%;
-			border: 2px solid black;
-			margin: 3px auto
-		}
-		table {
-			border-collapse: collapse;
-			line-height: 1rem;
-		}
-		tr,td {
-			border: 1px solid black;
-			padding: 4px;
-		}
-		.outside td{
-			padding: 4px 0 0 4px;
-		}
-		.inside{
-			width: 95%;
-			margin-left: auto;
-			line-height: 0.9rem;
-			font-style: italic;
-		}
-		table .inside td,tr{
-			border-bottom: 0;
-			border-right: 0;
-		}
-		table .outside{
-			padding-left: 0;
-			padding-bottom: 0;
-		}
-
-		.info {
-			font-style: italic;
-			padding-left: 1.5rem;
-		}
-		ul.info2 {
-			list-style: square;
-			padding-left: 1em;
-			line-height: 0.7rem;	
-		}
-		ul.info2 li {
-			margin:0.5rem 0rem ;
-		}
-		
-		
-		ul {
-			margin: 0;
-		}
-		
-		#box1 {
-			height: 3cm;
-		}
-		.topleft{
-			vertical-align: top;
-			text-align: left;
-		}
-		.center {
-			text-align: center;
-		}
-		#wpis {
-			height: 30%;
-		}
-		#rejestr{
-			height: 70%;
-		}
-		#nrdz{
-			width: 55%;
-		}
-		#oplata{
-			width: 45%;
-		}
-		#box2 {
-			vertical-align: top;
-			height: 2rem;
-		}
 
 	</style>
 </head>
 <body>
-	<div class="container">
-		<table class="dark main" id="box1">
-			<tr>
-				<td class ="center" id="wpis"><b>KW-WPIS</b></td>
-				<td rowspan="2"class="center"><h1>Wniosek o wpis w księdze wieczystej</h1></td>
-				<td rowspan="2" class="light topleft"><i>Adnotacja o wpłynięciu wniosku:</i></td> <!-- Poprawione, teraz jest częścią pierwszego wiersza -->
-			</tr>
-			<tr>
-				<td class="center white" id="rejestr"><b>Rejestr Ksiąg Wieczystych</b></td>
-			</tr>
-		</table>
-		<table class="light main">
-			<tr>
-				<td id="nrdz"><i>Numer Dz.Kw:</i></td>
-				<td id="oplata"><i>Uiszczono opłatę w kwocie (w zł):</i></td>
-			</tr>
-		</table>
-		<table class="dark main">
-			<tr>
-				<td>
-					<h2>POUCZENIE</h2>
+	<div class="A4">
+		
+		<div class="container">
+			<div class="nr-strony">strona 1</div>
+			<table class="dark main" id="box1">
+				<tr>
+					<td class ="center" id="wpis"><b>KW-WPIS</b></td>
+					<td rowspan="2"class="center"><h1>Wniosek o wpis w księdze wieczystej</h1></td>
+					<td rowspan="2" class="light topleft"><i>Adnotacja o wpłynięciu wniosku:</i></td> 
+				</tr>
+				<tr>
+					<td class="center white" id="rejestr"><b>Rejestr Ksiąg Wieczystych</b></td>
+				</tr>
+			</table>
+			<table class="light main">
+				<tr>
+					<td id="nrdz"><i>Numer Dz.Kw:</i></td>
+					<td id="oplata"><i>Uiszczono opłatę w kwocie (w zł):</i></td>
+				</tr>
+			</table>
+			<table class="dark main">
+				<tr>
+					<td>
+						<h2>POUCZENIE</h2>
+						<ul class="info">
+							<li>Formularz należy wypełnić w języku polskim, czytelnie, drukowanymi literami, bez skreśleń i poprawek, na maszynie, na komputerze lub ręcznie, zgodnie z opisem pól.</li>
+							<li>Wnioskodawca wypełnia tylko pola jasne wniosku, z tym że pola niewypełnione należy przekreślić.</li>
+							<li>Wniosek można złożyć w biurze podawczym wydziału ksiąg wieczystych lub nadać w placówce pocztowej operatora pocztowego na adres tego wydziału.</li>
+						</ul>
+					</td>
+				</tr>
+				
+			</table>
+			<table class="main dark outside">
+				<tr><td>
+					<h2>OZNACZENIE SĄDU I WYDZIAŁU, DO KTÓREGO SKŁADANY JEST WNIOSEK:</h2>
+					<table class="inside white">
+						<tr>
+							<td>1. Sąd Rejonowy</td>
+						</tr>
+						<tr>
+							<td>2. Wydział Ksiąg Wieczystych</td>
+						</tr>
+					</table>
+				</td></tr>
+			</table>
+			<table class="main dark outside">
+				<tr><td>
+					<h2>NUMER KSIĘGI WIECZYSTEJ, KTÓREJ DOTYCZY WNIOSEK:</h2>
 					<ul class="info">
-						<li>Formularz należy wypełnić w języku polskim, czytelnie, drukowanymi literami, bez skreśleń i poprawek, na maszynie, na komputerze lub ręcznie, zgodnie z opisem pól.</li>
-						<li>Wnioskodawca wypełnia tylko pola jasne wniosku, z tym że pola niewypełnione należy przekreślić.</li>
-						<li>Wniosek można złożyć w biurze podawczym wydziału ksiąg wieczystych lub nadać w placówce pocztowej operatora pocztowego na adres tego wydziału.</li>
-					</ul>
-				</td>
-			</tr>
-
-		</table>
-		<table class="main dark outside">
-			<tr><td>
-				<h2>OZNACZENIE SĄDU I WYDZIAŁU, DO KTÓREGO SKŁADANY JEST WNIOSEK:</h2>
-				<table class="inside white">
+						<li>Jeżeli przedmiotem żądania jest odłączenie/wyodrębnienie z księgi wieczystej części nieruchomości i przyłączenie tej części do innej istniejącej księgi wieczystej, w polu nr 3 należy podać numer księgi wieczystej, z której część nieruchomości zostanie odłączona/wyodrębniona.</ul>
+							<table class="inside white">
+								<tr><td id="box2">3. Numer księgi wieczystej:</td></tr>
+							</table>
+						</li>
+					</td></tr>
+				</table>
+				<table class="main dark outside">
 					<tr>
-						<td>1. Sąd Rejonowy</td>
+						<td>
+							<h2 class="center">NA PODSTAWIE ZAŁĄCZONYCH DOKUMENTÓW WNOSZĘ O:</h2>
+							<div class="inside">
+								<strong>Do wniosku należy dołączyć formularz „KW-ZAD Żądanie wpisu w księdze wieczystej”, jeżeli wnioskodawca wnosi o wpis, zmianę lub wykreślenie więcej niż dwóch:</strong>
+								<ul class="info2">
+									<li>współwłaścicieli, współużytkowników wieczystych lub współuprawnionych;</li>
+									<li>praw (innych niż własność, użytkowanie wieczyste, spółdzielcze własnościowe prawo do lokalu), roszczeń, ograniczeń w rozporządzaniu nieruchomością, hipotek.</li>
+								</ul>
+								
+							</div>
+						</td>
 					</tr>
+				
 					<tr>
-						<td>2. Wydział Ksiąg Wieczystych</td>
+						<td>
+							<h2>TREŚĆ ŻĄDANIA:</h2>
+							<ul class="info">
+								<li>Należy wyraźnie zaznaczyć kwadraty odpowiadające treści żądania.</li>
+								<li>Przy każdym żądaniu należy jednoznacznie określić, czy wnioskodawca wnosi o nowy wpis w księdze wieczystej, czy o zmianę lub wykreślenie wpisu ujawnionego w księdze wieczystej.</li>
+							</ul>
+							<table class="inside">
+								<tr>
+									<td class="white">
+										<h3><input type="checkbox"> Sprostowanie oznaczenia nieruchomości/ujawnienie budynku lub urządzenia</strong></h3>
+									</td>
+								</tr>
+								<tr>
+									<td><ul class="info">
+										<li>Sprostowanie oznaczenia nieruchomości jest ujawniane w księdze wieczystej wyłącznie na podstawie załączonych do wniosku dokumentów.</li>
+										<li>Żądanie ujawnienia budynku lub urządzenia wymaga wypełnienia pola nr 4.</li>
+										<li>W przypadku jednoczesnego żądania „Ujawnienia budynku lub urządzenia” oraz „Odłączenia/wyodrębnienia części nieruchomości 
+											i przyłączenia tej części do innej istniejącej księgi wieczystej” dla pierwszego z tych żądań należy wypełnić pole nr 1 załącznika KW-ZAD. </li>
+									</ul></td>
+								</tr>
+								<tr>
+									<td class="white">
+										<h3><input type="checkbox">Odłączenie/wyodrębnienie części nieruchomości i przyłączenie tej części do innej, istniejącej księgi wieczystej</h3></td>
+								</tr>
+								<tr>
+									<td> <ul class="info">
+										<li>
+											W żądaniu należy wskazać odłączane/wyodrębniane z księgi wieczystej części nieruchomości przez podanie numeru lub nazwy obrębu, numeru działki i obszaru (jeżeli odłączanym przedmiotem jest działka ewidencyjna), ulicy, numeru budynku i powierzchni użytkowej (jeżeli odłączanym przedmiotem jest budynek) lub ulicy, numeru budynku i numeru lokalu (jeżeli wyodrębnianym przedmiotem jest lokal) oraz podać numer księgi wieczystej, do której część nieruchomości zostanie przyłączona.
+										</li>
+									</ul>
+										<table class="inside white">
+											<tr>
+												<td class="topleft">
+													<div id="box3">
+														4. Treść żądania:
+													</div>
+
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+						</td>
 					</tr>
 				</table>
-			</td></tr>
-		</table>
-		<table class="main dark outside">
-			<tr><td>
-				<h2>NUMER KSIĘGI WIECZYSTEJ, KTÓREJ DOTYCZY WNIOSEK:</h2>
-				<ul class="info">
-					<li>Jeżeli przedmiotem żądania jest odłączenie/wyodrębnienie z księgi wieczystej części nieruchomości i przyłączenie tej części do innej istniejącej księgi wieczystej, w polu nr 3 należy podać numer księgi wieczystej, z której część nieruchomości zostanie odłączona/wyodrębniona.</ul>
-					<table class="inside white">
-						<tr><td id="box2">3. Numer księgi wieczystej:</td></tr>
-					</table>
-				</li>
-			</td></tr>
-		</table>
-		<table class="main dark">
-			<tr>
-				<td>
-					<h2 class="center">NA PODSTAWIE ZAŁĄCZONYCH DOKUMENTÓW WNOSZĘ O:</h2>
-					<div class="inside">
-						<strong>Do wniosku należy dołączyć formularz „KW-ZAD Żądanie wpisu w księdze wieczystej”, jeżeli wnioskodawca wnosi o wpis, zmianę lub wykreślenie więcej niż dwóch:</strong>
-						<ul class="info2">
-							<li>współwłaścicieli, współużytkowników wieczystych lub współuprawnionych;</li>
-							<li>praw (innych niż własność, użytkowanie wieczyste, spółdzielcze własnościowe prawo do lokalu), roszczeń, ograniczeń w rozporządzaniu nieruchomością, hipotek.</li>
-						</ul>
-
-					</div>
-				</td>
-			</tr>
-		</table>
-		<table class="main dark">
-			<tr>
-				<td>
-					<h2>TREŚĆ ŻĄDANIA:</h2>
-					
-				</td>
-			</tr>
-		</table>
+			</table>
+			
+			<table class="main">
+				<tr>
+					<td class="white">
+						<div class="topleft box4">Miejsce na znaki opłaty sądowej</div>
+					</td>
+					<td class="light">
+						<div class="topleft box4">Adnotacje o rozpoznaniu</div>
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+			
+			
 	</div>
-		
+	<div class="A4">
+		<div class="container">
+			<div class="nr-strony">strona 2</div>
+			<table class="dark main outside">
+				<tr>
+					<td class="part" colspan="2">
+						<H2 class="center">NA PODSTAWIE ZAŁĄCZONYCH DOKUMNETÓW WNOSZĘ O (cd.):</H2>
+					</td>
 
+				</tr>
+				<tr>
+					<td rowspan="4" class="narrow">
+						
+					</td>
+					<td class="white">
+						<h3><input type="checkbox"> Wpis właściciela (współwłaściciela), użytkownika wieczystego (współużytkownika wieczystego), uprawnionego (współuprawnionego): </h3>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<ul class ="info">
+							<li>W żądaniu należy wpisać rodzaj przysługującego prawa, imię (imiona) i nazwisko (nazwiska), imię ojca i imię matki oraz numer PESEL (jeśli został nadany) lub nazwę/firmę i siedzibę, numer REGON (jeśli został nadany) oraz numer w Krajowym Rejestrze Sądowym (jeżeli dokonano wpisu do tego rejestru), a także wielkość przysługującego udziału w prawie.</li>
+							<li>Jeżeli wnioskodawca żąda ujawnienia w księdze wieczystej kilku współwłaścicieli nieruchomości, współużytkowników wieczystych lub współuprawnionych z tytułu spółdzielczego własnościowego prawa do lokalu, każdego z nich należy wskazać w osobnej rubryce.             W jednej rubryce należy wskazać współmałżonków, którym przysługuje dane prawo na zasadzie wspólności ustawowej lub umownej małżeńskiej, oraz wspólników spółek cywilnych, którym przysługuje dane prawo na zasadzie współwłasności łącznej</li>
+						</ul>
+					<table class="white inside">
+						<tr>
+							<td>
+								<div class="topleft box5">5. Treść żądania:</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="topleft box5">6. Treść żądania:</div>
+							</td>
+						</tr>
+					</table>
+					</td>
+					
+				</tr>
+				<tr>
+					<td class="white inside">
+						<h3><input type="checkbox"> Wpis prawa, ograniczenia w rozporządzaniu nieruchomością, roszczenia lub hipoteki:</h3></td>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<ul class="info">
+							<li>W żądaniu należy w szczególności określić rodzaj i treść hipoteki lub innego prawa, roszczenia lub ograniczenia, a także uprawnionych. 
+								W przypadku hipoteki łącznej lub innego prawa, roszczenia lub ograniczenia, które ma być wpisane w więcej niż jednej księdze wieczystej, należy podać numery wszystkich ksiąg wieczystych, w których prawo, roszczenie lub ograniczenie ma być wpisane.
+							</li>
+							<li>Treść każdego żądania należy wpisać w osobnej rubryce.</li>
+						</ul>
+						<table class="white inside">
+							<tr>
+								<td>
+									<div class="topleft box5">7. Treść żądania:</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="topleft box5">8. Treść żądania:</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+					
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="A4">
+		<div class="container">
+			<div class="nr-strony"> strona 3</div>
+			<table class="main dark outside">
+				<tr>
+					<td>
+						<h2 class="center">WNIOSKODAWCY/UCZESTNICY POSTĘPOWANIA</h2>
+						<ul class="info">
+							<li>Należy wypełnić wszystkie pola dotyczące danych wnioskodawcy/uczestnika postępowania. W przypadku braku numeru PESEL, numeru REGON lub numeru w Krajowym Rejestrze Sądowym należy wpisać słowo „brak”.</li>
+							<li>Należy wyraźnie zaznaczyć kwadrat wskazujący właściwą odpowiedź na pytanie zadane w formularzu.</li>
+							<li>Adres do doręczeń należy podać tylko wówczas, gdy jest on inny od miejsca zamieszkania/siedziby wnioskodawcy/uczestnika postępowania.</li>
+							<li>W przypadku gdy wnioskodawca/uczestnik postępowania nie ma miejsca zamieszkania lub zwykłego pobytu albo siedziby w Polsce lub innym państwie członkowskim Unii Europejskiej i nie ustanowił pełnomocnika do prowadzenia sprawy w Polsce, w polu „adres do doręczeń” należy wpisać adres pełnomocnika do doręczeń w Polsce.</li>
+							<li>Załącznik „KW-WU Wnioskodawca/uczestnik postępowania” należy wypełnić i dołączyć do wniosku w przypadku, gdy trzy poniższe bloki „DANE WNIOSKODAWCY/UCZESTNIKA POSTĘPOWANIA” nie pozwalają na wpisanie wszystkich wnioskodawców i/lub uczestników postępowania.</li>
+							<li>Jeżeli w imieniu wnioskodawcy/uczestnika postępowania występuje pełnomocnik lub przedstawiciel ustawowy, należy wypełnić formularz „KW-PP Pełnomocnik/przedstawiciel ustawowy” i dołączyć go do wniosku. W przypadku gdy w imieniu wnioskodawcy/uczestnika postępowania występuje pełnomocnik, do wniosku należy ponadto dołączyć pełnomocnictwo. </li>
+						</ul>
+					</td>
+				</tr>
+				<tr class="part">
+					<td>
+						<h2>DANE WNIOSKODAWCY/UCZESTNIKA POSTĘPOWANIA*:</h2>
+						<table class="inside white">
+							<tr>
+								<td>
+									9.Numer Pesel
+								</td>
+								<td colspan="2">
+									10. Numer identyifkacyjny REGON:
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">11. Numer w Krajowym Rejestrze Sądowym:</td>
+							</tr>
+							<tr>
+								<td colspan="3">12. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego*</td>
+							</tr>
+							<tr>
+								<td colspan="3">13. Drugi człon nazwiska złożonego:</td>
+							</tr>
+							<tr>
+								<td>
+									14. Imię pierwsze
+								</td>
+								<td colspan="2">
+									15. Imię drugie:
+								</td>
+							</tr>
+							<tr>
+								<td>
+									16. Imię ojca:
+								</td>
+								<td colspan="2">
+									17. Imię matki
+								</td>
+							</tr>
+							<tr>
+								<td class="dark" colspan="3"><h2>MIEJSCE ZAMIESZKANIA/SIEDZIBA*</h2></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									18. Kraj:
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									19. Miejscowość:
+								</td>
+							</tr>
+							<tr colspan="3">
+								<td>
+									20. Ulica:
+								</td>
+							</tr>
+							<tr>
+								<td>
+									21. Numer Budynku:
+								</td>
+								<td>22. Numer Lokalu:</td>
+								<td>23. Kod pocztowy:</td>
+							</tr>
+							<tr>
+							<td colspan="3"> 24. Poczta:</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<div class="pole-wyboru">
+									<div>25. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
+									<div><input type="checkbox"> TAK <input type="checkbox"> NIE </div>
+									</div> 
+								</td>
+							</tr>	
+						</table>
+						</td>
+						</tr>
+						<tr>
+							<td>
+								<h2>ADRES DO DORĘCZEŃ:</h2>
+								<table class="inside white">
+									<tr>
+										<td colspan="3">
+											26. Nazwa lub firma/Imię i nazwisko*
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											27. Miejscowość:
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											28. Ulica:
+										</td>
+									</tr>
+									<tr>
+										<td>
+											29. Numer Budynku:
+										</td>
+										<td>30. Numer Lokalu:</td>
+										<td>31. Kod pocztowy:</td>
+									</tr>
+									<tr>
+									<td colspan="3"> 32. Poczta:</td>
+									</tr>
+								</table>
+
+							</td>
+						</tr>
+					</td>
+				</tr>
+			</table>
+			<table class="main outside dark">
+				<tr class="part">
+					<td>
+						<h2>DANE WNIOSKODAWCY/UCZESTNIKA POSTĘPOWANIA*:</h2>
+						<table class="inside white">
+							<tr>
+								<td>
+									33.Numer Pesel
+								</td>
+								<td colspan="2">
+									34. Numer identyifkacyjny REGON:
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">35. Numer w Krajowym Rejestrze Sądowym:</td>
+							</tr>
+							<tr>
+								<td colspan="3">36. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego*</td>
+							</tr>
+							<tr>
+								<td colspan="3">37. Drugi człon nazwiska złożonego:</td>
+							</tr>
+							<tr>
+								<td>
+									38. Imię pierwsze
+								</td>
+								<td colspan="2">
+									39. Imię drugie:
+								</td>
+							</tr>
+							<tr>
+								<td>
+									40. Imię ojca:
+								</td>
+								<td colspan="2">
+									41. Imię matki
+								</td>
+							</tr>
+							<tr>
+								<td class="dark" colspan="3"><h2>MIEJSCE ZAMIESZKANIA/SIEDZIBA*</h2></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									42. Kraj:
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									43. Miejscowość:
+								</td>
+							</tr>
+							<tr colspan="3">
+								<td>
+									44. Ulica:
+								</td>
+							</tr>
+							<tr>
+								<td>
+									45. Numer Budynku:
+								</td>
+								<td>46. Numer Lokalu:</td>
+								<td>47. Kod pocztowy:</td>
+							</tr>
+							<tr>
+							<td colspan="3"> 48. Poczta:</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<div class="pole-wyboru">
+									<div>49. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
+									<div><input type="checkbox"> TAK <input type="checkbox"> NIE </div>
+									</div> 
+								</td>
+							</tr>	
+						</table>
+						</td>
+						</tr>
+						<tr>
+							<td>
+								<h2>ADRES DO DORĘCZEŃ:</h2>
+								<table class="inside white">
+									<tr>
+										<td colspan="3">
+											50. Nazwa lub firma/Imię i nazwisko*
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											51. Miejscowość:
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											52. Ulica:
+										</td>
+									</tr>
+									<tr>
+										<td>
+											53. Numer Budynku:
+										</td>
+										<td>54. Numer Lokalu:</td>
+										<td>55. Kod pocztowy:</td>
+									</tr>
+									<tr>
+									<td colspan="3"> 56. Poczta:</td>
+									</tr>
+								</table>
+
+							</td>
+						</tr>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="A4">
+		<div class="container">
+			<div class="nr-strony">strona 5</div>
+			<table class="main outside dark">
+				<tr class="part">
+					<td>
+						<h2>DANE WNIOSKODAWCY/UCZESTNIKA POSTĘPOWANIA*:</h2>
+						<table class="inside white">
+							<tr>
+								<td>
+									57.Numer Pesel
+								</td>
+								<td colspan="2">
+									58. Numer identyifkacyjny REGON:
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">59. Numer w Krajowym Rejestrze Sądowym:</td>
+							</tr>
+							<tr>
+								<td colspan="3">60. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego*</td>
+							</tr>
+							<tr>
+								<td colspan="3">61. Drugi człon nazwiska złożonego:</td>
+							</tr>
+							<tr>
+								<td>
+									62. Imię pierwsze
+								</td>
+								<td colspan="2">
+									63. Imię drugie:
+								</td>
+							</tr>
+							<tr>
+								<td>
+									64. Imię ojca:
+								</td>
+								<td colspan="2">
+									65. Imię matki
+								</td>
+							</tr>
+							<tr>
+								<td class="dark" colspan="3"><h2>MIEJSCE ZAMIESZKANIA/SIEDZIBA*</h2></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									66. Kraj:
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									67. Miejscowość:
+								</td>
+							</tr>
+							<tr colspan="3">
+								<td>
+									68. Ulica:
+								</td>
+							</tr>
+							<tr>
+								<td>
+									69. Numer Budynku:
+								</td>
+								<td>70. Numer Lokalu:</td>
+								<td>71. Kod pocztowy:</td>
+							</tr>
+							<tr>
+							<td colspan="3"> 72. Poczta:</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<div class="pole-wyboru">
+									<div>73. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
+									<div><input type="checkbox"> TAK <input type="checkbox"> NIE </div>
+									</div> 
+								</td>
+							</tr>	
+						</table>
+						</td>
+						</tr>
+						<tr>
+							<td>
+								<h2>ADRES DO DORĘCZEŃ:</h2>
+								<table class="inside white">
+									<tr>
+										<td colspan="3">
+											74. Nazwa lub firma/Imię i nazwisko*
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											75. Miejscowość:
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											76. Ulica:
+										</td>
+									</tr>
+									<tr>
+										<td>
+											77. Numer Budynku:
+										</td>
+										<td>78. Numer Lokalu:</td>
+										<td>79. Kod pocztowy:</td>
+									</tr>
+									<tr>
+									<td colspan="3"> 80. Poczta:</td>
+									</tr>
+								</table>
+
+							</td>
+						</tr>
+					</td>
+				</tr>
+			</table>
+			<table class="dark main outside">
+				<tr>
+					<tD>
+						<h2> WYKAZ DOKUMENTÓW DOŁĄCZONYCH DO WNIOSKU:</h2>
+					<ul class="info">
+						<li>Jeżeli dokument niezbędny do rozpoznania wniosku znajduje się przy innym wniosku, w danych identyfikujących dokument należy dodatkowo wskazać numer takiego wniosku lub numer księgi wieczystej, do której akt dokument został dołączony.</li>
+						<li>W przypadku gdy pola 84-88 okażą się niewystarczające na wpisanie dokumentów, pozostałe dokumenty należy wymienić na kolejnych ponumerowanych kartach formatu A4.</li>
+					</ul>
+					<table class="white inside zalaczniki">
+						<tr class="dark header">
+							<td class="center" style="width:5%">
+								<strong>Lp.</strong>
+							</td>
+							<td class="center"><strong>Nazwa formularza</strong></td>
+							<td class="center" style="width:20%"><strong>Liczba załączników</strong></td>
+						</tr>
+						<tr>
+							<td>81.</td>
+							<td>KW-WU Wnioskodawca/uczestnik postępowania</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>82.</td>
+							<td>KW-PP Pełnomocnik/Przedstawiciel ustawowy</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>83.</td>
+							<td>KW-ZAD Żądanie wpisu w księdze wieczystej</td>
+							<td></td>
+						</tr>
+						<tr class="dark header">
+							<td><strong>Lp.</strong></td>
+							<td colspan="2"><strong>Dane identyfikujące inny dokument</strong> (nazwa, numer, data wydania/sporządzenia, organ, który wydał/sporządził dokument)</td>
+						</tr>
+						<tr>
+							<td>84.</td>
+							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<td>85.</td>
+							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<td>86.</td>
+							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<td>87.</td>
+							<td colspan="2"></td>
+						</tr>
+						<tr>
+							<td>88.</td>
+							<td colspan="2"></td>
+						</tr>
+
+					</table>
+					</tD>
+				</tr>
+			</table>
+			<table class="main double-top outside">
+				<tr class="dark">
+					<td>
+						<h2>WNIOSKODAWCA/PEŁNOMOCNIK/PRZEDSTAWICIEL USTAWOWY*:</h2>
+						<table class="inside high">
+							<tr class="header">
+								<td class="center top">
+									<strong>Nazwa/Imię i nazwisko</strong>
+								</td>
+								<td class="center top">
+									<p><strong>Data</strong></p>
+									<p><i>(dzień/miesiąc/rok)</i></p>
+								</td>
+								<td class="center top">
+									<strong>Podpis</strong>
+								</td>
+							</tr>
+							<tr class="white">
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						
+						</table>
+			</table>
+		</div>
+	</div>
 </body>
 </html>
+
+						

@@ -1,0 +1,169 @@
+body {
+	font-family: 'Times New Roman', Times, serif;
+	font-size: 8pt;
+	margin:0;
+}
+.A4 {
+	width: 21cm;
+	height: 29.7cm;
+	border: solid 1px;
+	padding-top: 0.5cm;
+	box-sizing: border-box;
+}
+h1{
+	font-size: 12pt;
+	font-weight: bold;
+}
+h2{
+	font-size: 9pt;
+	padding: 0;
+	margin: 0.1rem 0;
+}
+h3 { 
+	font-size: 8pt;
+	font-weight: bold;
+	font-style: normal;
+	padding: 0;
+	margin: 0;
+}
+.nr-strony{
+	font-size: 8pt;
+	text-align: right;
+	margin-right: 0.5cm;
+	font-style: italic;
+}
+.container{
+	width: 17.87cm ;
+	margin: auto;
+	
+}
+.dark{
+	background-color: rgb(217, 217, 217);
+}
+.light{
+	background-color: rgb(242, 242, 242) ;
+}
+.white{
+	background-color: white;
+}
+.main{
+	width: 100%;
+	border: 2px solid black;
+	margin: 3px auto
+}
+table {
+	border-collapse: collapse;
+	line-height: 1rem;
+}
+tr,td {
+	border: 1px solid black;
+	padding: 4px;
+}
+.outside td{
+	padding: 4px 0 0 4px;
+}
+.inside{
+	width: 97%;
+	margin-left: auto;
+	line-height: 0.9rem;
+	font-style: italic;
+}
+.part {
+	border: 2px solid black;
+}
+table .inside td,tr{
+	border-bottom: 0;
+	border-right: 0;
+}
+table .outside{
+	padding-left: 0;
+	padding-bottom: 0;
+}
+table.zalaczniki td{
+	height: 1.5rem;
+}
+.double-top {
+	border-top: 5px double black;
+}
+ul {
+	margin: 0.3rem 0
+}
+p{
+	margin: 0;
+}
+.info {
+	font-style: italic;
+	padding-left: 1.5rem;
+	line-height: 0.7rem;
+}
+.high td{
+	height: 2.5rem;
+}
+ul.info2 {
+	list-style: square;
+	padding-left: 1em;
+	line-height: 0.7rem;	
+}
+ul li+li {
+	margin-top:0.3rem;
+}
+
+.narrow{
+	width: 3%;
+}
+
+.topleft{
+	vertical-align: top;
+	text-align: left;
+}
+.top{
+	vertical-align: top;
+}
+.center {
+	text-align: center;
+}
+
+.pole-wyboru {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding-right: 1cm;
+}
+.pole-wyboru input{
+	margin-left:  1cm;
+}
+.header{
+	font-style: normal;
+}
+#wpis {
+	height: 30%;
+}
+#rejestr{
+	height: 70%;
+}
+#nrdz{
+	width: 55%;
+}
+#oplata{
+	width: 45%;
+}
+#box1 {
+	height: 3cm;
+}
+
+#box2 {
+	vertical-align: top;
+	height: 2rem;
+}
+
+#box3 {
+	min-height: 2.5cm;
+	height: 100%;
+}
+
+.box4 {
+	min-height: 3cm;
+}
+.box5 {
+	min-height: 4.5cm;
+}
