@@ -1,4 +1,5 @@
 body {
+	font-family: Arial, Helvetica, sans-serif;
 	font-family: 'Times New Roman', Times, serif;
 	font-size: 8pt;
 	margin:0;
@@ -90,6 +91,10 @@ ul {
 }
 p{
 	margin: 0;
+}
+.oznaczenie-dzialki td{
+	width: 50%;
+	height: 1.2rem;
 }
 .info {
 	font-style: italic;
