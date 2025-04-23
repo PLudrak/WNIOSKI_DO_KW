@@ -1,5 +1,5 @@
 import pandas as pd
-
+from rendering import *
 def load_dzialki(filepath):
 	#df_dzialki = pd.DataFrame(columns=['ID_zrodlowe','ID_projektowane','powierzchnia','czy_inwestycja','KW'])
 	rows = []
@@ -73,14 +73,26 @@ def load_osoby(filepath):
 	df_osoby=df_osoby.fillna("-")
 	return df_osoby
 
+def load_sady(filepath):
+	df_excel=pd.read_excel(filepath)
+	mapa_sadow = dict(zip(df_excel['kod'], df_excel['sad_rejonowy']))
+	return mapa_sadow
+
+
 class Wniosek:
 	
-	def __init__ (self,KW:str,df_dzialki:pd.DataFrame,df_relacje:pd.DataFrame):
+	def __init__ (self,KW:str,df_dzialki:pd.DataFrame,df_relacje:pd.DataFrame,df_wlasciciele,sady:dict,dane_wnioskodawcy:dict):
 		self.kw =KW
 		print(f"Wniosek {self.kw} zainicjalizowano")
 		self.wlasciciele = []
+		self.wlasciciele_dane = []
 		self.find_dzialki(df_dzialki)
 		self.find_wlasciciele(df_relacje)
+		self.formularze = ['KW-WPIS']
+		self.okresl_sad(sady)
+		self.wnioskodawca = dane_wnioskodawcy
+		self.pobierz_dane_wlascicieli(df_wlasciciele)
+		self.ile_wlascicieli = len(self.wlasciciele)
 	
 	def find_dzialki(self,df_dzialki:pd.DataFrame):
 		"""znajdz dzialki zrodlowe i projektowane na podstawie nr KW"""
@@ -101,12 +113,38 @@ class Wniosek:
 			if pd.notna(zrodlowa) and pd.notna(projektowana):
 				self.dzialki_zr_pr.setdefault(zrodlowa,[]).append(projektowana)
 
-		print(self.dzialki_zr_pr)
 	
 	def find_wlasciciele(self,df_relacje):
 		"""Znajdz id wlascicieli kw na podstawie dzialek"""
 		for dzialka in self.dzialki_zrodlowe:
 			wlasciciele = df_relacje[df_relacje['ID_dzialki']==dzialka]['ID_wlasciciela'].tolist()
 			self.wlasciciele += wlasciciele
-		self.wlasciciele= list(set(self.dzialki))
-		print(wlasciciele)
+		self.wlasciciele= list(set(self.wlasciciele))
+		
+
+	def pobierz_dane_wlascicieli(self,df_wlasiciele:pd.DataFrame):
+		for id in self.wlasciciele:
+			rekord = df_wlasiciele[df_wlasiciele["ID_osoby"]==id]
+			if not rekord.empty:
+				self.wlasciciele_dane.append(rekord.iloc[0].to_dict())
+			print(rekord)
+
+	
+	def okresl_sad(self,sady):
+		"""Przypisz sąd rejonowy na podstawie numeru kw"""
+		prefix = self.kw.split("/")[0]
+		self.sad = sady.get(prefix, "-")
+
+
+
+
+	def print_forms(self):
+		for form in self.formularze:
+			if form == "KW-WPIS":
+				data={
+					'sad':self.sad,
+					'nr_kw':self.kw,
+					'tresc_zadania':"Lorem ipsum dolor amet",
+					'co jezeli bedzie':"za duzo?"
+				}
+				print_wpis(data,self.wnioskodawca,self.wlasciciele_dane,)
