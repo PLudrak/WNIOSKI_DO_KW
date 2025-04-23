@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>KW-WPIS</title>
+	<link rel="stylesheet" href="../static/styles.css">
+
+</head>
+<body>
+	<div class="A4">
+		
+		<div class="container">
+			<div class="nr-strony">strona {{numer_strony}}</div>
+			<table class="dark main" id="box1">
+				<tr>
+					<td class ="center" id="wpis"><b>KW-WPIS</b></td>
+					<td rowspan="2"class="center"><h1>Wniosek o wpis w księdze wieczystej</h1></td>
+					<td rowspan="2" class="light topleft"><i>Adnotacja o wpłynięciu wniosku:</i></td> 
+				</tr>
+				<tr>
+					<td class="center white" id="rejestr"><b>Rejestr Ksiąg Wieczystych</b></td>
+				</tr>
+			</table>
+			<table class="light main">
+				<tr>
+					<td id="nrdz"><i>Numer Dz.Kw:</i></td>
+					<td id="oplata"><i>Uiszczono opłatę w kwocie (w zł):</i></td>
+				</tr>
+			</table>
+			<table class="dark main">
+				<tr>
+					<td>
+						<h2>POUCZENIE</h2>
+						<ul class="info">
+							<li>Formularz należy wypełnić w języku polskim, czytelnie, drukowanymi literami, bez skreśleń i poprawek, na maszynie, na komputerze lub ręcznie, zgodnie z opisem pól.</li>
+							<li>Wnioskodawca wypełnia tylko pola jasne wniosku, z tym że pola niewypełnione należy przekreślić.</li>
+							<li>Wniosek można złożyć w biurze podawczym wydziału ksiąg wieczystych lub nadać w placówce pocztowej operatora pocztowego na adres tego wydziału.</li>
+						</ul>
+					</td>
+				</tr>
+				
+			</table>
+			<table class="main dark outside">
+				<tr><td>
+					<h2>OZNACZENIE SĄDU I WYDZIAŁU, DO KTÓREGO SKŁADANY JEST WNIOSEK:</h2>
+					<table class="inside white">
+						<tr>
+							<td>1. Sąd Rejonowy {{ sad }}</td>
+						</tr>
+						<tr>
+							<td>2. Wydział Ksiąg Wieczystych </div></td>
+						</tr>
+					</table>
+				</td></tr>
+			</table>
+			<table class="main dark outside">
+				<tr><td>
+					<h2>NUMER KSIĘGI WIECZYSTEJ, KTÓREJ DOTYCZY WNIOSEK:</h2>
+					<ul class="info">
+						<li>Jeżeli przedmiotem żądania jest odłączenie/wyodrębnienie z księgi wieczystej części nieruchomości i przyłączenie tej części do innej istniejącej księgi wieczystej, w polu nr 3 należy podać numer księgi wieczystej, z której część nieruchomości zostanie odłączona/wyodrębniona.</ul>
+							<table class="inside white">
+								<tr><td id="box2">3. Numer księgi wieczystej: <div class="input">{{ nr_kw }}</div></td></tr>
+							</table>
+						</li>
+					</td></tr>
+				</table>
+				<table class="main dark outside">
+					<tr>
+						<td>
+							<h2 class="center">NA PODSTAWIE ZAŁĄCZONYCH DOKUMENTÓW WNOSZĘ O:</h2>
+							<div class="inside">
+								<strong>Do wniosku należy dołączyć formularz „KW-ZAD Żądanie wpisu w księdze wieczystej”, jeżeli wnioskodawca wnosi o wpis, zmianę lub wykreślenie więcej niż dwóch:</strong>
+								<ul class="info2">
+									<li>współwłaścicieli, współużytkowników wieczystych lub współuprawnionych;</li>
+									<li>praw (innych niż własność, użytkowanie wieczyste, spółdzielcze własnościowe prawo do lokalu), roszczeń, ograniczeń w rozporządzaniu nieruchomością, hipotek.</li>
+								</ul>
+								
+							</div>
+						</td>
+					</tr>
+				
+					<tr>
+						<td>
+							<h2>TREŚĆ ŻĄDANIA:</h2>
+							<ul class="info">
+								<li>Należy wyraźnie zaznaczyć kwadraty odpowiadające treści żądania.</li>
+								<li>Przy każdym żądaniu należy jednoznacznie określić, czy wnioskodawca wnosi o nowy wpis w księdze wieczystej, czy o zmianę lub wykreślenie wpisu ujawnionego w księdze wieczystej.</li>
+							</ul>
+							<table class="inside">
+								<tr>
+									<td class="white">
+										<h3>Sprostowanie oznaczenia nieruchomości/ujawnienie budynku lub urządzenia</strong></h3>
+									</td>
+								</tr>
+								<tr>
+									<td><ul class="info">
+										<li>Sprostowanie oznaczenia nieruchomości jest ujawniane w księdze wieczystej wyłącznie na podstawie załączonych do wniosku dokumentów.</li>
+										<li>Żądanie ujawnienia budynku lub urządzenia wymaga wypełnienia pola nr 4.</li>
+										<li>W przypadku jednoczesnego żądania „Ujawnienia budynku lub urządzenia” oraz „Odłączenia/wyodrębnienia części nieruchomości 
+											i przyłączenia tej części do innej istniejącej księgi wieczystej” dla pierwszego z tych żądań należy wypełnić pole nr 1 załącznika KW-ZAD. </li>
+									</ul></td>
+								</tr>
+								<tr>
+									<td class="white">
+										<h3>Odłączenie/wyodrębnienie części nieruchomości i przyłączenie tej części do innej, istniejącej księgi wieczystej</h3></td>
+								</tr>
+								<tr>
+									<td> <ul class="info">
+										<li>
+											W żądaniu należy wskazać odłączane/wyodrębniane z księgi wieczystej części nieruchomości przez podanie numeru lub nazwy obrębu, numeru działki i obszaru (jeżeli odłączanym przedmiotem jest działka ewidencyjna), ulicy, numeru budynku i powierzchni użytkowej (jeżeli odłączanym przedmiotem jest budynek) lub ulicy, numeru budynku i numeru lokalu (jeżeli wyodrębnianym przedmiotem jest lokal) oraz podać numer księgi wieczystej, do której część nieruchomości zostanie przyłączona.
+										</li>
+									</ul>
+										<table class="inside white">
+											<tr>
+												<td class="topleft">
+													<div id="box3">
+														4. Treść żądania: 
+														<br><div class="input">{{ tresc_zadania }}</div>
+													</div>
+
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+						</td>
+					</tr>
+				</table>
+			</table>
+			
+			<table class="main">
+				<tr>
+					<td class="white">
+						<div class="topleft box4">Miejsce na znaki opłaty sądowej</div>
+					</td>
+					<td class="light">
+						<div class="topleft box4">Adnotacje o rozpoznaniu</div>
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+	</div>
+			
+			
+
+</body>
+</html>
+
+						

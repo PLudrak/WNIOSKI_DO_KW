@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>KW-WPIS</title>
+	<link rel="stylesheet" href="../static/styles.css">
+
+</head>
+<body>
+	<div class="A4">
+		<div class="container">
+			<div class="nr-strony"> strona 3</div>
+			<table class="main dark outside">
+				<tr>
+					<td>
+						<h2 class="center">WNIOSKODAWCY/UCZESTNICY POSTĘPOWANIA</h2>
+						<ul class="info">
+							<li>Należy wypełnić wszystkie pola dotyczące danych wnioskodawcy/uczestnika postępowania. W przypadku braku numeru PESEL, numeru REGON lub numeru w Krajowym Rejestrze Sądowym należy wpisać słowo „brak”.</li>
+							<li>Należy wyraźnie zaznaczyć kwadrat wskazujący właściwą odpowiedź na pytanie zadane w formularzu.</li>
+							<li>Adres do doręczeń należy podać tylko wówczas, gdy jest on inny od miejsca zamieszkania/siedziby wnioskodawcy/uczestnika postępowania.</li>
+							<li>W przypadku gdy wnioskodawca/uczestnik postępowania nie ma miejsca zamieszkania lub zwykłego pobytu albo siedziby w Polsce lub innym państwie członkowskim Unii Europejskiej i nie ustanowił pełnomocnika do prowadzenia sprawy w Polsce, w polu „adres do doręczeń” należy wpisać adres pełnomocnika do doręczeń w Polsce.</li>
+							<li>Załącznik „KW-WU Wnioskodawca/uczestnik postępowania” należy wypełnić i dołączyć do wniosku w przypadku, gdy trzy poniższe bloki „DANE WNIOSKODAWCY/UCZESTNIKA POSTĘPOWANIA” nie pozwalają na wpisanie wszystkich wnioskodawców i/lub uczestników postępowania.</li>
+							<li>Jeżeli w imieniu wnioskodawcy/uczestnika postępowania występuje pełnomocnik lub przedstawiciel ustawowy, należy wypełnić formularz „KW-PP Pełnomocnik/przedstawiciel ustawowy” i dołączyć go do wniosku. W przypadku gdy w imieniu wnioskodawcy/uczestnika postępowania występuje pełnomocnik, do wniosku należy ponadto dołączyć pełnomocnictwo. </li>
+						</ul>
+					</td>
+				</tr>
+				<tr class="part">
+					<td>
+						<h2>DANE WNIOSKODAWCY/<s>UCZESTNIKA POSTĘPOWANIA*</s>:</h2>
+						<table class="inside white">
+							<tr>
+								<td>
+									9.Numer Pesel <div class="input"> {{wnioskodawca.pesel}} </div>
+								</td>
+								<td colspan="2">
+									10. Numer identyifkacyjny REGON: <div class="input"> {{wnioskodawca.regon}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">11. Numer w Krajowym Rejestrze Sądowym:
+									<div class="input"> {{wnioskodawca.krs}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">12. Nazwa lub firma/<s>Nazwisko lub pierwszy człon nazwiska złożonego*</s><div class="input"> {{wnioskodawca.nazwa}} </div></td>
+							</tr>
+							<tr>
+								<td colspan="3">13. Drugi człon nazwiska złożonego:<div class="input"> {{wnioskodawca.nazwisko2}} </div></td>
+							</tr>
+							<tr>
+								<td>
+									14. Imię pierwsze <div class="input"> {{wnioskodawca.imie}} </div>
+								</td>
+								<td colspan="2">
+									15. Imię drugie: <div class="input"> {{wnioskodawca.imie2}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									16. Imię ojca: <div class="input"> {{wnioskodawca.imie_ojca}} </div>
+								</td>
+								<td colspan="2">
+									17. Imię matki <div class="input"> {{wnioskodawca.imie_matki}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="dark" colspan="3"><h2><s>MIEJSCE ZAMIESZKANIA</s>/SIEDZIBA*</h2></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									18. Kraj: <div class="input"> {{wnioskodawca.kraj}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									19. Miejscowość: <div class="input"> {{wnioskodawca.miejscowość}} </div>
+								</td>
+							</tr>
+							<tr colspan="3">
+								<td>
+									20. Ulica: <div class="input"> {{wnioskodawca.ulica}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									21. Numer Budynku: <div class="input"> {{wnioskodawca.nr_budynku}} </div>
+								</td>
+								<td>22. Numer Lokalu: <div class="input"> {{wnioskodawca.nr_lokalu}} </div></td>
+								<td>23. Kod pocztowy: <div class="input"> {{wnioskodawca.kod_pocztowy}} </div></td>
+							</tr>
+							<tr>
+							<td colspan="3"> 24. Poczta: <div class="input"> {{wnioskodawca.poczta}} </div></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<div class="pole-wyboru">
+									<div>25. Czy wnioskodwaca/<s>uczestnik postępowania</s>* ma pełnomocnika/przedstawiciela ustawowego?</div>
+									<div><div class="checkbox"> {% include "tak.svg" %} TAK </div><div class="checbox"> {% include "nie.svg" %} NIE </div></div>
+									</div> 
+								</td>
+							</tr>	
+						</table>
+						</td>
+						</tr>
+						<tr>
+							<td>
+								<h2>ADRES DO DORĘCZEŃ:</h2>
+								<table class="inside white">
+									<tr>
+										<td colspan="3">
+											26. Nazwa lub firma/Imię i nazwisko*
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											27. Miejscowość:
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											28. Ulica:
+										</td>
+									</tr>
+									<tr>
+										<td>
+											29. Numer Budynku:
+										</td>
+										<td>30. Numer Lokalu:</td>
+										<td>31. Kod pocztowy:</td>
+									</tr>
+									<tr>
+									<td colspan="3"> 32. Poczta:</td>
+									</tr>
+								</table>
+
+							</td>
+						</tr>
+					</td>
+				</tr>
+			</table>
+			<table class="main outside dark">
+				<tr class="part">
+					<td>
+						<h2><s>DANE WNIOSKODAWCY</s>/UCZESTNIKA POSTĘPOWANIA*:</h2>
+						<table class="inside white">
+							<tr>
+								<td>
+									33.Numer Pesel <div class="input"> {{uczestnik.pesel}} </div>
+								</td>
+								<td colspan="2">
+									34. Numer identyifkacyjny REGON: <div class="input"> {{uczestnik.pesel}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">35. Numer w Krajowym Rejestrze Sądowym: <div class="input"> {{uczestnik.krs}} </div></td>
+							</tr>
+							<tr>
+								<td colspan="3">36. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego* <div class="input"> {{uczestnik.nazwisko}} </div></td>
+							</tr>
+							<tr>
+								<td colspan="3">37. Drugi człon nazwiska złożonego: <div class="input"> {{uczestnik.nazwisko2}} </div></td>
+							</tr>
+							<tr>
+								<td>
+									38. Imię pierwsze <div class="input"> {{uczestnik.imie}} </div>
+								</td>
+								<td colspan="2">
+									39. Imię drugie: <div class="input"> {{uczestnik.imie2}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									40. Imię ojca: <div class="input"> {{uczestnik.imie_ojca}} </div>
+								</td>
+								<td colspan="2">
+									41. Imię matki <div class="input"> {{uczestnik.imie_matki}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td class="dark" colspan="3"><h2>MIEJSCE ZAMIESZKANIA/SIEDZIBA*</h2></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									42. Kraj: <div class="input"> {{uczestnik.kraj}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									43. Miejscowość: <div class="input"> {{uczestnik.miejscowosc}} </div>
+								</td>
+							</tr>
+							<tr colspan="3">
+								<td>
+									44. Ulica: <div class="input"> {{uczestnik.ulica}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									45. Numer Budynku: <div class="input"> {{uczestnik.numer_budynku}} </div>
+								</td>
+								<td>
+									46. Numer Lokalu: <div class="input"> {{uczestnik.numer_lokalu}} </div>
+								</td>
+								<td>
+									47. Kod pocztowy: <div class="input"> {{uczestnik.kod_pocztowy}} </div>
+								</td>
+							</tr>
+							<tr>
+							<td colspan="3"> 48. Poczta:<div class="input"> {{uczestnik.poczta}} </div></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<div class="pole-wyboru">
+									<div>49. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
+									<div><input type="checkbox"> TAK <input type="checkbox"> NIE </div>
+									</div> 
+								</td>
+							</tr>	
+						</table>
+						</td>
+						</tr>
+						<tr>
+							<td>
+								<h2>ADRES DO DORĘCZEŃ:</h2>
+								<table class="inside white">
+									<tr>
+										<td colspan="3">
+											50. Nazwa lub firma/Imię i nazwisko*: ---
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											51. Miejscowość: ---
+										</td>
+									</tr>
+									<tr>
+										<td colspan="3">
+											52. Ulica: ---
+										</td>
+									</tr>
+									<tr>
+										<td>
+											53. Numer Budynku: ---
+										</td>
+										<td>54. Numer Lokalu: ---</td>
+										<td>55. Kod pocztowy: ---</td>
+									</tr>
+									<tr>
+									<td colspan="3"> 56. Poczta: ---</td>
+									</tr>
+								</table>
+
+							</td>
+						</tr>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+</body>
+</html>
+
+						
