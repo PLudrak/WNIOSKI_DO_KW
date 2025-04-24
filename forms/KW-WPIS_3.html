@@ -95,9 +95,10 @@
 							<tr>
 								<td colspan="3">
 									<div class="pole-wyboru">
-									<div>25. Czy wnioskodwaca/<s>uczestnik postępowania</s>* ma pełnomocnika/przedstawiciela ustawowego?</div>
-									<div><div class="checkbox"> {% include "tak.svg" %} TAK </div><div class="checbox"> {% include "nie.svg" %} NIE </div></div>
-									</div> 
+										<div>25. Czy wnioskodwaca/<s>uczestnik postępowania</s>* ma pełnomocnika/przedstawiciela ustawowego?</div>
+										<div class="checkbox"><img src="../static/tak.svg"><span>TAK</span></div>
+										<div class="checkbox"><img src="../static/nie.svg"><span>NIE</span></div>
+									</div>
 								</td>
 							</tr>	
 						</table>
@@ -149,7 +150,7 @@
 									33.Numer Pesel <div class="input"> {{uczestnik.pesel}} </div>
 								</td>
 								<td colspan="2">
-									34. Numer identyifkacyjny REGON: <div class="input"> {{uczestnik.pesel}} </div>
+									34. Numer identyifkacyjny REGON: <div class="input"> {{uczestnik.regon}} </div>
 								</td>
 							</tr>
 							<tr>
@@ -178,7 +179,13 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="dark" colspan="3"><h2>MIEJSCE ZAMIESZKANIA/SIEDZIBA*</h2></td>
+								<td class="dark" colspan="3">
+									{% if uczestnik.czy_osoba_prawna %}
+									<h2><s>MIEJSCE ZAMIESZKANIA</s>/SIEDZIBA*</h2>
+									{% else %}
+									<h2>MIEJSCE ZAMIESZKANIA/<s>SIEDZIBA</s>*</h2>
+									{% endif %}
+								</td>
 							</tr>
 							<tr>
 								<td colspan="3">
@@ -212,8 +219,9 @@
 							<tr>
 								<td colspan="3">
 									<div class="pole-wyboru">
-									<div>49. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
-									<div><input type="checkbox"> TAK <input type="checkbox"> NIE </div>
+										<div>49. Czy <s>wnioskodwaca</s>/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
+										<div class="checkbox"><img src="../static/nie.svg" alt="TAK"><span>TAK</span></div>
+										<div class="checkbox"><img src="../static/tak.svg" alt="NIE"><span>NIE</span></div>
 									</div> 
 								</td>
 							</tr>	

@@ -19,70 +19,81 @@
 						<table class="inside white">
 							<tr>
 								<td>
-									57.Numer Pesel
+									57.Numer Pesel <div class="input"> {{uczestnik.pesel}} </div>
 								</td>
 								<td colspan="2">
-									58. Numer identyifkacyjny REGON:
+									58. Numer identyifkacyjny REGON: <div class="input"> {{uczestnik.regon}} </div>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="3">59. Numer w Krajowym Rejestrze Sądowym:</td>
+								<td colspan="3">59. Numer w Krajowym Rejestrze Sądowym: <div class="input"> {{uczestnik.krs}} </div></td>
 							</tr>
 							<tr>
-								<td colspan="3">60. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego*</td>
+								<td colspan="3">60. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego*: <div class="input"> {{uczestnik.nazwisko}} </div></td>
 							</tr>
 							<tr>
-								<td colspan="3">61. Drugi człon nazwiska złożonego:</td>
+								<td colspan="3">61. Drugi człon nazwiska złożonego:<div class="input"> {{uczestnik.nazwisko2}} </div></td>
 							</tr>
 							<tr>
 								<td>
-									62. Imię pierwsze
+									62. Imię pierwsze: <div class="input"> {{uczestnik.imie}} </div>
 								</td>
 								<td colspan="2">
-									63. Imię drugie:
+									63. Imię drugie: <div class="input"> {{uczestnik.imie2}} </div>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									64. Imię ojca:
+									64. Imię ojca: <div class="input"> {{uczestnik.imie_ojca}} </div>
 								</td>
 								<td colspan="2">
-									65. Imię matki
+									65. Imię matki: <div class="input"> {{uczestnik.imie_matki}} </div>
 								</td>
 							</tr>
 							<tr>
-								<td class="dark" colspan="3"><h2>MIEJSCE ZAMIESZKANIA/SIEDZIBA*</h2></td>
-							</tr>
-							<tr>
-								<td colspan="3">
-									66. Kraj:
+								<td class="dark" colspan="3">
+									{% if uczestnik.czy_osoba_prawna %}
+									<h2><s>MIEJSCE ZAMIESZKANIA</s>/SIEDZIBA*</h2>
+									{% else %}
+									<h2>MIEJSCE ZAMIESZKANIA/<s>SIEDZIBA</s>*</h2>
+									{% endif %}
 								</td>
 							</tr>
 							<tr>
 								<td colspan="3">
-									67. Miejscowość:
+									66. Kraj: <div class="input"> {{uczestnik.kraj}} </div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									67. Miejscowość: <div class="input"> {{uczestnik.miejscowosc}} </div>
 								</td>
 							</tr>
 							<tr colspan="3">
 								<td>
-									68. Ulica:
+									68. Ulica: <div class="input"> {{uczestnik.ulica}} </div>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									69. Numer Budynku:
+									69. Numer Budynku: <div class="input"> {{uczestnik.numer_budynku}} </div>
 								</td>
-								<td>70. Numer Lokalu:</td>
-								<td>71. Kod pocztowy:</td>
+								<td>
+									70. Numer Lokalu: <div class="input"> {{uczestnik.numer_lokalu}} </div>
+								</td>
+								<td>
+									71. Kod pocztowy: <div class="input"> {{uczestnik.kod_pocztowy}} </div>
+								</td>
 							</tr>
 							<tr>
-							<td colspan="3"> 72. Poczta:</td>
+							<td colspan="3"> 72. Poczta:<div class="input"> {{uczestnik.poczta}} </div></td>
 							</tr>
 							<tr>
 								<td colspan="3">
 									<div class="pole-wyboru">
-									<div>73. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
-									<div><input type="checkbox"> TAK <input type="checkbox"> NIE </div>
+										<div>73. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
+										<div class="checkbox"><img src="../static/nie.svg" alt="TAK"><span>TAK</span></div>
+										<div class="checkbox"><img src="../static/tak.svg" alt="NIE"><span>NIE</span></div>
 									</div> 
 								</td>
 							</tr>	
@@ -95,28 +106,28 @@
 								<table class="inside white">
 									<tr>
 										<td colspan="3">
-											74. Nazwa lub firma/Imię i nazwisko*
+											74. Nazwa lub firma/Imię i nazwisko*: ---
 										</td>
 									</tr>
 									<tr>
 										<td colspan="3">
-											75. Miejscowość:
+											75. Miejscowość: ---
 										</td>
 									</tr>
 									<tr>
 										<td colspan="3">
-											76. Ulica:
+											76. Ulica: ---
 										</td>
 									</tr>
 									<tr>
 										<td>
-											77. Numer Budynku:
+											77. Numer Budynku: ---
 										</td>
-										<td>78. Numer Lokalu:</td>
-										<td>79. Kod pocztowy:</td>
+										<td>78. Numer Lokalu: ---</td>
+										<td>79. Kod pocztowy: ---</td>
 									</tr>
 									<tr>
-									<td colspan="3"> 80. Poczta:</td>
+									<td colspan="3"> 80. Poczta: ---</td>
 									</tr>
 								</table>
 
@@ -143,18 +154,18 @@
 						</tr>
 						<tr>
 							<td>81.</td>
-							<td>KW-WU Wnioskodawca/uczestnik postępowania</td>
-							<td></td>
+							<td>KW-WU Wnioskodawca/uczestnik postępowania<div class="input">  </div></td>
+							<td>{{zalaczniki.kw_wu}}</td>
 						</tr>
 						<tr>
 							<td>82.</td>
-							<td>KW-PP Pełnomocnik/Przedstawiciel ustawowy</td>
-							<td></td>
+							<td>KW-PP Pełnomocnik/Przedstawiciel ustawowy<div class="input"> </div></td>
+							<td>{{zalaczniki.kw_pp}}</td>
 						</tr>
 						<tr>
 							<td>83.</td>
-							<td>KW-ZAD Żądanie wpisu w księdze wieczystej</td>
-							<td></td>
+							<td>KW-ZAD Żądanie wpisu w księdze wieczystej<div class="input">  </div></td>
+							<td>{{zalaczniki.kw_zad}}</td>
 						</tr>
 						<tr class="dark header">
 							<td><strong>Lp.</strong></td>
@@ -162,23 +173,23 @@
 						</tr>
 						<tr>
 							<td>84.</td>
-							<td colspan="2"></td>
+							<td colspan="2"><div class="input"> {{zalaczniki.inny1}} </div></td>
 						</tr>
 						<tr>
 							<td>85.</td>
-							<td colspan="2"></td>
+							<td colspan="2"><div class="input"> {{zalaczniki.inny2}} </div></td>
 						</tr>
 						<tr>
 							<td>86.</td>
-							<td colspan="2"></td>
+							<td colspan="2"><div class="input"> {{zalaczniki.inny3}} </div></td>
 						</tr>
 						<tr>
 							<td>87.</td>
-							<td colspan="2"></td>
+							<td colspan="2"><div class="input"> {{zalaczniki.inny4}} </div></td>
 						</tr>
 						<tr>
 							<td>88.</td>
-							<td colspan="2"></td>
+							<td colspan="2"><div class="input"> {{zalaczniki.inny5}} </div></td>
 						</tr>
 
 					</table>

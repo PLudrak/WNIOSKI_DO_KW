@@ -181,8 +181,31 @@ ul li+li {
 	margin-left: 0.5cm;
 	display: inline;
 }
+
+.checkbox-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 1cm;
+}
+
 .checkbox {
-	height: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox img {
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+.checkbox+.checkbox {
 	margin-left: 1rem;
-	display: inline-block;
+}
+.checkbox span {
+    margin-left: 0.8rem; /* Przestrzeń między ikoną a tekstem */
+    vertical-align: middle;
+}
+.checkbox-img{
+	height: 1rem;
+	width: 1em;
 }
