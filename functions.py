@@ -1,5 +1,6 @@
 import pandas as pd
 from rendering import *
+
 def load_dzialki(filepath):
 	#df_dzialki = pd.DataFrame(columns=['ID_zrodlowe','ID_projektowane','powierzchnia','czy_inwestycja','KW'])
 	rows = []
@@ -10,10 +11,10 @@ def load_dzialki(filepath):
 		ID_projektowane = row['ID_Projektowane']
 		powierzchnia = row['Powierzchnia']
 		
-		if type(row['Inwestycja'])== str and row['Inwestycja'].upper() == "PRAWDA":
-			czy_inwestycja = True
-		else: 
-			czy_inwestycja = False
+		# if type(row['Inwestycja'])== str and row['Inwestycja'].upper() == "PRAWDA":
+		# 	czy_inwestycja = True
+		# else: 
+		# 	czy_inwestycja = False
 		
 		KW = row['KW']
 		if KW is None:
@@ -23,11 +24,12 @@ def load_dzialki(filepath):
 			'ID_zrodlowe':ID_zrodlowe,
 			'ID_projektowane':ID_projektowane,
 			'powierzchnia': powierzchnia,
-			'czy_inwestycja':czy_inwestycja,
-			'KW':KW
+			'czy_inwestycja':row["Inwestycja"],
+			'KW':KW,
 		}
 		rows.append(new_row)
 	df_dzialki = pd.DataFrame(rows)
+	print(df_dzialki)
 	return df_dzialki
 
 def load_relacje(filepath):
@@ -66,7 +68,8 @@ def load_osoby(filepath):
 			'kod_pocztowy':row['Kod_pocztowy'],
 			'poczta':row['Poczta'],
 			'pelnomocnik' : False,
-			'adres_doreczen' :False
+			'adres_doreczen' :False,
+			'czy_osoba_prawna':row['osoba']
 		}
 		rows.append(new_row)
 	df_osoby=pd.DataFrame(rows)
@@ -78,22 +81,57 @@ def load_sady(filepath):
 	mapa_sadow = dict(zip(df_excel['kod'], df_excel['sad_rejonowy']))
 	return mapa_sadow
 
+def load_gddkia(filepath):
+	df_excel=pd.read_excel(filepath)
+	rows = []
+	for _,row in df_excel.iterrows():
+		new_row = {
+			"obreb":row["OBREB"],
+			"obreb_id":row["obreb_id"],
+			"kw_gddkia":row["KW GDDK"],
+			"gmina": row["GMINA"],
+			"powiat": row["POWIAT"]}
+
+		rows.append(new_row)
+	df_GDDKIA = pd.DataFrame(rows)
+	return df_GDDKIA
+
+def dzialki_w_inwestycji(df_dzialki):
+	"""zwroc liste dzialek ktore po podziale znajda sie w inwestycji"""
+	df_filtered = df_dzialki[df_dzialki["czy_inwestycja"]==True]
+	dzialki ={
+		row["ID_projektowane"]:row["powierzchnia"]
+		for _, row in df_filtered.iterrows()
+	}
+	return dzialki
+	
+
+def krotkie_id(nr_dzialki):
+	"""wyodrebnij numer dzialki z id dzialki"""
+	return nr_dzialki.split(".")[-1]
 
 class Wniosek:
 	
-	def __init__ (self,KW:str,df_dzialki:pd.DataFrame,df_relacje:pd.DataFrame,df_wlasciciele,sady:dict,dane_wnioskodawcy:dict):
+	def __init__ (self,KW:str,df_dzialki:pd.DataFrame,df_relacje:pd.DataFrame,df_wlasciciele,sady:dict,dane_wnioskodawcy:dict,df_GDDKIA, dzialki_inwestycja):
 		self.kw =KW
-		print(f"Wniosek {self.kw} zainicjalizowano")
 		self.wlasciciele = []
 		self.wlasciciele_dane = []
-		self.find_dzialki(df_dzialki)
-		self.find_wlasciciele(df_relacje)
+		self.dzialki_zrodlowe = []
+		self.dzialki_zr_pr = []
 		self.formularze = ['KW-WPIS']
-		self.okresl_sad(sady)
+		self.sad = []
 		self.wnioskodawca = dane_wnioskodawcy
-		self.pobierz_dane_wlascicieli(df_wlasciciele)
 		self.ile_wlascicieli = len(self.wlasciciele)
-	
+		self.zalaczniki = []
+		self.find_dzialki(df_dzialki)
+		self.obreb = self.ustal_obreb(df_GDDKIA)
+		self.find_wlasciciele(df_relacje)
+		self.okresl_sad(sady)
+		self.pobierz_dane_wlascicieli(df_wlasciciele)
+		self.okresl_zalaczniki()
+		self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
+		print(f"Wniosek {self.kw} zainicjalizowano")
+
 	def find_dzialki(self,df_dzialki:pd.DataFrame):
 		"""znajdz dzialki zrodlowe i projektowane na podstawie nr KW"""
 		
@@ -113,7 +151,28 @@ class Wniosek:
 			if pd.notna(zrodlowa) and pd.notna(projektowana):
 				self.dzialki_zr_pr.setdefault(zrodlowa,[]).append(projektowana)
 
+	def ustal_obreb(self,df_GDDKIA):
+		
+		obreby_id =[]
+		for dzialka in self.dzialki_zrodlowe:
+			obreb_id = ".".join(dzialka.split(".")[:2])
+			obreby_id.append(obreb_id)
+		
+		obreby_id = set(obreby_id)
 	
+		if len(obreby_id) ==1:
+			obreb_id = next(iter(obreby_id))
+			obreb_nazwa = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["obreb"].values[0]
+			obreb_gmina = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["gmina"].values[0]
+			obreb_powiat = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["powiat"].values[0]
+			self.kw_docelowa = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["kw_gddkia"].values[0]
+
+			return {'id':str(obreb_id), 'nazwa':obreb_nazwa, 'gmina':obreb_gmina,'powiat':obreb_powiat}
+
+		print(f"UWAGA:dzialki we wniosku do: {self.kw} znajdują się w dwóch obrebach")
+		return 
+
+
 	def find_wlasciciele(self,df_relacje):
 		"""Znajdz id wlascicieli kw na podstawie dzialek"""
 		for dzialka in self.dzialki_zrodlowe:
@@ -127,7 +186,6 @@ class Wniosek:
 			rekord = df_wlasiciele[df_wlasiciele["ID_osoby"]==id]
 			if not rekord.empty:
 				self.wlasciciele_dane.append(rekord.iloc[0].to_dict())
-			print(rekord)
 
 	
 	def okresl_sad(self,sady):
@@ -135,16 +193,49 @@ class Wniosek:
 		prefix = self.kw.split("/")[0]
 		self.sad = sady.get(prefix, "-")
 
-
-
-
+	def okresl_zalaczniki(self):
+		self.zalaczniki = {}
+		self.zalaczniki['kw_pp'] = 1
+		if self.ile_wlascicieli > 2:
+			self.zalaczniki['kw_wu'] = self.ile_wlascicieli - 2
+	
+	def get_output_path(self):
+		path = ["export",self.sad,self.obreb["nazwa"],self.kw.replace("/",".")]
+		return os.path.join(*path) 
+	
 	def print_forms(self):
 		for form in self.formularze:
 			if form == "KW-WPIS":
+				output_path=self.get_output_path()
 				data={
 					'sad':self.sad,
 					'nr_kw':self.kw,
-					'tresc_zadania':"Lorem ipsum dolor amet",
-					'co jezeli bedzie':"za duzo?"
+					'tresc_zadania':self.tresc_zadania,
 				}
-				print_wpis(data,self.wnioskodawca,self.wlasciciele_dane,)
+
+				print_wpis(data,self.wnioskodawca,self.wlasciciele_dane,self.zalaczniki, output_path)
+
+	def okresl_tresc_zadania(self,dzialki_inwestycja_wszystkie:dict):
+		#selekcja działek w inwestycji
+		dzialki_inwestycja = [dz for dz in self.dzialki if dz in dzialki_inwestycja_wszystkie]	
+		#ile dzialek odlaczanych
+		licznik_dzialek = len(dzialki_inwestycja)
+		tresc = (
+			f'WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA'
+			' 203 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH"'
+			'(DZ.U. 2023 POZ. 162),')
+
+		for num,dzialka in enumerate(self.dzialki):
+			nowa_tresc = ""
+			if dzialka in dzialki_inwestycja:
+				nowa_tresc = f" DZIAŁKI NR {krotkie_id(dzialka)} O POW. {dzialki_inwestycja_wszystkie[dzialka]} HA,"
+			if num == licznik_dzialek -1 and num >0:
+				nowa_tresc = f" ORAZ {nowa_tresc[:-1]}"
+			tresc += nowa_tresc
+		
+		tresc += (
+			f"POŁOŻONEJ W OBRĘBIE {krotkie_id(self.obreb["id"])} {self.obreb["nazwa"]}, GMINA {self.obreb["gmina"]},"
+			f"POWIAT {self.obreb["powiat"]} I PRZYŁĄCZENIE JEJ DO KSIĘGI {self.kw_docelowa}."
+				)
+		return tresc
+

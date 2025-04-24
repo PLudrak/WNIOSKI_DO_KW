@@ -1,26 +1,46 @@
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 import os
-def load_template(template):
-	env = Environment(loader=FileSystemLoader(['forms','static']))
-	template = env.get_template(template)
-	return template
 
+def load_template(template_name: str):
+    env = Environment(loader=FileSystemLoader(['forms', 'static']))
+    return env.get_template(template_name)
 
-def print_wpis(data, wnioskodawca, wlasciciele):
+def rozdziel_uczestnikow(wlasciciele: list[dict]):
+    uczestnik1 = wlasciciele[0] if len(wlasciciele) > 0 else {}
+    uczestnik2 = wlasciciele[1] if len(wlasciciele) > 1 else {}
+    pozostali = wlasciciele[2:] if len(wlasciciele) > 2 else []
+    return uczestnik1, uczestnik2, pozostali
+
+def print_wpis(data, wnioskodawca, wlasciciele,zalaczniki,path):
 	base_path = os.path.abspath("forms")
-	template = load_template(r"KW-WPIS_1.html")
-	html = template.render(**data,numer_strony="1")
-	HTML(string=html, base_url=base_path).write_pdf("1.pdf")
+	output_path = os.path.join(path,"KW-WPIS.pdf")
+	os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+	u1,u2,pozostali_uczestnicy = rozdziel_uczestnikow(wlasciciele)
 	
-	template = load_template(r"KW-WPIS_2.html")
-	html = template.render(**data,numer_strony="2")
-	HTML(string=html, base_url=base_path).write_pdf("2.pdf")
+	strony = [
+		("KW-WPIS_1.html", {"numer_strony":"1"}),
+		("KW-WPIS_2.html", {"numer_strony":"2"}),
+		("KW-WPIS_3.html", {"numer_strony":"3", "uczestnik":u1, "wnioskodawca":wnioskodawca}),
+		("KW-WPIS_4.html", {"numer_strony":"4", "uczestnik":u2, "zalaczniki":zalaczniki})
+	]
+	rendered_pages = []
 
-	template = load_template(r"KW-WPIS_3.html")
-	html = template.render(**data,wnioskodawca=wnioskodawca,uczestnik=wlasciciele[0],numer_strony="3")
-	HTML(string=html, base_url=base_path).write_pdf("3.pdf")
+	for template_name, context in strony:
+		template = load_template(template_name)
+		html = template.render(**data,**context)
+		rendered_pages.append(html)
 
-	template = load_template(r"KW-WPIS_4.html")
-	html = template.render(**data,numer_strony="4")
-	HTML(string=html, base_url=base_path).write_pdf("4.pdf")
+	combined_html = "".join(rendered_pages)
+	while True:
+		try:
+			HTML(string=combined_html, base_url=base_path).write_pdf(output_path)
+			print(f"Zapisano wniosek {output_path}")
+			break
+		except:
+			print("Błąd zapisu \n sprobowac ponownie? T/N")
+			odp = input().strip().lower()
+			if odp != 't':
+				print("zapis przerwany")
+				break
