@@ -125,7 +125,8 @@ def krotkie_id(nr_dzialki):
 	return nr_dzialki.split(".")[-1]
 
 class Wniosek:
-	
+	pierwszy_wniosek= {}
+
 	def __init__ (self,KW:str,obreb:str,df_dzialki:pd.DataFrame,df_relacje:pd.DataFrame,df_wlasciciele,sady:dict,dane_wnioskodawcy:dict,df_GDDKIA, dzialki_inwestycja):
 		self.kw =KW
 		self.wlasciciele = []
@@ -137,7 +138,7 @@ class Wniosek:
 		self.wnioskodawca = dane_wnioskodawcy
 		self.zalaczniki = []
 		self.find_dzialki(df_dzialki,obreb)
-		self.obreb = self.ustal_obreb(df_GDDKIA)
+		self.obreb = self.ustal_obreb(df_GDDKIA) #potencjalnie mylące - zmienic później
 		self.find_wlasciciele(df_relacje)
 		self.ile_wlascicieli = len(self.wlasciciele)
 		self.okresl_sad(sady)
@@ -180,7 +181,6 @@ class Wniosek:
 			obreby_id.append(obreb_id)
 		
 		obreby_id = set(obreby_id)
-		print(obreby_id)
 		if len(obreby_id) ==1:
 			obreb_id = next(iter(obreby_id))
 			obreb_nazwa = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["obreb"].values[0]
@@ -221,6 +221,33 @@ class Wniosek:
 		if self.ile_wlascicieli > 2:
 			self.zalaczniki['kw_wu'] = self.ile_wlascicieli - 2
 	
+		self.zalaczniki['inny1'] = self.odnosnik_do_zalacznika("DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024")
+		self.zalaczniki['inny2'] = self.odnosnik_do_zalacznika("PEŁNOMOCNICTWO")
+	
+	def odnosnik_do_zalacznika(self,zalacznik:str):
+		if self.okresl_pierwszy_wniosek():
+			return zalacznik
+		else:
+			suffix = f" - znajduje się w aktach {Wniosek.pierwszy_wniosek[self.obreb['id']]}"
+			zalacznik += suffix
+			return zalacznik
+	
+	def okresl_pierwszy_wniosek(self):
+		"""sprawdza czy jest pierwszym wnioskiem dla obrebu, jezeli nie zwraca numer kw pierwszego wniosku"""
+		pierwszy_wniosek = Wniosek.pierwszy_wniosek.get(self.obreb['id'])
+		if not pierwszy_wniosek:
+			Wniosek.pierwszy_wniosek[self.obreb['id']]=self.kw
+			pierwszy_wniosek = self.kw
+			
+		print(f"Pierwszy wniosek dla {self.obreb['nazwa']}\n           |{pierwszy_wniosek}| ")
+		print(f"aktualna KW:|{self.kw}|")
+		print(pierwszy_wniosek==self.kw)
+		if pierwszy_wniosek == self.kw:
+			return True
+		else:
+			return False
+	
+
 	def get_output_path(self):
 		path = ["export",self.sad,self.obreb["nazwa"],self.kw.replace("/",".")]
 		return os.path.join(*path) 

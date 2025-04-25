@@ -16,7 +16,6 @@ def print_wpis(data, wnioskodawca, wlasciciele,zalaczniki,path):
 	base_path = os.path.abspath("forms")
 	output_path = os.path.join(path,"KW-WPIS.pdf")
 	os.makedirs(os.path.dirname(output_path), exist_ok=True)
-	print(zalaczniki)
 	u1,u2,pozostali_uczestnicy = rozdziel_uczestnikow(wlasciciele)
 	
 	strony = [
