@@ -35,8 +35,7 @@ if __name__=='__main__':
 	print("Załadowano informacje o Księgach GDDKIA i obrębach")
 	dzialki_inwestycja = dzialki_w_inwestycji(df_dzialki)
 
-	lista_kw = df_dzialki['KW'].dropna().unique().tolist()
-	lista_kw = ['RA1L/00028970/1']
+	
 
 	lista_kw = sorted(
 		df_dzialki[df_dzialki["czy_inwestycja"]==True][['KW','obreb']]

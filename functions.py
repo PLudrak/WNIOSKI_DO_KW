@@ -141,8 +141,8 @@ class Wniosek:
 		self.obreb = self.ustal_obreb(df_GDDKIA) #potencjalnie mylące - zmienic później
 		self.find_wlasciciele(df_relacje)
 		self.ile_wlascicieli = len(self.wlasciciele)
-		self.okresl_sad(sady)
 		self.pobierz_dane_wlascicieli(df_wlasciciele)
+		self.okresl_sad(sady)
 		self.okresl_zalaczniki()
 		self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
 		print(f"Wniosek {self.kw} zainicjalizowano")
@@ -215,6 +215,7 @@ class Wniosek:
 		self.sad = sady.get(prefix, "-")
 
 	def okresl_zalaczniki(self):
+		"""przygotuj dane do wpisania w Wykazie zalacznikow KW-WPIS/KW-ZAL"""
 		self.zalaczniki = {}
 		self.zalaczniki['kw_pp'] = 1
 
@@ -225,6 +226,7 @@ class Wniosek:
 		self.zalaczniki['inny2'] = self.odnosnik_do_zalacznika("PEŁNOMOCNICTWO")
 	
 	def odnosnik_do_zalacznika(self,zalacznik:str):
+		"""jezeli wniosek nie jest pierwszym w obrebie, dodaj odsylacz do pierwszego wniosku"""
 		if self.okresl_pierwszy_wniosek():
 			return zalacznik
 		else:
