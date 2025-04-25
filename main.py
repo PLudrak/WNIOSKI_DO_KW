@@ -24,6 +24,7 @@ dane_wnioskodawcy = {
 if __name__=='__main__':
 	df_dzialki = load_dzialki(r"import/Dzialki.xlsx")
 	print("Zaladowano informacje o działkacj")
+	print(df_dzialki.head())
 	df_relacje = load_relacje(r"import/Relacje.xlsx")
 	print("Zaladowano informacje o właścicielach")
 	df_osoby = load_osoby(r"import/Wlasciciele.xlsx")
@@ -32,9 +33,10 @@ if __name__=='__main__':
 	print("Załadowano informacje o sądach")
 	df_GDDKIA = load_gddkia(r"import/KW-GDDKIA.xlsx")
 	print("Załadowano informacje o Księgach GDDKIA i obrębach")
-	lista_kw = ["RA1L/00034474/9","RA1L/00062793/6","RA1L/00023185/6"]
 	dzialki_inwestycja = dzialki_w_inwestycji(df_dzialki)
 
+	lista_kw = df_dzialki['KW'].dropna().unique().tolist()
+	lista_kw = ['RA1L/00028970/1']
 	wnioski = []
 	for kw in lista_kw:
 		wniosek = Wniosek(kw,df_dzialki,df_relacje,df_osoby,df_sady,dane_wnioskodawcy,df_GDDKIA, dzialki_inwestycja)

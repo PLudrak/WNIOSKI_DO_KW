@@ -16,7 +16,7 @@ def print_wpis(data, wnioskodawca, wlasciciele,zalaczniki,path):
 	base_path = os.path.abspath("forms")
 	output_path = os.path.join(path,"KW-WPIS.pdf")
 	os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
+	print(zalaczniki)
 	u1,u2,pozostali_uczestnicy = rozdziel_uczestnikow(wlasciciele)
 	
 	strony = [
@@ -36,11 +36,36 @@ def print_wpis(data, wnioskodawca, wlasciciele,zalaczniki,path):
 	while True:
 		try:
 			HTML(string=combined_html, base_url=base_path).write_pdf(output_path)
-			print(f"Zapisano wniosek {output_path}")
+			print(f"KW-WPIS zapisano w {output_path}")
+			if pozostali_uczestnicy:
+				print_WU(pozostali_uczestnicy,path)
 			break
-		except:
-			print("Błąd zapisu \n sprobowac ponownie? T/N")
+		except Exception as e:
+			print(f"Błąd zapisu {e} \n sprobowac ponownie? T/N")
 			odp = input().strip().lower()
 			if odp != 't':
 				print("zapis przerwany")
 				break
+	
+def print_WU(uczestnicy,path):
+	try:
+		base_path = os.path.abspath("forms")
+		output_path = os.path.join(path,"KW-WU.pdf")
+		os.makedirs(os.path.dirname(output_path), exist_ok=True)
+		rendered_pages = []
+
+		for i,uczestnik in enumerate(uczestnicy, start=1):
+			print(uczestnik)
+			context = {"numer_strony":str(i), "uczestnik":uczestnik}
+			template = load_template("KW-WU.html")
+			html = template.render(**context)
+			rendered_pages.append(html)
+		
+		combined_html = "".join(rendered_pages)
+
+
+		HTML(string=combined_html,base_url=base_path).write_pdf(output_path)
+		print(f"KW-WU   zapisano w {output_path}")
+	except Exception as e:
+		print(e)
+		raise

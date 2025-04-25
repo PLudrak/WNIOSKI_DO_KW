@@ -11,10 +11,6 @@ def load_dzialki(filepath):
 		ID_projektowane = row['ID_Projektowane']
 		powierzchnia = row['Powierzchnia']
 		
-		# if type(row['Inwestycja'])== str and row['Inwestycja'].upper() == "PRAWDA":
-		# 	czy_inwestycja = True
-		# else: 
-		# 	czy_inwestycja = False
 		
 		KW = row['KW']
 		if KW is None:
@@ -26,10 +22,10 @@ def load_dzialki(filepath):
 			'powierzchnia': powierzchnia,
 			'czy_inwestycja':row["Inwestycja"],
 			'KW':KW,
+			'obreb': row['ID_zrodlowe']
 		}
 		rows.append(new_row)
 	df_dzialki = pd.DataFrame(rows)
-	print(df_dzialki)
 	return df_dzialki
 
 def load_relacje(filepath):
@@ -43,25 +39,43 @@ def load_relacje(filepath):
 	df_relacje = pd.DataFrame(rows)		
 	return df_relacje
 
+def nazwisko_zlozone(nazwa):
+	
+	nazwisko = nazwa.split()[0]
+	if "-" in nazwisko:
+		nazwisko = nazwisko.split("-")
+		nazwisko1,nazwisko2 = nazwisko [0],nazwisko[1]
+	else:
+		nazwisko1,nazwisko2 = nazwisko, None
+	return nazwisko1, nazwisko2
+
+def poprawny_numer(numer):
+	"""Sprawdź czy numer pesel, regon, nip == 0, jezeli tak zastap go '---' """
+	if numer == 0 or numer == None:
+		numer = "---"
+	return numer
+
 def load_osoby(filepath):
 	rows=[]
 	df_excel = pd.read_excel(filepath)
 
 	for _,row in df_excel.iterrows():
+		nazwisko,nazwisko2 = nazwisko_zlozone(row['Nazwa_poprawna'])
 		#ID_ososby Pesel Regon KRS Nazwa Nazwisko Nazwisko2 Imie1 Imie2 ImieO Imie_m Kraj Miejscowosc Ulica NumerBudnku NumerLokalu KodPocztowy Poczta Pełnomocnik AdresDoreczen
 		new_row ={
 			'ID_osoby':row['ID_osoby'],
-			'pesel':row['Pesel'],
-			'regon':row['REGON'],
-			'krs':row['KRS'],
+			'pesel':poprawny_numer(row['Pesel']),
+			'regon':poprawny_numer(row['REGON']),
+			'krs':poprawny_numer(row['KRS']),
 			'nazwa':row['Nazwa_poprawna'],
-			'nazwisko':row['Nazwa_poprawna'].split()[0],
+			'nazwisko':nazwisko,
+			'nazwisko2':nazwisko2,
 			'imie':row['Imie_1'],
 			'imie2':row['Imie_2'],
 			'imie_ojca':row['Imie_O'],
 			'imie_matki':row['Imie_M'],
 			'kraj':row['Kraj'],
-			'mijescowosc':row['Poczta'],
+			'miejscowosc':row['Poczta'],
 			'ulica':row['Ulica'],
 			'numer_budynku':row['Numer_domu'],
 			'numer_lokalu':row['Numer_lokalu'],
@@ -121,11 +135,11 @@ class Wniosek:
 		self.formularze = ['KW-WPIS']
 		self.sad = []
 		self.wnioskodawca = dane_wnioskodawcy
-		self.ile_wlascicieli = len(self.wlasciciele)
 		self.zalaczniki = []
 		self.find_dzialki(df_dzialki)
 		self.obreb = self.ustal_obreb(df_GDDKIA)
 		self.find_wlasciciele(df_relacje)
+		self.ile_wlascicieli = len(self.wlasciciele)
 		self.okresl_sad(sady)
 		self.pobierz_dane_wlascicieli(df_wlasciciele)
 		self.okresl_zalaczniki()
@@ -159,7 +173,7 @@ class Wniosek:
 			obreby_id.append(obreb_id)
 		
 		obreby_id = set(obreby_id)
-	
+		print(obreby_id)
 		if len(obreby_id) ==1:
 			obreb_id = next(iter(obreby_id))
 			obreb_nazwa = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["obreb"].values[0]
@@ -196,6 +210,7 @@ class Wniosek:
 	def okresl_zalaczniki(self):
 		self.zalaczniki = {}
 		self.zalaczniki['kw_pp'] = 1
+		print("ile_wlascicieli: ",self.ile_wlascicieli)
 		if self.ile_wlascicieli > 2:
 			self.zalaczniki['kw_wu'] = self.ile_wlascicieli - 2
 	
@@ -220,22 +235,31 @@ class Wniosek:
 		dzialki_inwestycja = [dz for dz in self.dzialki if dz in dzialki_inwestycja_wszystkie]	
 		#ile dzialek odlaczanych
 		licznik_dzialek = len(dzialki_inwestycja)
+	
 		tresc = (
 			f'WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA'
-			' 203 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH"'
-			'(DZ.U. 2023 POZ. 162),')
+			' 2003 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH" '
+			'(DZ.U. 2023 POZ. 162):')
+		
 
-		for num,dzialka in enumerate(self.dzialki):
+		for num,dzialka in enumerate(dzialki_inwestycja):
 			nowa_tresc = ""
 			if dzialka in dzialki_inwestycja:
 				nowa_tresc = f" DZIAŁKI NR {krotkie_id(dzialka)} O POW. {dzialki_inwestycja_wszystkie[dzialka]} HA,"
+				tresc += nowa_tresc
 			if num == licznik_dzialek -1 and num >0:
-				nowa_tresc = f" ORAZ {nowa_tresc[:-1]}"
-			tresc += nowa_tresc
+				nowa_tresc = f" ORAZ {nowa_tresc} "
+				tresc = tresc[:-1] + nowa_tresc #tresc[:-1] usuwa ostatni przecinek przed "ORAZ"
 		
 		tresc += (
-			f"POŁOŻONEJ W OBRĘBIE {krotkie_id(self.obreb["id"])} {self.obreb["nazwa"]}, GMINA {self.obreb["gmina"]},"
+			f"POŁOŻONEJ W OBRĘBIE {krotkie_id(self.obreb["id"])} {self.obreb["nazwa"]}, GMINA {self.obreb["gmina"]}, "
 			f"POWIAT {self.obreb["powiat"]} I PRZYŁĄCZENIE JEJ DO KSIĘGI {self.kw_docelowa}."
 				)
+		
+		if licznik_dzialek > 1:
+			tresc = tresc.replace("POŁOŻONEJ","POŁOŻONYCH")
+			tresc = tresc.replace("JEJ", "ICH")		
 		return tresc
 
+if __name__ == "__main__":
+	print(nazwisko_zlozone("głażejewicz-bąk"))
