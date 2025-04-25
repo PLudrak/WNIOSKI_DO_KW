@@ -22,7 +22,7 @@ def load_dzialki(filepath):
 			'powierzchnia': powierzchnia,
 			'czy_inwestycja':row["Inwestycja"],
 			'KW':KW,
-			'obreb': row['ID_zrodlowe']
+			'obreb': ".".join(ID_zrodlowe.split(".")[:-1])
 		}
 		rows.append(new_row)
 	df_dzialki = pd.DataFrame(rows)
@@ -126,7 +126,7 @@ def krotkie_id(nr_dzialki):
 
 class Wniosek:
 	
-	def __init__ (self,KW:str,df_dzialki:pd.DataFrame,df_relacje:pd.DataFrame,df_wlasciciele,sady:dict,dane_wnioskodawcy:dict,df_GDDKIA, dzialki_inwestycja):
+	def __init__ (self,KW:str,obreb:str,df_dzialki:pd.DataFrame,df_relacje:pd.DataFrame,df_wlasciciele,sady:dict,dane_wnioskodawcy:dict,df_GDDKIA, dzialki_inwestycja):
 		self.kw =KW
 		self.wlasciciele = []
 		self.wlasciciele_dane = []
@@ -136,7 +136,7 @@ class Wniosek:
 		self.sad = []
 		self.wnioskodawca = dane_wnioskodawcy
 		self.zalaczniki = []
-		self.find_dzialki(df_dzialki)
+		self.find_dzialki(df_dzialki,obreb)
 		self.obreb = self.ustal_obreb(df_GDDKIA)
 		self.find_wlasciciele(df_relacje)
 		self.ile_wlascicieli = len(self.wlasciciele)
@@ -146,11 +146,18 @@ class Wniosek:
 		self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
 		print(f"Wniosek {self.kw} zainicjalizowano")
 
-	def find_dzialki(self,df_dzialki:pd.DataFrame):
+	def find_dzialki(self,df_dzialki:pd.DataFrame,obreb):
 		"""znajdz dzialki zrodlowe i projektowane na podstawie nr KW"""
 		
 		#selekcja rekordów z df_dzialki gdzie: kw wnisoku == kw dzialki źródłowej
 		df_kw = df_dzialki[df_dzialki['KW'] == self.kw]
+
+		#filtrowanie działek które zaczynają się od numeru obrębu docelowego dla danego wniosku
+		df_kw = df_kw[
+			df_kw['ID_zrodlowe'].astype(str).str.startswith(obreb) |
+			df_kw['ID_projektowane'].astype(str).str.startswith(obreb)
+		]
+
 
 		#tworzy listę działek źródłowych:
 		self.dzialki_zrodlowe = df_kw['ID_zrodlowe'].unique().tolist()
@@ -210,7 +217,7 @@ class Wniosek:
 	def okresl_zalaczniki(self):
 		self.zalaczniki = {}
 		self.zalaczniki['kw_pp'] = 1
-		print("ile_wlascicieli: ",self.ile_wlascicieli)
+
 		if self.ile_wlascicieli > 2:
 			self.zalaczniki['kw_wu'] = self.ile_wlascicieli - 2
 	

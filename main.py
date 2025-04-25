@@ -37,9 +37,18 @@ if __name__=='__main__':
 
 	lista_kw = df_dzialki['KW'].dropna().unique().tolist()
 	lista_kw = ['RA1L/00028970/1']
+
+	lista_kw = (
+		df_dzialki[df_dzialki["czy_inwestycja"]==True][['KW','obreb']]
+		.dropna()
+		.drop_duplicates()
+		.to_dict(orient='records')
+	)
+	for line in lista_kw:
+		print(line["KW"], line["obreb"])
 	wnioski = []
 	for kw in lista_kw:
-		wniosek = Wniosek(kw,df_dzialki,df_relacje,df_osoby,df_sady,dane_wnioskodawcy,df_GDDKIA, dzialki_inwestycja)
+		wniosek = Wniosek(kw['KW'],kw['obreb'],df_dzialki,df_relacje,df_osoby,df_sady,dane_wnioskodawcy,df_GDDKIA, dzialki_inwestycja)
 		wniosek.print_forms()
 		wnioski.append(wniosek)
 	

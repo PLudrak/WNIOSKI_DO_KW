@@ -55,7 +55,6 @@ def print_WU(uczestnicy,path):
 		rendered_pages = []
 
 		for i,uczestnik in enumerate(uczestnicy, start=1):
-			print(uczestnik)
 			context = {"numer_strony":str(i), "uczestnik":uczestnik}
 			template = load_template("KW-WU.html")
 			html = template.render(**context)
