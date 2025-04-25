@@ -72,6 +72,15 @@ tr,td {
 	line-height: 0.9rem;
 	font-style: italic;
 }
+.inside-middle{
+	width: 97%;
+	margin-left: auto;
+	line-height: 0.9rem;
+	font-style: italic;
+}
+table .inside-middle td,tr{
+	border-right: 0;
+}
 .part {
 	border: 2px solid black;
 }
@@ -94,6 +103,7 @@ ul {
 }
 p{
 	margin: 0;
+	line-height: 1.3rem;
 }
 .oznaczenie-dzialki td{
 	width: 50%;
@@ -208,4 +218,12 @@ ul li+li {
 .checkbox-img{
 	height: 1rem;
 	width: 1em;
+}
+
+.option {
+	display: flex;
+	align-items: center;
+	gap:1rem;
+	margin-left: 1rem;
+	font-weight: bold;
 }

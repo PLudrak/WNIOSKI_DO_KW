@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>KW-WPIS</title>
+	<link rel="stylesheet" href="../static/styles.css">
+
+</head>
+<body>
+	<div class="A4">
+		
+		<div class="container">
+			<div class="nr-strony">strona {{numer_strony}}</div>
+			<table class="dark main" id="box1">
+				<tr>
+					<td class ="center" id="wpis"><b>KW-ZAL</b></td>
+					<td rowspan="2"class="center"><h1>Wniosek o wpis w księdze wieczystej</h1></td>
+					<td rowspan="2" class="light topleft"><i>Adnotacja o wpłynięciu wniosku:</i></td> 
+				</tr>
+				<tr>
+					<td class="center white" id="rejestr"><b>Rejestr Ksiąg Wieczystych</b></td>
+				</tr>
+			</table>
+			<table class="light main">
+				<tr>
+					<td id="nrdz"><i>Numer Dz.Kw:</i></td>
+					<td id="oplata"><i>Uiszczono opłatę w kwocie (w zł):</i></td>
+				</tr>
+			</table>
+			<table class="dark main">
+				<tr>
+					<td>
+						<h2>POUCZENIE</h2>
+						<ul class="info">
+							<li>Formularz należy wypełnić w języku polskim, czytelnie, drukowanymi literami, bez skreśleń i poprawek, na maszynie, na komputerze lub ręcznie, zgodnie z opisem pól.</li>
+							<li>Wnioskodawca wypełnia tylko pola jasne wniosku, z tym że pola niewypełnione należy przekreślić.</li>
+							<li>Wniosek można złożyć w biurze podawczym wydziału ksiąg wieczystych lub nadać w placówce pocztowej operatora pocztowego na adres tego wydziału.</li>
+						</ul>
+					</td>
+				</tr>
+				
+			</table>
+			<table class="main dark outside">
+				<tr><td>
+					<h2>OZNACZENIE SĄDU I WYDZIAŁU, DO KTÓREGO SKŁADANY JEST WNIOSEK:</h2>
+					<table class="inside white">
+						<tr>
+							<td>1. Sąd Rejonowy <p class="input"> {{ sad }}</p></td>
+						</tr>
+						<tr>
+							<td>2. Wydział Ksiąg Wieczystych</td>
+						</tr>
+					</table>
+				</td></tr>
+			</table>
+			<table class="main dark outside">
+				<tr>
+					<td>
+						<h2>WNOSZĘ O ZAŁOŻENIE KSIĘGI WIECZYSTEJ DLA:</h2>
+						<ul class="info">
+							<li>
+								Należy wyraźnie zaznaczyć jeden kwadrat odpowiadający treści żądania.
+							</li>
+						</ul>
+								<table class="white inside-middle">
+									<tr>
+										<td>
+											<p class="option"><img class="checkbox-img" src="../static/tak.svg"> NIERUCHOMOŚCI GRUNOTOWEJ </p>
+											<p class="option"><img class="checkbox-img" src="../static/nie.svg"> NIERUCHOMOŚCI BUDYNKOWEJ </p>
+											<p class="option"><img class="checkbox-img" src="../static/nie.svg"> NIERUCHOMOŚCI LOKALOWEJ </p>
+											<p class="option"><img class="checkbox-img" src="../static/nie.svg"> SPÓŁDZIELCZEGO WŁASNOŚCIOWEGO PRAWA DO LOKALU </p>
+										</td>
+									</tr>
+								</table>
+								<ul class="info">
+									<li>
+										Jeżeli przedmiotem żądania jest założenie księgi wieczystej dla nieruchomości odłączonej/wyodrębnionej z innej księgi wieczystej, w polu nr 3 należy wskazać numer księgi wieczystej, z której część nieruchomości zostanie odłączona/wyodrębniona.
+									</li>
+								</ul>
+								<table class="white inside-middle">
+									<tr>
+										<td>
+											3. Odłączonej z księgi wieczystej numer:<p class="input">{{kw_odlaczane}}</p>
+										</td>
+									</tr>
+								</table>
+								<ul class="info">
+									<li>
+										Jeżeli przedmiotem żądania jest założenie księgi wieczystej dla nieruchomości gruntowej, dla której nie jest prowadzona księga wieczysta, przez dołączenie jej do istniejącej księgi wieczystej, w polu nr 4 należy wskazać numer tej księgi wieczystej.
+									</li>
+								</ul>
+								<table class="white inside-middle">
+									<tr>
+										<td>
+											4. Numer księgi wieczystje, do której dołącza się nieruchomość:<p class="input">{{kw_dolaczane}}</p>
+										</td>
+									</tr>
+								</table>
+							</td>
+
+				</tr>
+			</table>
+			<table class="main dark outside">
+				<tr>
+					<td>
+						<h2>POŁOŻENIE NIERUCHOMOŚCI</h2>
+						<table class="white inside">
+							<tr>
+								<td colspan="2">
+									5. Województwo: <p class="input">{{ polozenie.wojewodztwo }}</p>
+								</td>
+							</tr>	
+							<tr>
+								<td>6. Powiat: <p class="input">{{ polozenie.powiat }}</p></td>
+								<td>7. Gmina: <p class="input">{{ polozenie.gmina }}</p></td>
+							</tr>
+							<tr>
+								<td>8. Miejscowosc: <p class="input">{{ polozenie.miejscowosc }}</p></td>
+								<td>9. Dzielnica: <p class="input">{{ polozenie.dzielnica }}</p></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<table class="main dark outside">
+				<tr>
+					<td class="part">
+						<h2 class="center">OZNACZENIE I OBSZAR (POWIERZCHNIA) NIERUCHOMOŚCI:</h2>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h2 style="display: inline;"> OZNACZENIE I OBSZAR DZIAŁKI EWIDENCYJNEJ</h2>(wypełniane tylko w przypadku, gdy przedmiotem żądania jest założenie księgi wieczystej dla nieruchomości gruntowej):
+						<ul class="info">
+							<li>Jeżeli przedmiotem żądania jest założenie księgi wieczystej dla nieruchomości gruntowej, w skład której wchodzi kilka działek ewidencyjnych, do wniosku należy dołączyć formularz „KW-OZN Oznaczenie działki ewidencyjnej”.</li>
+							<li>W polu „Obszar” należy podać nazwę jednostki pola powierzchni gruntów wykazywanych w ewidencji gruntów i budynków.</li>
+						</ul>
+						<table class="inside white">
+							<tr>
+								<td>10. Ulica: <p class="input">{{ oznaczenie.ulica }}</p></td> 
+								<td>11. Numer działki: <p class="input">{{ oznaczenie.id_dzialki }}</p></td> 
+							</tr>
+							<tr>
+								<td>12. Nazwa lub numer obrębu: <p class="input">{{ oznaczenie.id_obrebu }}</p></td> 
+								<td>13. Obszar: <p class="input">{{ oznaczenie.powierzchnia }}</p></td> 
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td class="part">
+						<h2 style="display: inline;">OZNACZENIE I POWIERZCHNIA UŻYTKOWA BUDYNKU </h2> (wypełniane tylko w przypadku, gdy przedmiotem żądania jest założenie księgi wieczystej dla nieruchomości budynkowej lub spółdzielczego własnościowego prawa do lokalu dotyczącego domu jednorodzinnego):
+						<table class="white inside">
+							<tr>
+								<td>14. Ulica: <p class="input"> --- </p></td>
+								<td>15. Nr budynku: <p class="input"> --- </p></td>
+							</tr>
+							<tr>
+								<td>16. Nr lokalu: <p class="input"> --- </p></td>
+								<td>17. Ulica: <p class="input"> --- </p></td>
+							</tr>
+
+						</table>
+						
+					</td>
+				</tr>
+			</table>
+			<table class="main">
+				<tr>
+					<td class="white">
+						<div class="topleft box4">Miejsce na znaki opłaty sądowej</div>
+					</td>
+					<td class="light">
+						<div class="topleft box4">Adnotacje o rozpoznaniu</div>
+					</td>
+				</tr>
+			</table>
+	
+		</div>
+	</div>
+	<div class="A4">
+		<div class="container">
+			<table class="main dark outside">
+				<tr>
+					<td class="part">
+						<h2 class="center">OZNACZENIE I OBSZAR (POWIERZCHNIA) NIERUCHOMOŚCI (cd.):</h2>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<h2 style="display: inline;"> OZNACZENIE I POWIERZCHNIA UŻYTKOWA LOKALU </h2> (wypełniane tylko w przypadku, gdy przedmiotem żądania jest założenie księgi wieczystej dla nieruchomości lokalowej lub spółdzielczego własnościowego prawa do lokalu):
+						<ul class="info">
+							<li>Jeżeli przedmiotem żądania jest założenie księgi wieczystej dla nieruchomości gruntowej, w skład której wchodzi kilka działek ewidencyjnych, do wniosku należy dołączyć formularz „KW-OZN Oznaczenie działki ewidencyjnej”.</li>
+							<li>W polu „Obszar” należy podać nazwę jednostki pola powierzchni gruntów wykazywanych w ewidencji gruntów i budynków.</li>
+						</ul>
+						<table class="inside white">
+							<tr>
+								<td>18. Ulica: <p class="input">---</p></td> 
+								<td>19. Numer budynku: <p class="input">---</p></td> 
+							</tr>
+							<tr>
+								<td>20. Lokalu <p class="input">---</p></td> 
+								<td>21. Kondygnacja: <p class="input">---</p></td> 
+							</tr>
+							<tr>
+								<td rowspan="2">22. Powierzchnia użytkowa lokalu wraz z powierzchnią pomieszczeń przynależnych(w m2): <p class="input">---</p></td>
+							</tr>
+						</table>
+						</td>
+				</tr>
+			</table>
+			<table class="main dark outside">
+				<tr>
+					<td>
+						<h2 class="center">NA PODSTAWIE ZAŁĄCZONYCH DOKUMENTÓW WNOSZĘ O WPIS:</h2>
+						<strong><i>Do wniosku należy dołączyć formularz „KW-ZAD Żądanie wpisu w księdze wieczystej”, jeżeli w zakładanej księdze wieczystej:</i></strong>
+						<ul class="info">
+							<li>W żądaniu należy wpisać rodzaj przysługującego prawa, imię (imiona) i nazwisko (nazwiska), imię ojca i imię matki oraz numer PESEL (jeśli został nadany) lub nazwę/firmę i siedzibę, numer REGON (jeśli został nadany) oraz numer w Krajowym Rejestrze Sądowym (jeżeli dokonano wpisu do tego rejestru), a także wielkość przysługującego udziału w prawie.</li>
+							<li>Jeżeli wnioskodawca żąda ujawnienia w księdze wieczystej kilku współwłaścicieli nieruchomości, współużytkowników wieczystych lub współuprawnionych z tytułu spółdzielczego własnościowego prawa do lokalu, każdego z nich należy wskazać w osobnej rubryce. W jednej rubryce należy wskazać współmałżonków, którym przysługuje dane prawo na zasadzie wspólności ustawowej lub umownej małżeńskiej, oraz wspólników spółek cywilnych, którym przysługuje dane prawo na zasadzie współwłasności łącznej.</li>
+						</ul>
+					</td>
+				</tr>
+
+			</table>
+		</div>
+	</div>
