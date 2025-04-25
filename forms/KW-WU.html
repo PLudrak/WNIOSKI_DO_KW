@@ -11,7 +11,7 @@
 	<div class="A4">
 		
 		<div class="container">
-			<div class="nr-strony">strona 1</div>
+			<div class="nr-strony">strona {{numer_strony}}</div>
 			<table class="dark main" id="box1">
 				<tr>
 					<td class ="center" id="wpis"><b>KW-WU</b></td>
@@ -45,74 +45,86 @@
 			
 				<tr>
 					<td>
-						<h2>DANE WNIOSKODAWCY/UCZESTNIKA POSTĘPOWANIA*:</h2>
+						<h2><s>DANE WNIOSKODAWCY</s>/UCZESTNIKA POSTĘPOWANIA*:</h2>
 						<table class="inside white">
 							<tr>
 								<td>
-									1.Numer Pesel
+									1.Numer Pesel: <div class="input"> {{uczestnik.pesel}} </div>
 								</td>
 								<td colspan="2">
-									2. Numer identyifkacyjny REGON:
+									2. Numer identyifkacyjny REGON: <div class="input"> {{uczestnik.regon}} </div>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="3">3. Numer w Krajowym Rejestrze Sądowym:</td>
+								<td colspan="3">3. Numer w Krajowym Rejestrze Sądowym: <div class="input"> {{uczestnik.krs}} </div></td>
 							</tr>
 							<tr>
-								<td colspan="3">4. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego*</td>
+								<td colspan="3">4. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego* <div class="input"> {{uczestnik.nazwisko}} </div></td>
 							</tr>
 							<tr>
-								<td colspan="3">5. Drugi człon nazwiska złożonego:</td>
+								<td colspan="3">5. Drugi człon nazwiska złożonego: <div class="input"> {{uczestnik.nazwisko2}} </div></td>
 							</tr>
 							<tr>
 								<td>
-									6. Imię pierwsze
+									6. Imię pierwsze: <div class="input"> {{uczestnik.imie}} </div>
 								</td>
 								<td colspan="2">
-									7. Imię drugie:
+									7. Imię drugie: <div class="input"> {{uczestnik.imie2}} </div>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									8. Imię ojca:
+									8. Imię ojca: <div class="input"> {{uczestnik.imie_ojca}} </div>
 								</td>
 								<td colspan="2">
-									9. Imię matki
+									9. Imię matki: <div class="input"> {{uczestnik.imie_matki}} </div>
 								</td>
 							</tr>
 							<tr>
-								<td class="dark" colspan="3"><h2>MIEJSCE ZAMIESZKANIA/SIEDZIBA*</h2></td>
+								<td class="dark" colspan="3">
+									{% if uczestnik.czy_osoba_prawna %}
+									<h2><s>MIEJSCE ZAMIESZKANIA</s>/SIEDZIBA*</h2>
+									{% else %}
+									<h2>MIEJSCE ZAMIESZKANIA/<s>SIEDZIBA</s>*</h2>
+									{% endif %}</td>
 							</tr>
 							<tr>
 								<td colspan="3">
-									10. Kraj:
+									10. Kraj: <div class="input"> {{uczestnik.kraj}} </div>
 								</td>
 							</tr>
 							<tr>
 								<td colspan="3">
-									11. Miejscowość:
+									11. Miejscowość: <div class="input"> {{uczestnik.miejscowosc}} </div>
 								</td>
 							</tr>
 							<tr colspan="3">
 								<td>
-									12. Ulica:
+									12. Ulica: <div class="input"> {{uczestnik.ulica}} </div>
 								</td>
 							</tr>
 							<tr>
 								<td>
-									13. Numer Budynku:
+									13. Numer Budynku: <div class="input"> {{uczestnik.numer_budynku}} </div>
 								</td>
-								<td>14. Numer Lokalu:</td>
-								<td>15. Kod pocztowy:</td>
+								<td>
+									14. Numer Lokalu: <div class="input"> {{uczestnik.numer_lokalu}} </div>
+								</td>
+								<td>
+									15. Kod pocztowy: <div class="input"> {{uczestnik.kod_pocztowy}} </div>
+								</td>
 							</tr>
 							<tr>
-							<td colspan="3"> 16. Poczta:</td>
+								<td colspan="3">
+									16. Poczta: <div class="input"> {{uczestnik.poczta}} </div>
+								</td>
 							</tr>
 							<tr>
 								<td colspan="3">
 									<div class="pole-wyboru">
-									<div>25. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
-									<div><input type="checkbox"> TAK <input type="checkbox"> NIE </div>
+										<div>17. Czy <s>wnioskodwaca</s>/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
+										<div class="checkbox"><img src="../static/nie.svg" alt="TAK"><span>TAK</span></div>
+										<div class="checkbox"><img src="../static/tak.svg" alt="NIE"><span>NIE</span></div>
 									</div> 
 								</td>
 							</tr>
@@ -125,28 +137,28 @@
 						<table class="inside white">
 							<tr>
 								<td colspan="3">
-									26. Nazwa lub firma/Imię i nazwisko*
+									18. Nazwa lub firma/Imię i nazwisko* :---
 								</td>
 							</tr>
 							<tr>
 								<td colspan="3">
-									27. Miejscowość:
+									19. Miejscowość: ---
 								</td>
 							</tr>
 							<tr>
 								<td colspan="3">
-									28. Ulica:
+									20. Ulica: ---
 								</td>
 							</tr>
 							<tr>
 								<td>
-									29. Numer Budynku:
+									21. Numer Budynku: ---
 								</td>
-								<td>30. Numer Lokalu:</td>
-								<td>31. Kod pocztowy:</td>
+								<td>22. Numer Lokalu: ---</td>
+								<td>23. Kod pocztowy: ---</td>
 							</tr>
 							<tr>
-							<td colspan="3"> 32. Poczta:</td>
+							<td colspan="3"> 24. Poczta: ---</td>
 							</tr>
 						</table>
 
@@ -178,4 +190,7 @@
 						
 						</table>
 			</table>
+		</div>
+	</div>
+</body>
 					
