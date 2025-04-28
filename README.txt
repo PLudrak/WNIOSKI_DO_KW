@@ -53,6 +53,8 @@ Struktura projektu:
 				
 Do poprawy/zrobienia:
 -stworzyc formulaz dla KW-ZAL
+-poprawić wpisywanie danych dla podmiotów nie będących osobami fizycznymi
+-wykreślic uczestnika2 jezeli jeden walsciciel
 -Jeżeli gddkia nie ma dzialki w obrebie, pierwszy wniosek powinien byc KW-ZAL a nie KW-WPIS,
 	zastanowic sie czy to powinno byc zalozenie przez odlaczenie czy zalozenie nowej kw
 	dla nieruchomosci ktora wczesniej kw nie miala

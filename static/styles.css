@@ -147,8 +147,11 @@ ul li+li {
 	justify-content: space-between;
 	padding-right: 1cm;
 }
-.pole-wyboru input{
-	margin-left:  1cm;
+.pole-wyboru .input{
+	gap: 0.5rem;
+	display: flex;
+	font-style: italic;
+	align-items: center;
 }
 .header{
 	font-style: normal;
@@ -185,7 +188,9 @@ ul li+li {
 .box5 {
 	min-height: 4.5cm;
 }
-
+.box6 {
+	min-height: 4rem;
+}
 .input{
 	font-style: normal;
 	margin-left: 0.5cm;
@@ -226,4 +231,18 @@ ul li+li {
 	gap:1rem;
 	margin-left: 1rem;
 	font-weight: bold;
+}
+
+
+
+.podpis {
+	margin-left: 60%;
+	display: inline-block;
+	text-align: center;
+	padding: 1rem;
+}
+
+.podpis p {
+	padding: 0;
+	line-height: 0.7rem;
 }
