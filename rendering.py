@@ -12,58 +12,97 @@ def rozdziel_uczestnikow(wlasciciele: list[dict]):
     pozostali = wlasciciele[2:] if len(wlasciciele) > 2 else []
     return uczestnik1, uczestnik2, pozostali
 
+def zeruj_slownik(my_dict):
+    """Zwraca słownik utworzony na podstawie innego słownika, 
+    zastępując wszystkie wartosci znakami --- na potrzeby wyswietlania w formularzu"""
+    new_dict = dict.fromkeys(my_dict.keys(),'---')
+    return new_dict
+
+def wlasciciele_do_druku(wlasciciele:list[dict]):
+    """Przygotowuje dane wlascicielu do druku"""
+    wlasciciele_poprawione = []
+
+    #jeżeli właścicielem jest osoba prawna zamien nazwisko na pelna nazwe w celu 
+    #poprawnego wyswietlenia we wniosku 
+
+    for wlasciciel in wlasciciele:
+        if wlasciciel['czy_osoba_prawna']:
+            wlasciciel['nazwisko'] = wlasciciel['nazwa']
+        wlasciciele_poprawione.append(wlasciciel)
+    
+    uczestnik1,uczestnik2,pozostali_uczestnicy = rozdziel_uczestnikow(wlasciciele)
+
+    #jeżeli jest jeden właściciel skreśl pozostałe pola w formularzu
+    if len(wlasciciele) == 1:
+        uczestnik2 = zeruj_slownik(uczestnik1)
+    return uczestnik1, uczestnik2, pozostali_uczestnicy
+
 def print_wpis(data, wnioskodawca, wlasciciele,zalaczniki,path):
-	base_path = os.path.abspath("forms")
-	output_path = os.path.join(path,"KW-WPIS.pdf")
-	os.makedirs(os.path.dirname(output_path), exist_ok=True)
-	u1,u2,pozostali_uczestnicy = rozdziel_uczestnikow(wlasciciele)
-	
-	strony = [
-		("KW-WPIS_1.html", {"numer_strony":"1"}),
-		("KW-WPIS_2.html", {"numer_strony":"2"}),
-		("KW-WPIS_3.html", {"numer_strony":"3", "uczestnik":u1, "wnioskodawca":wnioskodawca}),
-		("KW-WPIS_4.html", {"numer_strony":"4", "uczestnik":u2, "zalaczniki":zalaczniki})
-	]
-	rendered_pages = []
+    base_path = os.path.abspath("forms")
+    output_path = os.path.join(path,"KW-WPIS.pdf")
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-	for template_name, context in strony:
-		template = load_template(template_name)
-		html = template.render(**data,**context)
-		rendered_pages.append(html)
+    u1,u2,pozostali_uczestnicy = wlasciciele_do_druku(wlasciciele)
+    
+    strony = [
+        ("KW-WPIS_1.html", {"numer_strony":"1"}),
+        ("KW-WPIS_2.html", {"numer_strony":"2"}),
+        ("KW-WPIS_3.html", {"numer_strony":"3", "uczestnik":u1, "wnioskodawca":wnioskodawca}),
+        ("KW-WPIS_4.html", {"numer_strony":"4", "uczestnik":u2, "zalaczniki":zalaczniki})
+    ]
+    rendered_pages = []
 
-	combined_html = "".join(rendered_pages)
-	while True:
-		try:
-			HTML(string=combined_html, base_url=base_path).write_pdf(output_path)
-			print(f"KW-WPIS zapisano w {output_path}")
-			if pozostali_uczestnicy:
-				print_WU(pozostali_uczestnicy,path)
-			break
-		except Exception as e:
-			print(f"Błąd zapisu {e} \n sprobowac ponownie? T/N")
-			odp = input().strip().lower()
-			if odp != 't':
-				print("zapis przerwany")
-				break
-	
+    for template_name, context in strony:
+        template = load_template(template_name)
+        html = template.render(**data,**context)
+        rendered_pages.append(html)
+
+    combined_html = "".join(rendered_pages)
+    
+    while True:
+        try:
+            save_pdf(combined_html, output_path, base_path)
+            print("KW-WPIS - zapisano")
+            if pozostali_uczestnicy:
+                print_WU(pozostali_uczestnicy, path)
+            break
+        except Exception:
+            print("Spróbować ponownie? (T/N)")
+            odp = input().strip().lower()
+            if odp != 't':
+                print("Zapis przerwany.")
+                break
+    
 def print_WU(uczestnicy,path):
-	try:
-		base_path = os.path.abspath("forms")
-		output_path = os.path.join(path,"KW-WU.pdf")
-		os.makedirs(os.path.dirname(output_path), exist_ok=True)
-		rendered_pages = []
+    
+    base_path = os.path.abspath("forms")
+    output_path = os.path.join(path,"KW-WU.pdf")
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    rendered_pages = []
 
-		for i,uczestnik in enumerate(uczestnicy, start=1):
-			context = {"numer_strony":str(i), "uczestnik":uczestnik}
-			template = load_template("KW-WU.html")
-			html = template.render(**context)
-			rendered_pages.append(html)
-		
-		combined_html = "".join(rendered_pages)
+    for i,uczestnik in enumerate(uczestnicy, start=1):
+        context = {"numer_strony":str(i), "uczestnik":uczestnik}
+        template = load_template("KW-WU.html")
+        html = template.render(**context)
+        rendered_pages.append(html)
+        
+    combined_html = "".join(rendered_pages)
 
+    try:
+        save_pdf(combined_html,output_path,base_path)
+        print(f"KW-WU - zapisano")
+    except Exception as e:
+        print(f"[!] KW-WU - błąd zapisu {e}")
+        raise
 
-		HTML(string=combined_html,base_url=base_path).write_pdf(output_path)
-		print(f"KW-WU   zapisano w {output_path}")
-	except Exception as e:
-		print(e)
-		raise
+def save_pdf(html_string: str, output_path: str, base_url: str):
+    try:
+        HTML(string=html_string, base_url=base_url).write_pdf(output_path)
+    except Exception as e:
+        print(f"Błąd zapisu: {e}")
+        try:
+            if os.path.exists(output_path):
+                os.remove(output_path)
+        except Exception as remove_error:
+            print(f"Nie udało się usunąć uszkodzonego pliku: {remove_error}")
+        raise  # ponowne wyrzucenie błędu, żeby móc obsłużyć wyżej

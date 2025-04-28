@@ -22,9 +22,9 @@ dane_wnioskodawcy = {
 }
 
 if __name__=='__main__':
+	
 	df_dzialki = load_dzialki(r"import/Dzialki.xlsx")
-	print("Zaladowano informacje o działkacj")
-	print(df_dzialki.head())
+	print("Zaladowano informacje o działkach")
 	df_relacje = load_relacje(r"import/Relacje.xlsx")
 	print("Zaladowano informacje o właścicielach")
 	df_osoby = load_osoby(r"import/Wlasciciele.xlsx")
@@ -34,7 +34,7 @@ if __name__=='__main__':
 	df_GDDKIA = load_gddkia(r"import/KW-GDDKIA.xlsx")
 	print("Załadowano informacje o Księgach GDDKIA i obrębach")
 	dzialki_inwestycja = dzialki_w_inwestycji(df_dzialki)
-
+	print(df_osoby)
 	
 
 	lista_kw = sorted(
@@ -44,6 +44,8 @@ if __name__=='__main__':
 		.to_dict(orient='records'),
 		key=lambda x: x['KW']
 	)
+	
+	print("LISTA ZNALEZIONYCH KW DO WNIOSKÓW")
 	for line in lista_kw:
 		print(line["KW"], line["obreb"])
 	wnioski = []

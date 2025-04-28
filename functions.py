@@ -61,6 +61,7 @@ def load_osoby(filepath):
 
 	for _,row in df_excel.iterrows():
 		nazwisko,nazwisko2 = nazwisko_zlozone(row['Nazwa_poprawna'])
+
 		#ID_ososby Pesel Regon KRS Nazwa Nazwisko Nazwisko2 Imie1 Imie2 ImieO Imie_m Kraj Miejscowosc Ulica NumerBudnku NumerLokalu KodPocztowy Poczta Pełnomocnik AdresDoreczen
 		new_row ={
 			'ID_osoby':row['ID_osoby'],
@@ -85,6 +86,8 @@ def load_osoby(filepath):
 			'adres_doreczen' :False,
 			'czy_osoba_prawna':row['osoba']
 		}
+
+
 		rows.append(new_row)
 	df_osoby=pd.DataFrame(rows)
 	df_osoby=df_osoby.fillna("-")
@@ -145,7 +148,9 @@ class Wniosek:
 		self.okresl_sad(sady)
 		self.okresl_zalaczniki()
 		self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
-		print(f"Wniosek {self.kw} zainicjalizowano")
+		
+		print(f"\nWniosek {self.kw} zainicjalizowano")
+		print(f'Zapis do folderu:" {self.get_output_path()}"')
 
 	def find_dzialki(self,df_dzialki:pd.DataFrame,obreb):
 		"""znajdz dzialki zrodlowe i projektowane na podstawie nr KW"""
@@ -237,21 +242,20 @@ class Wniosek:
 	def okresl_pierwszy_wniosek(self):
 		"""sprawdza czy jest pierwszym wnioskiem dla obrebu, jezeli nie zwraca numer kw pierwszego wniosku"""
 		pierwszy_wniosek = Wniosek.pierwszy_wniosek.get(self.obreb['id'])
+		
+		#jeżeli nie ma infromacji o pierwszym wniosku dla danego obrebu [przechowywanej w klasie] ustal 
+		#aktualny wniosek jako pierwszy
 		if not pierwszy_wniosek:
 			Wniosek.pierwszy_wniosek[self.obreb['id']]=self.kw
 			pierwszy_wniosek = self.kw
 			
-		print(f"Pierwszy wniosek dla {self.obreb['nazwa']}\n           |{pierwszy_wniosek}| ")
-		print(f"aktualna KW:|{self.kw}|")
-		print(pierwszy_wniosek==self.kw)
 		if pierwszy_wniosek == self.kw:
 			return True
 		else:
 			return False
 	
-
 	def get_output_path(self):
-		path = ["export",self.sad,self.obreb["nazwa"],self.kw.replace("/",".")]
+		path = ["export",f"Sąd rejonowy {self.sad}",self.obreb["nazwa"],self.kw.replace("/",".")]
 		return os.path.join(*path) 
 	
 	def print_forms(self):
@@ -267,7 +271,7 @@ class Wniosek:
 				print_wpis(data,self.wnioskodawca,self.wlasciciele_dane,self.zalaczniki, output_path)
 
 	def okresl_tresc_zadania(self,dzialki_inwestycja_wszystkie:dict):
-		#selekcja działek w inwestycji
+		#selekcja działek których dotyczy wniosek znajduje się w inwestycji
 		dzialki_inwestycja = [dz for dz in self.dzialki if dz in dzialki_inwestycja_wszystkie]	
 		#ile dzialek odlaczanych
 		licznik_dzialek = len(dzialki_inwestycja)
