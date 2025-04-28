@@ -150,7 +150,7 @@ class Wniosek:
 		self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
 		
 		print(f"\nWniosek {self.kw} zainicjalizowano")
-		print(f'Zapis do folderu:" {self.get_output_path()}"')
+		print('Zapis do folderu:"',f'{self.get_output_path()}','" ')
 
 	def find_dzialki(self,df_dzialki:pd.DataFrame,obreb):
 		"""znajdz dzialki zrodlowe i projektowane na podstawie nr KW"""
@@ -255,7 +255,7 @@ class Wniosek:
 			return False
 	
 	def get_output_path(self):
-		path = ["export",f"Sąd rejonowy {self.sad}",self.obreb["nazwa"],self.kw.replace("/",".")]
+		path = ["export",f"Sąd rejonowy {self.sad}".replace(" ","_"),self.obreb["nazwa"],self.kw.replace("/",".")]
 		return os.path.join(*path) 
 	
 	def print_forms(self):
