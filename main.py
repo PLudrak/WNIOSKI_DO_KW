@@ -63,7 +63,8 @@ if __name__ == "__main__":
     ile_wnisokow = len(lista_kw)
     for num, kw in enumerate(lista_kw, start=1):
         # pasek_postepu(num,ile_wnisokow)
-        print(f"{num}/{ile_wnisokow}")
+        print()
+        print(f"[{num}/{ile_wnisokow}]", end=" ")
         wniosek = Wniosek(
             kw["KW"],
             kw["obreb"],
@@ -77,3 +78,4 @@ if __name__ == "__main__":
         )
         wniosek.print_forms()
         wnioski.append(wniosek)
+    print("Zakończono tworzenie wniosków")

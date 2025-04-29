@@ -177,7 +177,7 @@ class Wniosek:
             self.dzialki_odlaczane, dzialki_inwestycja
         )
 
-        print(f"\nWniosek {self.kw} zainicjalizowano")
+        print(f"Wniosek {self.kw} zainicjalizowano")
         print('Zapis do folderu:"', f"{self.get_output_path()}", '" ')
 
     def find_dzialki(self, df_dzialki: pd.DataFrame, obreb):

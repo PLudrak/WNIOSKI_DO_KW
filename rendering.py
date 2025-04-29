@@ -59,6 +59,8 @@ def print_zal(data, wnioskodawca, wlasciciele, zalaczniki, dzialki, path):
     )
     save_pdf(html, output_path, base_path)
     print("KW-ZAL - zapisano")
+    if pozostali_uczestnicy:
+        print_WU(pozostali_uczestnicy)
 
 
 def print_wpis(data, wnioskodawca, wlasciciele, zalaczniki, path):

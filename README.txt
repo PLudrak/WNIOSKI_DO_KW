@@ -61,10 +61,11 @@ Do poprawy/zrobienia:
 [x] stworzyc formulaz dla KW-ZAL
 [x] poprawić wpisywanie danych dla podmiotów nie będących osobami fizycznymi
 [x] wykreślic uczestnika2 jezeli jeden walsciciel
-[ ] Jeżeli gddkia nie ma dzialki w obrebie, pierwszy wniosek powinien byc KW-ZAL a nie KW-WPIS,
+[x] Jeżeli gddkia nie ma dzialki w obrebie, pierwszy wniosek powinien byc KW-ZAL a nie KW-WPIS,
 		zastanowic sie czy to powinno byc zalozenie przez odlaczenie czy zalozenie nowej kw
 		dla nieruchomosci ktora wczesniej kw nie miala, bardziej sklaniam sie do opcji przez odlaczenie, 
 		bo bedzie miala taka sama podstawe jak wpisy
+[x] jeżeli wiecej niż dwie osoby w KW-ZAL dodaj KW-WU
 [ ] jezeli wiecej niz 1 dzialka we wniosku zal to dodaj je do wnioskow ozn
 [ ] tworzenie zbiorczego pdfa do druku, z kontrolą parzystości stron 
 [ ] logowanie do txt
