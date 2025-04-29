@@ -65,9 +65,12 @@ Do poprawy/zrobienia:
 		zastanowic sie czy to powinno byc zalozenie przez odlaczenie czy zalozenie nowej kw
 		dla nieruchomosci ktora wczesniej kw nie miala, bardziej sklaniam sie do opcji przez odlaczenie, 
 		bo bedzie miala taka sama podstawe jak wpisy
+[ ] jezeli wiecej niz 1 dzialka we wniosku zal to dodaj je do wnioskow ozn
 [ ] tworzenie zbiorczego pdfa do druku, z kontrolą parzystości stron 
 [ ] logowanie do txt
 [ ] Załączniki są definiowane wewnątrz funkcji - trzeba to bardziej zautomatyzowac
+[ ] uporządkować dzialki w inwestycji i okolice
+	dzialki_odlaczane i dzialki_oznaczone można połączyć w jedną zmienną 
 [ ] Poprawic funkcje obreb w klasie Wniosek -> zmienic na dane ewidencyjne czy cos 
 [ ] Automatyczne przenoszenie załączników do folderów. 
 [ ] uporządkować main.py i functions.py - ewentualnie klase wniosek do oddzielnego pliku
