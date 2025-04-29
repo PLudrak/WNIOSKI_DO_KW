@@ -49,17 +49,17 @@
 							</td>
 						</tr>
 						<tr>
-							<td>{{(oznaczenie.lp-1)*5+1}}. Ulica: <div class="input"> --- </div></td>
-							<td>{{(oznaczenie.lp-1)*5+2}}. Numer działki: <div class="input">{{oznaczenie.nr}}</div></td>
+							<td>{{(oznaczenie.lp-2)*5+1}}. Ulica: <div class="input"> --- </div></td>
+							<td>{{(oznaczenie.lp-2)*5+2}}. Numer działki: <div class="input">{{oznaczenie.id_dzialki}}</div></td>
 						</tr>
 						<tr>
-							<td>{{(oznaczenie.lp-1)*5+3}}. Nazwa lub numer obrębu: <div class="input">{{oznaczenie.obreb}}</div></td>
-							<td>{{(oznaczenie.lp-1)*5+4}}. Obszar:<div class="input">{{oznaczenie.obreb}}</div></td>
+							<td>{{(oznaczenie.lp-2)*5+3}}. Nazwa lub numer obrębu: <div class="input">{{oznaczenie.id_obrebu}}</div></td>
+							<td>{{(oznaczenie.lp-2)*5+4}}. Obszar:<div class="input">{{oznaczenie.powierzchnia}}</div></td>
 						</tr>
 						<tr>
-							<td colspan="2">{{(oznaczenie.lp-1)*5+5}}. Odłączono z księgi wieczystej numer:<div class="input">{{oznaczenie.kw}}</div></td>
+							<td colspan="2">{{(oznaczenie.lp-2)*5+5}}. Odłączono z księgi wieczystej numer:<div class="input">{{oznaczenie.kw}}</div></td>
 						</tr>
-						
+						{% endfor %}
 					</table>
 					</td>
 				</tr>

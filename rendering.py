@@ -15,6 +15,12 @@ def rozdziel_uczestnikow(wlasciciele: list[dict]):
     return uczestnik1, uczestnik2, pozostali
 
 
+def rozdziel_dzialki(dzialki: list[dict]):
+    dzialka = dzialki[0] if len(dzialki) > 0 else {}
+    pozostale = dzialki[1:] if len(dzialki) > 1 else []
+    return dzialka, pozostale
+
+
 def zeruj_slownik(my_dict):
     """Zwraca słownik utworzony na podstawie innego słownika,
     zastępując wszystkie wartosci znakami --- na potrzeby wyswietlania w formularzu"""
@@ -48,19 +54,36 @@ def print_zal(data, wnioskodawca, wlasciciele, zalaczniki, dzialki, path):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     u1, u2, pozostali_uczestnicy = wlasciciele_do_druku(wlasciciele)
     template = load_template("KW-ZAL_1.html")
-
+    dzialka, pozostale_dzialki = rozdziel_dzialki(dzialki)
     html = template.render(
         **data,
         zalaczniki=zalaczniki,
         wnioskodawca=wnioskodawca,
-        oznaczenie=dzialki[0],
+        oznaczenie=dzialka,
         uczestnik=u1,
         uczestnik2=u2,
     )
     save_pdf(html, output_path, base_path)
     print("KW-ZAL - zapisano")
     if pozostali_uczestnicy:
-        print_WU(pozostali_uczestnicy)
+        print_WU(pozostali_uczestnicy, path)
+    if pozostale_dzialki:
+        print_OZN(pozostale_dzialki, data["nr_kw"], path)
+
+
+def print_OZN(dzialki, kw, path):
+    base_path = os.path.abspath("forms")
+    output_path = os.path.join(path, "KW-OZN.pdf")
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    for num, dzialka in enumerate(dzialki, start=2):
+        dzialka["lp"] = num
+        dzialka["kw"] = kw
+
+    template = load_template("KW-OZN.html")
+    html = template.render(oznaczenia=dzialki)
+    save_pdf(html, output_path, base_path)
+    print("KW-OZN - zapisano")
 
 
 def print_wpis(data, wnioskodawca, wlasciciele, zalaczniki, path):

@@ -316,7 +316,8 @@ class Wniosek:
 
             data = {
                 "sad": self.sad,
-                "kw_odlaczane": self.kw_docelowa,
+                "kw_odlaczane": self.kw,
+                "nr_kw": self.kw,
                 "polozenie": polozenie,
             }
             print_zal(
@@ -361,7 +362,7 @@ class Wniosek:
                 f'{krotkie_id(self.obreb["id"])} {self.obreb["nazwa"]}'
             )
             oznaczenie["id_dzialki"] = krotkie_id(dzialka)
-            oznaczenie["powierzchnia"] = dzialki_inwestycja_wszystkie[dzialka]
+            oznaczenie["powierzchnia"] = f"{dzialki_inwestycja_wszystkie[dzialka]} HA"
             oznaczenia.append(oznaczenie)
         return oznaczenia
 

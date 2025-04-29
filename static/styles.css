@@ -209,6 +209,10 @@ ul li+li {
     align-items: center;
 }
 
+img{
+	padding: 3px
+}
+
 .checkbox img {
     margin-right: 0.5rem;
     vertical-align: middle;
@@ -223,6 +227,7 @@ ul li+li {
 .checkbox-img{
 	height: 1rem;
 	width: 1em;
+	padding: 3px;
 }
 
 .option {
