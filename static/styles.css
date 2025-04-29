@@ -183,7 +183,7 @@ ul li+li {
 }
 
 .box4 {
-	min-height: 3cm;
+	min-height: 2.5cm;
 }
 .box5 {
 	min-height: 4.5cm;
@@ -231,9 +231,12 @@ ul li+li {
 	gap:1rem;
 	margin-left: 1rem;
 	font-weight: bold;
+	line-height: 0.8rem;
 }
 
-
+.two-column{
+	width: 50%;
+}
 
 .podpis {
 	margin-left: 60%;
