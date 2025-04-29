@@ -66,7 +66,7 @@ Do poprawy/zrobienia:
 		dla nieruchomosci ktora wczesniej kw nie miala, bardziej sklaniam sie do opcji przez odlaczenie, 
 		bo bedzie miala taka sama podstawe jak wpisy
 [x] jeżeli wiecej niż dwie osoby w KW-ZAL dodaj KW-WU
-[ ] jezeli wiecej niz 1 dzialka we wniosku zal to dodaj je do wnioskow ozn
+[x] jezeli wiecej niz 1 dzialka we wniosku zal to dodaj je do wnioskow ozn
 [ ] tworzenie zbiorczego pdfa do druku, z kontrolą parzystości stron 
 [ ] logowanie do txt
 [ ] Załączniki są definiowane wewnątrz funkcji - trzeba to bardziej zautomatyzowac

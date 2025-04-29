@@ -79,3 +79,5 @@ if __name__ == "__main__":
         wniosek.print_forms()
         wnioski.append(wniosek)
     print("Zakończono tworzenie wniosków")
+    for wniosek in wnioski:
+        wniosek.show_stats()

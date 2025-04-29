@@ -176,7 +176,7 @@ class Wniosek:
         self.dzialki_oznaczenia = self.oznaczenie_dzialek(
             self.dzialki_odlaczane, dzialki_inwestycja
         )
-
+        self.stats = {}
         print(f"Wniosek {self.kw} zainicjalizowano")
         print('Zapis do folderu:"', f"{self.get_output_path()}", '" ')
 
@@ -328,6 +328,7 @@ class Wniosek:
                 self.dzialki_oznaczenia,
                 output_path,
             )
+            self.stats["wniosek"] = "KW-ZAL"
         else:
             data = {
                 "sad": self.sad,
@@ -341,6 +342,7 @@ class Wniosek:
                 self.zalaczniki,
                 output_path,
             )
+            self.stats["wniosek"] = "KW-WPIS"
 
     def dzialki_w_inwestycji(self, dzialki_inwestycja_wszystkie):
         """Z listy wszsytkich działek w inwestycji zwraca tylko te których dotyczy wniosek"""
@@ -396,6 +398,24 @@ class Wniosek:
             tresc = tresc.replace("POŁOŻONEJ", "POŁOŻONYCH")
             tresc = tresc.replace("JEJ", "ICH")
         return tresc
+
+    def get_stats(self):
+        stats = {
+            "kw": self.kw,
+            "liczba_wlascicieli": self.ile_wlascicieli,
+            "wlasciciele": [w["nazwa"] for w in self.wlasciciele_dane],
+            "ile_dzialek_zrodlowych": len(self.dzialki),
+            "ile_dzialek_odlaczanych": len(self.dzialki_odlaczane),
+            "dzialki": self.dzialki_zr_pr,
+            "zalaczniki": self.zalaczniki,
+            "czy_pierwszy_wniosek": self.okresl_pierwszy_wniosek(),
+        }
+        return stats
+
+    def show_stats(self):
+        print()
+        for key, value in self.get_stats().items():
+            print(f"{key}:{value}")
 
 
 if __name__ == "__main__":

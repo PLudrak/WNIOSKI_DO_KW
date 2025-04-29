@@ -1,5 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
+from registry import PDFRegistry
 import os
 
 
@@ -155,6 +156,7 @@ def print_WU(uczestnicy, path):
 def save_pdf(html_string: str, output_path: str, base_url: str):
     try:
         HTML(string=html_string, base_url=base_url).write_pdf(output_path)
+        PDFRegistry.add(output_path)
     except Exception as e:
         print(f"Błąd zapisu: {e}")
         try:
