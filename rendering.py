@@ -49,7 +49,7 @@ def wlasciciele_do_druku(wlasciciele: list[dict]):
     return uczestnik1, uczestnik2, pozostali_uczestnicy
 
 
-def print_zal(data, wnioskodawca, wlasciciele, zalaczniki, dzialki, path):
+def print_zal(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, dzialki, path):
     base_path = os.path.abspath("forms")
     output_path = os.path.join(path, "KW-ZAL.pdf")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -66,10 +66,13 @@ def print_zal(data, wnioskodawca, wlasciciele, zalaczniki, dzialki, path):
     )
     save_pdf(html, output_path, base_path)
     print("KW-ZAL - zapisano")
+    wniosek.stats["formularze"].append("KW-ZAL")
     if pozostali_uczestnicy:
         print_WU(pozostali_uczestnicy, path)
+        wniosek.stats["formularze"].append("KW-WU")
     if pozostale_dzialki:
         print_OZN(pozostale_dzialki, data["nr_kw"], path)
+        wniosek.stats["formularze"].append("KW-OZN")
 
 
 def print_OZN(dzialki, kw, path):
@@ -87,7 +90,7 @@ def print_OZN(dzialki, kw, path):
     print("KW-OZN - zapisano")
 
 
-def print_wpis(data, wnioskodawca, wlasciciele, zalaczniki, path):
+def print_wpis(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, path):
     base_path = os.path.abspath("forms")
     output_path = os.path.join(path, "KW-WPIS.pdf")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -119,8 +122,10 @@ def print_wpis(data, wnioskodawca, wlasciciele, zalaczniki, path):
         try:
             save_pdf(combined_html, output_path, base_path)
             print("KW-WPIS - zapisano")
+            wniosek.stats["formularze"].append("KW-WPIS")
             if pozostali_uczestnicy:
                 print_WU(pozostali_uczestnicy, path)
+                wniosek.stats["formularze"].append("KW-WU")
             break
         except Exception:
             print("Spróbować ponownie? (T/N)")

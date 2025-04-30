@@ -140,6 +140,7 @@ def krotkie_id(nr_dzialki):
 
 class Wniosek:
     pierwszy_wniosek = {}
+    path = ""
 
     def __init__(
         self,
@@ -153,32 +154,35 @@ class Wniosek:
         df_GDDKIA,
         dzialki_inwestycja,
     ):
+        self.initialize_stats()
         self.kw = KW
-        self.wlasciciele = []
-        self.wlasciciele_dane = []
-        self.dzialki_zrodlowe = []
-        self.dzialki_zr_pr = []
-        self.formularze = ["KW-WPIS"]
-        self.sad = []
         self.wnioskodawca = dane_wnioskodawcy
-        self.zalaczniki = []
+
         self.find_dzialki(df_dzialki, obreb)
         self.dzialki_odlaczane = self.dzialki_w_inwestycji(dzialki_inwestycja)
         self.obreb = self.ustal_obreb(
             df_GDDKIA
         )  # potencjalnie mylące - zmienic później
+
+        self.wlasciciele = []
         self.find_wlasciciele(df_relacje)
         self.ile_wlascicieli = len(self.wlasciciele)
         self.pobierz_dane_wlascicieli(df_wlasciciele)
+
         self.okresl_sad(sady)
+        self.zalaczniki = []
         self.okresl_zalaczniki()
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
         self.dzialki_oznaczenia = self.oznaczenie_dzialek(
             self.dzialki_odlaczane, dzialki_inwestycja
         )
-        self.stats = {}
+
         print(f"Wniosek {self.kw} zainicjalizowano")
         print('Zapis do folderu:"', f"{self.get_output_path()}", '" ')
+
+    def initialize_stats(self):
+        self.stats = {}
+        self.stats["formularze"] = []
 
     def find_dzialki(self, df_dzialki: pd.DataFrame, obreb):
         """znajdz dzialki zrodlowe i projektowane na podstawie nr KW"""
@@ -204,6 +208,9 @@ class Wniosek:
             projektowana = row["ID_projektowane"]
             if pd.notna(zrodlowa) and pd.notna(projektowana):
                 self.dzialki_zr_pr.setdefault(zrodlowa, []).append(projektowana)
+
+    def clean_class_variables(self):
+        self.path = ""
 
     def ustal_obreb(self, df_GDDKIA):
 
@@ -248,6 +255,7 @@ class Wniosek:
         self.wlasciciele = list(set(self.wlasciciele))
 
     def pobierz_dane_wlascicieli(self, df_wlasiciele: pd.DataFrame):
+        self.wlasciciele_dane = []
         for id in self.wlasciciele:
             rekord = df_wlasiciele[df_wlasiciele["ID_osoby"] == id]
             if not rekord.empty:
@@ -321,6 +329,7 @@ class Wniosek:
                 "polozenie": polozenie,
             }
             print_zal(
+                self,
                 data,
                 self.wnioskodawca,
                 self.wlasciciele_dane,
@@ -328,7 +337,6 @@ class Wniosek:
                 self.dzialki_oznaczenia,
                 output_path,
             )
-            self.stats["wniosek"] = "KW-ZAL"
         else:
             data = {
                 "sad": self.sad,
@@ -336,13 +344,13 @@ class Wniosek:
                 "tresc_zadania": self.tresc_zadania,
             }
             print_wpis(
+                self,
                 data,
                 self.wnioskodawca,
                 self.wlasciciele_dane,
                 self.zalaczniki,
                 output_path,
             )
-            self.stats["wniosek"] = "KW-WPIS"
 
     def dzialki_w_inwestycji(self, dzialki_inwestycja_wszystkie):
         """Z listy wszsytkich działek w inwestycji zwraca tylko te których dotyczy wniosek"""
@@ -402,6 +410,7 @@ class Wniosek:
     def get_stats(self):
         stats = {
             "kw": self.kw,
+            "formularze": self.stats["formularze"],
             "liczba_wlascicieli": self.ile_wlascicieli,
             "wlasciciele": [w["nazwa"] for w in self.wlasciciele_dane],
             "ile_dzialek_zrodlowych": len(self.dzialki),
@@ -409,13 +418,24 @@ class Wniosek:
             "dzialki": self.dzialki_zr_pr,
             "zalaczniki": self.zalaczniki,
             "czy_pierwszy_wniosek": self.okresl_pierwszy_wniosek(),
+            "path": self.get_output_path(),
         }
         return stats
 
     def show_stats(self):
         print()
         for key, value in self.get_stats().items():
-            print(f"{key}:{value}")
+            if key == "dzialki":
+                print("dzialki:")
+                for dzialka_zrodlowa, projektowane in value.items():
+                    print(f" {dzialka_zrodlowa}:")
+                    for p in projektowane:
+                        if p in self.dzialki_odlaczane:
+                            print(f"  *{p}")
+                        else:
+                            print(f"   {p}")
+            else:
+                print(f"{key}: {value}")
 
 
 if __name__ == "__main__":
