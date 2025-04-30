@@ -1,5 +1,6 @@
 import pandas as pd
 from rendering import *
+from pathlib import Path
 
 
 def load_dzialki(filepath):
@@ -421,6 +422,45 @@ class Wniosek:
             "path": self.get_output_path(),
         }
         return stats
+
+    def stats_to_export(self):
+        dzialki = ""
+        for dzialka in self.dzialki:
+            if dzialka in self.dzialki_odlaczane:
+                dzialka = f"*{dzialka}"
+            dzialki += dzialka + "; "
+
+        path = Path(self.get_output_path())
+        relative_path = path.relative_to("export")
+
+        stats_export = {
+            "KW": self.kw,
+            "Link": f'=HYPERLINK("{relative_path}","LINK")',
+            "Formularze": "; ".join(self.stats["formularze"]),
+            "Obręb": self.obreb["nazwa"],
+            "Czy pierwszy wniosek": self.okresl_pierwszy_wniosek(),
+            "Liczba właścicieli": self.ile_wlascicieli,
+            "Właściciele": "; ".join(self.wlasciciele),
+            "Właściciele N": ". ".join(w["nazwa"] for w in self.wlasciciele_dane),
+            "Działki źródłowe": "; ".join(self.dzialki_zrodlowe),
+            "Działki projektowane": dzialki,
+            "Liczba działek źródłowych": len(self.dzialki_zrodlowe),
+            "Liczba działek projektowanych": len(self.dzialki),
+            "Liczba działek odłączanych od kw": len(self.dzialki_odlaczane),
+            "PATH": self.get_output_path(),
+        }
+
+        zalaczniki = {}
+        if "kw_pp" in self.zalaczniki.keys():
+            zalaczniki["KW-PP"] = self.zalaczniki["kw_pp"]
+        if any("decyzja" in str(val).lower() for val in self.zalaczniki.values()):
+            zalaczniki["Decyzja"] = True
+        else:
+            zalaczniki["Decyzja"] = False
+
+        stats_export.update(zalaczniki)
+
+        return stats_export
 
     def show_stats(self):
         print()
