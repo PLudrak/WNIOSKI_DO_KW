@@ -171,7 +171,7 @@ class Wniosek:
         self.pobierz_dane_wlascicieli(df_wlasciciele)
 
         self.okresl_sad(sady)
-        self.zalaczniki = []
+
         self.okresl_zalaczniki()
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
         self.dzialki_oznaczenia = self.oznaczenie_dzialek(dzialki_inwestycja)
@@ -279,7 +279,7 @@ class Wniosek:
         for pole in zalaczniki_pola:
             wartosc = self.zalaczniki.get(pole, "---")
             if wartosc == "---" and zalacznik_index < len(zalaczniki_do_dodania):
-                self.zalaczniki[pole] = zalacznik_index
+                self.zalaczniki[pole] = zalaczniki_do_dodania[zalacznik_index]
                 zalacznik_index += 1
 
         # w pozostale pola wstaw ---
@@ -287,11 +287,17 @@ class Wniosek:
             if pole not in self.zalaczniki:
                 self.zalaczniki[pole] = "---"
 
+        self.okresl_zalaczniki()
+
     def okresl_zalaczniki(self):
         """
         przygotuj dane do wpisania w Wykazie zalacznikow KW-WPIS/KW-ZAL
         !!! Koniecznie _PO_ dodaniu już wszystkich zalacznikow
         """
+
+        # utwórz słownik jeżeli jeszcze nie istnieje
+        if not hasattr(self, "zalaczniki"):
+            self.zalaczniki = {}
 
         # pelnomocnictwo jest dodawane jako zalacznik lub odnosnik do kazdego wniosku
         self.zalaczniki["kw_pp"] = 1

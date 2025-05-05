@@ -123,6 +123,12 @@ if __name__ == "__main__":
             dzialki_inwestycja,
         )
         # utwórz plik pdf z wnioskiem i zalacznikami
+        wniosek.dodaj_zalacznik(
+            [
+                "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
+                "PEŁNOMOCNICTWO",
+            ]
+        )
         wniosek.print_forms()
         wnioski.append(wniosek)
     print("Zakończono tworzenie wniosków")
