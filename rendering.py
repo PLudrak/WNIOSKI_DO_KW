@@ -1,6 +1,6 @@
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
-from registry import PDFRegistry
+from pdf_handling import PDFRegistry
 import os
 
 

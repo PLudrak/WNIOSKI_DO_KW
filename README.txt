@@ -67,7 +67,7 @@ Do poprawy/zrobienia:
 		bo bedzie miala taka sama podstawe jak wpisy
 [x] jeżeli wiecej niż dwie osoby w KW-ZAL dodaj KW-WU
 [x] jezeli wiecej niz 1 dzialka we wniosku zal to dodaj je do wnioskow ozn
-[ ] tworzenie zbiorczego pdfa do druku, z kontrolą parzystości stron 
+[x] tworzenie zbiorczego pdfa do druku, z kontrolą parzystości stron 
 [ ] logowanie do txt
 [ ] Załączniki są definiowane wewnątrz funkcji - trzeba to bardziej zautomatyzowac
 [ ] uporządkować dzialki w inwestycji i okolice

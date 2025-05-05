@@ -1,6 +1,7 @@
 import pandas as pd
 from functions import *
 from rendering import *
+from pdf_handling import *
 
 # Zaladuj dzialki i kw
 
@@ -113,6 +114,7 @@ if __name__ == "__main__":
     print("Zakończono tworzenie wniosków")
 
     save_stats(wnioski)
-
+    merge_wniosek()
+    merge_wnioski_obreb()
     # for wniosek in wnioski:
     # wniosek.show_stats()

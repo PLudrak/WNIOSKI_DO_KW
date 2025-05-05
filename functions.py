@@ -476,7 +476,3 @@ class Wniosek:
                             print(f"   {p}")
             else:
                 print(f"{key}: {value}")
-
-
-if __name__ == "__main__":
-    print(nazwisko_zlozone("głażejewicz-bąk"))
