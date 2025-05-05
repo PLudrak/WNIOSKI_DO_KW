@@ -378,8 +378,6 @@ class Wniosek:
         return oznaczenia
 
     def okresl_tresc_zadania(self, dzialki_inwestycja_wszystkie: dict):
-        # ile dzialek odlaczanych
-        licznik_dzialek = len(self.dzialki_odlaczane)
 
         tresc = (
             f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
@@ -387,25 +385,25 @@ class Wniosek:
             "(DZ.U. 2023 POZ. 162):"
         )
 
-        for num, dzialka in enumerate(self.dzialki_odlaczane):
-            nowa_tresc = ""
-            if dzialka in self.dzialki_odlaczane:
-                nowa_tresc = f" DZIAŁKI NR {krotkie_id(dzialka)} O POW. {dzialki_inwestycja_wszystkie[dzialka]} HA,"
-                tresc += nowa_tresc
-            if num == licznik_dzialek - 1 and num > 0:
-                nowa_tresc = f" ORAZ {nowa_tresc} "
-                tresc = (
-                    tresc[:-1] + nowa_tresc
-                )  # tresc[:-1] usuwa ostatni przecinek przed "ORAZ"
+        dzialki_opisy = [
+            f"DZIAŁKI NR {krotkie_id(d)} o POW. {dzialki_inwestycja_wszystkie[d]} HA"
+            for d in self.dzialki_odlaczane
+        ]
+
+        if len(dzialki_opisy) > 1:
+            tresc += ", ".join(dzialki_opisy[:-1]) + " ORAZ " + dzialki_opisy[-1]
+        else:
+            tresc += dzialki_opisy[0]
 
         tresc += (
-            f"POŁOŻONEJ W OBRĘBIE {krotkie_id(self.obreb["id"])} {self.obreb["nazwa"]}, GMINA {self.obreb["gmina"]}, "
-            f"POWIAT {self.obreb["powiat"]} I PRZYŁĄCZENIE JEJ DO KSIĘGI {self.kw_docelowa}."
+            f", POŁOŻONEJ W OBEBIE {krotkie_id(self.obreb['id'])} {self.obreb['nazwa']}, GMINA {self.obreb['gmina']}, "
+            f"POWIAT {self.obreb['powiat']} I PRZYŁĄCZENIE JEJ DO KSIĘGI {self.kw_docelowa}."
         )
 
-        if licznik_dzialek > 1:
+        if len(self.dzialki_odlaczane) > 1:
             tresc = tresc.replace("POŁOŻONEJ", "POŁOŻONYCH")
             tresc = tresc.replace("JEJ", "ICH")
+
         return tresc
 
     def get_stats(self):
@@ -437,6 +435,10 @@ class Wniosek:
             "KW": self.kw,
             "Link": f'=HYPERLINK("{relative_path}","LINK")',
             "Formularze": "; ".join(self.stats["formularze"]),
+            "KW-ZAL": "1" if "KW-ZAL" in self.stats["formularze"] else "0",
+            "KW-WPIS": "1" if "KW-WPIS" in self.stats["formularze"] else "0",
+            "KW-WU": "1" if "KW-WU" in self.stats["formularze"] else "0",
+            "KW-OZN": "1" if "KW-OZN" in self.stats["formularze"] else "0",
             "Obręb": self.obreb["nazwa"],
             "Czy pierwszy wniosek": self.okresl_pierwszy_wniosek(),
             "Liczba właścicieli": self.ile_wlascicieli,
@@ -454,9 +456,9 @@ class Wniosek:
         if "kw_pp" in self.zalaczniki.keys():
             zalaczniki["KW-PP"] = self.zalaczniki["kw_pp"]
         if any("decyzja" in str(val).lower() for val in self.zalaczniki.values()):
-            zalaczniki["Decyzja"] = True
+            zalaczniki["Decyzja"] = 1
         else:
-            zalaczniki["Decyzja"] = False
+            zalaczniki["Decyzja"] = 0
 
         stats_export.update(zalaczniki)
 
