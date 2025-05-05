@@ -62,7 +62,7 @@ def dodaj_puste_strony():
 
 
 def merge_wniosek():
-    """Połącz wnioski na podstawie ścieżek z PDFRegistry"""
+    """Połącz poszczególne strony i załączniki we wnioski na podstawie ścieżek z PDFRegistry"""
     dodaj_puste_strony()
     grouped_files = {}
 

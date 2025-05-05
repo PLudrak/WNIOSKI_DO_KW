@@ -5,11 +5,25 @@ import os
 
 
 def load_template(template_name: str):
+    """ładuje template z folderami bazowymi //forms i //static"""
     env = Environment(loader=FileSystemLoader(["forms", "static"]))
     return env.get_template(template_name)
 
 
 def rozdziel_uczestnikow(wlasciciele: list[dict]):
+    """
+    Rozdzila listę uczestników na na uczestnika pierwszego, drugiego i pozostałych.
+    We wnisoku jest miejsce na dwóch uczestników postępowania, pozostali są dodawaniu we załączniku KW-WU
+
+    Args:
+        wlasciciele (list[dict]): Lista słowników zawierająca dane o właścicielach
+
+    Returns:
+        tuple(dict,dict,list[dict]):
+            - słownik z danymi pierwszego uczestnika
+            - słownik z dnaymi drugiego uczestnika (może być pusty)
+            - lista pozostałych uczestników (może być pusta)
+    """
     uczestnik1 = wlasciciele[0] if len(wlasciciele) > 0 else {}
     uczestnik2 = wlasciciele[1] if len(wlasciciele) > 1 else {}
     pozostali = wlasciciele[2:] if len(wlasciciele) > 2 else []
@@ -17,7 +31,15 @@ def rozdziel_uczestnikow(wlasciciele: list[dict]):
 
 
 def rozdziel_dzialki(dzialki: list[dict]):
+    """
+    Dzieli listę działek na pierwszą i pozostałe.
+
+    Zwraca pierwszy element jako osobny słownik oraz listę pozostałych.
+    Jeśli lista jest pusta, zwraca pusty słownik i pustą listę.
+    """
+    # Pierwsza działka lub pusty słownik, jeśli lista pusta
     dzialka = dzialki[0] if len(dzialki) > 0 else {}
+    # Reszta działek lub pusta lista
     pozostale = dzialki[1:] if len(dzialki) > 1 else []
     return dzialka, pozostale
 

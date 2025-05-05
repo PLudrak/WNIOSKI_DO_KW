@@ -3,8 +3,7 @@ from functions import *
 from rendering import *
 from pdf_handling import *
 
-# Zaladuj dzialki i kw
-
+# dane GDDKiA
 dane_wnioskodawcy = {
     "pesel": "----------",
     "regon": "017511575",
@@ -25,6 +24,7 @@ dane_wnioskodawcy = {
 
 
 def pasek_postepu(licznik, suma):
+    """wyswietla w terminalu pasek postępu"""
     procent = int(round(licznik / suma * 100))
     pasek = "[" + "|" * procent + "-" * (100 - procent) + "]"
     pasek = (
@@ -35,7 +35,7 @@ def pasek_postepu(licznik, suma):
 
 
 def load_data(path="import"):
-
+    """Ładowanie danych z excela do programu jako DataFrame"""
     df_dzialki = load_dzialki(os.path.join(path, "Dzialki.xlsx"))
     print("Zaladowano informacje o działkach")
 
@@ -57,6 +57,12 @@ def load_data(path="import"):
 
 
 def get_lista_kw(df_dzialki):
+    """Pobiera wszystkie numery KW z dzialek będących w inwestycji, zwraca listę kw i liczbę znalezionych działek"""
+
+    # filtruj wiersze gdzie "czy_inwestycja" == True, wybiera tylko pola KW i obręb, usuwa wiersze w których brakuje
+    # numerów ksiąg wieczystych, usuwa duplikaty (obu wierszy razem), sortuje alfabetycznie wg klucza KW
+    # (w przyszłości dobrze żeby zwracało też listę działek z inwestycji które nie mają KW, więc należy je założyć)
+
     lista = sorted(
         df_dzialki[df_dzialki["czy_inwestycja"] == True][["KW", "obreb"]]
         .dropna()
@@ -65,6 +71,7 @@ def get_lista_kw(df_dzialki):
         key=lambda x: x["KW"],
     )
 
+    # drukuje znalezionych numerów KW i obrębów
     print("LISTA ZNALEZIONYCH KW DO WNIOSKÓW")
     for line in lista:
         print(line["KW"], line["obreb"])
@@ -72,13 +79,18 @@ def get_lista_kw(df_dzialki):
     return lista, len(lista)
 
 
-def save_stats(lista_wnioskow, filepath="export"):
-    path = os.path.join(filepath, "Stats.xlsx")
-    all_stats = []
+def save_stats(lista_wnioskow: list[Wniosek], filepath="export"):
+    """Połącz statystyki każdego z wniosków i zapisz je w formacie '.xslx'"""
 
+    # ścieżka zapisu
+    path = os.path.join(filepath, "Stats.xlsx")
+
+    # łączenie danych z poszczególnych wniosków w jedną listę
     data_to_export = [wniosek.stats_to_export() for wniosek in lista_wnioskow]
+    # konwersja listy na DataFrame (pandas)
     df = pd.DataFrame(data_to_export)
 
+    # zapis do pliku
     with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
         df.to_excel(writer, index=False, sheet_name="Wnioski")
     print('Zapisano raport w folderze "EXPORT')
@@ -97,6 +109,7 @@ if __name__ == "__main__":
     for num, kw in enumerate(lista_kw, start=1):
         # pasek_postepu(num,ile_wnisokow)
         print()
+        # utwórz wniosek:
         print(f"[{num}/{ile_wnisokow}]", end=" ")
         wniosek = Wniosek(
             kw["KW"],
@@ -109,6 +122,7 @@ if __name__ == "__main__":
             df_GDDKIA,
             dzialki_inwestycja,
         )
+        # utwórz plik pdf z wnioskiem i zalacznikami
         wniosek.print_forms()
         wnioski.append(wniosek)
     print("Zakończono tworzenie wniosków")
@@ -116,5 +130,3 @@ if __name__ == "__main__":
     save_stats(wnioski)
     merge_wniosek()
     merge_wnioski_obreb()
-    # for wniosek in wnioski:
-    # wniosek.show_stats()

@@ -174,9 +174,7 @@ class Wniosek:
         self.zalaczniki = []
         self.okresl_zalaczniki()
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
-        self.dzialki_oznaczenia = self.oznaczenie_dzialek(
-            self.dzialki_odlaczane, dzialki_inwestycja
-        )
+        self.dzialki_oznaczenia = self.oznaczenie_dzialek(dzialki_inwestycja)
 
         print(f"Wniosek {self.kw} zainicjalizowano")
         print('Zapis do folderu:"', f"{self.get_output_path()}", '" ')
@@ -267,21 +265,52 @@ class Wniosek:
         prefix = self.kw.split("/")[0]
         self.sad = sady.get(prefix, "-")
 
+    def dodaj_zalacznik(self, zalaczniki_do_dodania: list[str]):
+        """dodaj inne zalaczniki"""
+        zalaczniki_pola = ["inny1", "inny2", "inny3", "inny4", "inny5"]
+
+        # utwórz słownik jeżeli jeszcze nie istnieje
+        if not hasattr(self, "zalaczniki"):
+            self.zalaczniki = {}
+
+        zalacznik_index = 0
+
+        # pobierz wartość wg klucza, jeżeli wolna ("---") wstaw załącznik, jeżeli nie, sprawdź następny klucz
+        for pole in zalaczniki_pola:
+            wartosc = self.zalaczniki.get(pole, "---")
+            if wartosc == "---" and zalacznik_index < len(zalaczniki_do_dodania):
+                self.zalaczniki[pole] = zalacznik_index
+                zalacznik_index += 1
+
+        # w pozostale pola wstaw ---
+        for pole in zalaczniki_pola:
+            if pole not in self.zalaczniki:
+                self.zalaczniki[pole] = "---"
+
     def okresl_zalaczniki(self):
-        """przygotuj dane do wpisania w Wykazie zalacznikow KW-WPIS/KW-ZAL"""
-        self.zalaczniki = {}
+        """
+        przygotuj dane do wpisania w Wykazie zalacznikow KW-WPIS/KW-ZAL
+        !!! Koniecznie _PO_ dodaniu już wszystkich zalacznikow
+        """
+
+        # pelnomocnictwo jest dodawane jako zalacznik lub odnosnik do kazdego wniosku
         self.zalaczniki["kw_pp"] = 1
 
+        # jezeli jest wiecej niz dwoje uczesników (wlascicieli) wpisz liczbe załączników KW-WU
         if self.ile_wlascicieli > 2:
             self.zalaczniki["kw_wu"] = self.ile_wlascicieli - 2
 
-        self.zalaczniki["inny1"] = self.odnosnik_do_zalacznika(
-            "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024"
-        )
-        self.zalaczniki["inny2"] = self.odnosnik_do_zalacznika("PEŁNOMOCNICTWO")
+        # na kazdym niepustym polu z sekcji inny załącznik wykonaj funkcję odnośnik_do_zalacznika
+        # dodany zostanie odnośnik wskazujący w którym wniosku znajduje sie załącznik
+        for pole in self.zalaczniki.keys():
+            if pole.startswith("inne"):
+                if self.zalaczniki[pole] != "---":
+                    self.zalaczniki[pole] = self.odnosnik_do_zalacznika(
+                        self.zalaczniki[pole]
+                    )
 
     def odnosnik_do_zalacznika(self, zalacznik: str):
-        """jezeli wniosek nie jest pierwszym w obrebie, dodaj odsylacz do pierwszego wniosku"""
+        """jezeli wniosek nie jest pierwszym w obrebie, dodaj odnośnik do pierwszego wniosku"""
         if self.okresl_pierwszy_wniosek():
             return zalacznik
         else:
@@ -308,6 +337,8 @@ class Wniosek:
             return False
 
     def get_output_path(self):
+        """określ ścieżkę zapisu wniosku wg wzoru:
+        root\\export\\Sąd_rejonowy_w_{miejscowość}\\{Nazwa obrębu}\\{Nr KW}"""
         path = [
             "export",
             f"Sąd rejonowy {self.sad}".replace(" ", "_"),
@@ -317,8 +348,10 @@ class Wniosek:
         return os.path.join(*path)
 
     def print_forms(self):
+        """funkcja wybiera jaki wniosek powinien zostać wygenerowany i przekazuje atrybuty klasy do odpowienich funkcji"""
         output_path = self.get_output_path()
 
+        # jeżeli wniosek jest pierwszym wnioskiem dla swojego obrębu i nie określono docelowej księgi obrębu:
         if self.okresl_pierwszy_wniosek() and "." in self.kw_docelowa.replace("…", "."):
             polozenie = self.obreb
             polozenie["dzielnica"] = "---"
@@ -338,6 +371,7 @@ class Wniosek:
                 self.dzialki_oznaczenia,
                 output_path,
             )
+        # jeżeli wniosek nie jest pierwszym wnioskiem w obrębie lub jest znana księga do której dołącza się działki:
         else:
             data = {
                 "sad": self.sad,
@@ -361,10 +395,8 @@ class Wniosek:
         self.dzialki_inwestycja = dzialki_inwestycja
         return dzialki_inwestycja
 
-    def oznaczenie_dzialek(
-        self, dzialki: dict, dzialki_inwestycja_wszystkie: dict
-    ) -> list[dict]:
-        """generuje slowniki bedace oznaczeniem dzialki do wniosku KW-ZAL"""
+    def oznaczenie_dzialek(self, dzialki_inwestycja_wszystkie: dict) -> list[dict]:
+        """generuje listę słowników zawierających oznaczenia działek do formatu wymaganego we wnioskach KW-ZAL i KW-OZN"""
         oznaczenia = []
         for dzialka in self.dzialki_odlaczane:
             oznaczenie = {}
@@ -378,6 +410,7 @@ class Wniosek:
         return oznaczenia
 
     def okresl_tresc_zadania(self, dzialki_inwestycja_wszystkie: dict):
+        """Generuje treść żądania dla wnisosku KW-WPIS zawierającą informacje o numerze i powierzchni odłączanych działek"""
 
         tresc = (
             f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
@@ -390,6 +423,7 @@ class Wniosek:
             for d in self.dzialki_odlaczane
         ]
 
+        # jeżeli więcej niż jedna działka jest odłączana dodaje "ORAZ przed ostatnim opisem"
         if len(dzialki_opisy) > 1:
             tresc += ", ".join(dzialki_opisy[:-1]) + " ORAZ " + dzialki_opisy[-1]
         else:
@@ -400,6 +434,7 @@ class Wniosek:
             f"POWIAT {self.obreb['powiat']} I PRZYŁĄCZENIE JEJ DO KSIĘGI {self.kw_docelowa}."
         )
 
+        # zmiana liczby na mnogą jeżeli konieczne
         if len(self.dzialki_odlaczane) > 1:
             tresc = tresc.replace("POŁOŻONEJ", "POŁOŻONYCH")
             tresc = tresc.replace("JEJ", "ICH")
@@ -407,6 +442,7 @@ class Wniosek:
         return tresc
 
     def get_stats(self):
+        """Generowanie informacji o danym wniosku, głównie na potrzeby kontroli-debugu, nieużywane w głównej pętli programu"""
         stats = {
             "kw": self.kw,
             "formularze": self.stats["formularze"],
@@ -420,6 +456,22 @@ class Wniosek:
             "path": self.get_output_path(),
         }
         return stats
+
+    def show_stats(self):
+        """wyświetla statystyki ze słownika pozyskanego metodą get_stats()"""
+        print()
+        for key, value in self.get_stats().items():
+            if key == "dzialki":
+                print("dzialki:")
+                for dzialka_zrodlowa, projektowane in value.items():
+                    print(f" {dzialka_zrodlowa}:")
+                    for p in projektowane:
+                        if p in self.dzialki_odlaczane:
+                            print(f"  *{p}")
+                        else:
+                            print(f"   {p}")
+            else:
+                print(f"{key}: {value}")
 
     def stats_to_export(self):
         dzialki = ""
@@ -463,18 +515,3 @@ class Wniosek:
         stats_export.update(zalaczniki)
 
         return stats_export
-
-    def show_stats(self):
-        print()
-        for key, value in self.get_stats().items():
-            if key == "dzialki":
-                print("dzialki:")
-                for dzialka_zrodlowa, projektowane in value.items():
-                    print(f" {dzialka_zrodlowa}:")
-                    for p in projektowane:
-                        if p in self.dzialki_odlaczane:
-                            print(f"  *{p}")
-                        else:
-                            print(f"   {p}")
-            else:
-                print(f"{key}: {value}")

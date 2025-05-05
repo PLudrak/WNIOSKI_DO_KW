@@ -68,10 +68,11 @@ Do poprawy/zrobienia:
 [x] jeżeli wiecej niż dwie osoby w KW-ZAL dodaj KW-WU
 [x] jezeli wiecej niz 1 dzialka we wniosku zal to dodaj je do wnioskow ozn
 [x] tworzenie zbiorczego pdfa do druku, z kontrolą parzystości stron 
-[ ] logowanie do txt
+[x] raportowanie do excela
 [ ] Załączniki są definiowane wewnątrz funkcji - trzeba to bardziej zautomatyzowac
 [ ] uporządkować dzialki w inwestycji i okolice
 	dzialki_odlaczane i dzialki_oznaczone można połączyć w jedną zmienną 
 [ ] Poprawic funkcje obreb w klasie Wniosek -> zmienic na dane ewidencyjne czy cos 
 [ ] Automatyczne przenoszenie załączników do folderów. 
 [ ] uporządkować main.py i functions.py - ewentualnie klase wniosek do oddzielnego pliku
+[ ] logowanie do txt
