@@ -8,62 +8,41 @@ Program służy do automatycznego generowania wniosków o wpis lub założenie k
 
 ## Działanie skryptu (stan na 25.08.2024)
 
-1. **Ładowanie danych o wnioskodawcy**  
-   Hardcodowane w `main.py`.
+## Działanie skryptu(25.08.2024):
 
-2. **Ładowanie danych wejściowych z plików `.xlsx` z katalogu `import/`:**  
-   - Działki  
-   - Relacje działka – właściciel  
-   - Dane adresowe i osobowe właścicieli  
-   - Słownik kodów sądów rejonowych  
-   - Dane o KW, do których dopisywane będą nieruchomości (po jednej na obręb)
+1.Ładowanie danych o wnioskodawcy, hardcodowanych w main.py  
+2.Ładowanie danych z import/.xlsx  
+  2.1 Ładowanie info o działkach  
+  2.2 Ładowanie info o relacjach działka - właściciel  
+  2.3 Ładowanie danych adresowych/osobowych właścicieli  
+  2.4 Ładowanie tabeli słownikowej z kodami sądów rejonowych  
+  2.5 Ładowanie danych z informacjami o księgach wieczystych do których będziemy dopisywać  
+    nieruchomości (po jednej do każdego obrębu)  
+3.Stworzenie listy numerów KW i obrębów dla których generowane będą wnioski  
+4.Generowanie wniosku na podstawie załadowanych danych i listy z pkt3.:  
+  4.1 Przypisanie KW do wniosku  
+  4.2 Przypisanie rodzaju wniosku  
+  4.3 Przepisanie danych wnioskodawcy do wniosku  
+  4.4 Przypisanie numerów działek z KW w danym obrebie (pkt3) do wniosku  
+  4.5 Ustalenie adresu ewid. dla dzialek z wniosku (Obreb, Nr obrebu, Gmina, Powiat),  
+    dzialki w roznych obrebach spowoduja bład  
+  4.6 Znalezienie identyfikatorow wlascicieli na podstawie tabeli z relacjiami  
+  4.7 Okreslenie liczby wlascicieli  
+  4.8 Pobieranie danych o wlascicielach do wniosku  
+  4.9 Pobieranie danych o sądzie i wydziale odpowiednim dla danego wniosku  
+  4.10 Dodanie zalacznikow  
+    4.10.1 Okreslenie czy wniosek jest pierwszym skladanym w danym obrebie,  
+      zalaczniki sa dodawane do pierwszego wniosku w danym obrebie,  
+      dla pozostalych dodawany jest odnosnik do pierwszego wniosku  
+      (Pierwszenstwo okresla sie na podstawie alfabetycznej listy numerów kw)  
+    4.10.2 KW-PP na stałe w kodzie  
+    4.10.3 KW-WU wstepuje jezeli liczba wlascicieli > 2 (nie miesci sie w glownym wniosku)  
+    4.10.4 Decyzja wojewody na stałe w kodzie  
+5.Generowanie plików pdf dla wniosków.
 
-3. **Tworzenie listy KW i obrębów**, dla których generowane będą wnioski
-
-4. **Generowanie wniosków:**
-   - Przypisanie KW
-   - Rodzaj wniosku
-   - Dane wnioskodawcy
-   - Numery działek z KW w danym obrębie
-   - Ustalanie adresów ewidencyjnych działek (błąd w przypadku różnych obrębów)
-   - Identyfikatory właścicieli na podstawie relacji
-   - Liczba właścicieli
-   - Dane właścicieli
-   - Dane sądu i wydziału
-   - **Załączniki:**
-     - Dodawane tylko do pierwszego wniosku w obrębie (pozostałe dostają odniesienie)
-     - KW-PP – na stałe w kodzie
-     - KW-WU – jeżeli liczba właścicieli > 2
-     - Decyzja wojewody – na stałe w kodzie
-
-5. **Generowanie plików PDF** dla wniosków
-
----
-
-## Struktura katalogów
-
-📁 WPISY_DO_KW/
-├── main.py # Główny plik aplikacji
-├── functions.py # Główna logika
-├── requirements.txt # Zależności Pythona
-├── README.md # Opis projektu
-│
-├── 📁 import/ # Pliki wejściowe (.xlsx)
-│ ├── Wlasciciele.xlsx
-│ ├── Dzialki.xlsx
-│ ├── Relacje.xlsx
-│ ├── Sady.xlsx
-│ ├── KW-GDDKIA.xlsx
-│
-├── 📁 forms/ # Szablony jinja2 HTML do generowania PDF
-│
-└── 📁 export/ # Wygenerowane pliki PDF
-└──📁 <sad rejonowy>/
-└──📁 <nazwa obrębu>/
-└──📁 <nr_kw>/
-└── WNIOSKI.PDF
 
 ---
+
 
 ## TODO / Do poprawy
 
