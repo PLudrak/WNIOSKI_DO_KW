@@ -141,10 +141,10 @@ def krotkie_id(nr_dzialki):
 
 class Wniosek:
     pierwszy_wniosek = {}
-    path = ""
 
     def __init__(
         self,
+        tryb: str,
         KW: str,
         obreb: str,
         df_dzialki: pd.DataFrame,
@@ -156,6 +156,7 @@ class Wniosek:
         dzialki_inwestycja,
     ):
         self.initialize_stats()
+        self.tryb = tryb  # "ODL" lub "OBC"
         self.kw = KW
         self.wnioskodawca = dane_wnioskodawcy
 
@@ -207,9 +208,6 @@ class Wniosek:
             projektowana = row["ID_projektowane"]
             if pd.notna(zrodlowa) and pd.notna(projektowana):
                 self.dzialki_zr_pr.setdefault(zrodlowa, []).append(projektowana)
-
-    def clean_class_variables(self):
-        self.path = ""
 
     def ustal_obreb(self, df_GDDKIA):
 
@@ -266,7 +264,7 @@ class Wniosek:
         self.sad = sady.get(prefix, "-")
 
     def dodaj_zalacznik(self, zalaczniki_do_dodania: list[str]):
-        """dodaj inne zalaczniki"""
+        """dodaj inne zalaczniki, max 5"""
         zalaczniki_pola = ["inny1", "inny2", "inny3", "inny4", "inny5"]
 
         # utwórz słownik jeżeli jeszcze nie istnieje
@@ -309,7 +307,7 @@ class Wniosek:
         # na kazdym niepustym polu z sekcji inny załącznik wykonaj funkcję odnośnik_do_zalacznika
         # dodany zostanie odnośnik wskazujący w którym wniosku znajduje sie załącznik
         for pole in self.zalaczniki.keys():
-            if pole.startswith("inne"):
+            if pole.startswith("inny"):
                 if self.zalaczniki[pole] != "---":
                     self.zalaczniki[pole] = self.odnosnik_do_zalacznika(
                         self.zalaczniki[pole]
@@ -383,6 +381,7 @@ class Wniosek:
                 "sad": self.sad,
                 "nr_kw": self.kw,
                 "tresc_zadania": self.tresc_zadania,
+                "tresc_obciazenia": self.okresl_tresc_obciazenia(),
             }
             print_wpis(
                 self,
@@ -415,37 +414,46 @@ class Wniosek:
             oznaczenia.append(oznaczenie)
         return oznaczenia
 
+    def okresl_tresc_obciazenia(self):
+        if self.tryb == "OBC":
+            tresc = "lorem"
+            return tresc
+        else:
+            return "---"
+
     def okresl_tresc_zadania(self, dzialki_inwestycja_wszystkie: dict):
         """Generuje treść żądania dla wnisosku KW-WPIS zawierającą informacje o numerze i powierzchni odłączanych działek"""
+        if self.tryb == "ODL":
+            tresc = (
+                f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
+                ' 2003 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH" '
+                "(DZ.U. 2023 POZ. 162):"
+            )
 
-        tresc = (
-            f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
-            ' 2003 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH" '
-            "(DZ.U. 2023 POZ. 162):"
-        )
+            dzialki_opisy = [
+                f"DZIAŁKI NR {krotkie_id(d)} o POW. {dzialki_inwestycja_wszystkie[d]} HA"
+                for d in self.dzialki_odlaczane
+            ]
 
-        dzialki_opisy = [
-            f"DZIAŁKI NR {krotkie_id(d)} o POW. {dzialki_inwestycja_wszystkie[d]} HA"
-            for d in self.dzialki_odlaczane
-        ]
+            # jeżeli więcej niż jedna działka jest odłączana dodaje "ORAZ przed ostatnim opisem"
+            if len(dzialki_opisy) > 1:
+                tresc += ", ".join(dzialki_opisy[:-1]) + " ORAZ " + dzialki_opisy[-1]
+            else:
+                tresc += dzialki_opisy[0]
 
-        # jeżeli więcej niż jedna działka jest odłączana dodaje "ORAZ przed ostatnim opisem"
-        if len(dzialki_opisy) > 1:
-            tresc += ", ".join(dzialki_opisy[:-1]) + " ORAZ " + dzialki_opisy[-1]
+            tresc += (
+                f", POŁOŻONEJ W OBEBIE {krotkie_id(self.obreb['id'])} {self.obreb['nazwa']}, GMINA {self.obreb['gmina']}, "
+                f"POWIAT {self.obreb['powiat']} I PRZYŁĄCZENIE JEJ DO KSIĘGI {self.kw_docelowa}."
+            )
+
+            # zmiana liczby na mnogą jeżeli konieczne
+            if len(self.dzialki_odlaczane) > 1:
+                tresc = tresc.replace("POŁOŻONEJ", "POŁOŻONYCH")
+                tresc = tresc.replace("JEJ", "ICH")
+
+            return tresc
         else:
-            tresc += dzialki_opisy[0]
-
-        tresc += (
-            f", POŁOŻONEJ W OBEBIE {krotkie_id(self.obreb['id'])} {self.obreb['nazwa']}, GMINA {self.obreb['gmina']}, "
-            f"POWIAT {self.obreb['powiat']} I PRZYŁĄCZENIE JEJ DO KSIĘGI {self.kw_docelowa}."
-        )
-
-        # zmiana liczby na mnogą jeżeli konieczne
-        if len(self.dzialki_odlaczane) > 1:
-            tresc = tresc.replace("POŁOŻONEJ", "POŁOŻONYCH")
-            tresc = tresc.replace("JEJ", "ICH")
-
-        return tresc
+            return "---"
 
     def get_stats(self):
         """Generowanie informacji o danym wniosku, głównie na potrzeby kontroli-debugu, nieużywane w głównej pętli programu"""

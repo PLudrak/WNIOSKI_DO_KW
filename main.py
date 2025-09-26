@@ -35,7 +35,7 @@ def pasek_postepu(licznik, suma):
 
 
 def load_data(path="import"):
-    """Ładowanie danych z excela do programu jako DataFrame"""
+    """Ładowanie danych o działkach, relacjach, osobach, sądach, księgach gddkia z excela do programu jako DataFrame"""
     df_dzialki = load_dzialki(os.path.join(path, "Dzialki.xlsx"))
     print("Zaladowano informacje o działkach")
 
@@ -63,13 +63,15 @@ def get_lista_kw(df_dzialki):
     # numerów ksiąg wieczystych, usuwa duplikaty (obu wierszy razem), sortuje alfabetycznie wg klucza KW
     # (w przyszłości dobrze żeby zwracało też listę działek z inwestycji które nie mają KW, więc należy je założyć)
 
+    df_inwestycja = df_dzialki[df_dzialki["czy_inwestycja"] == True][["KW", "obreb"]]
+    df_kw = df_inwestycja.dropna(subset=["KW"])
     lista = sorted(
-        df_dzialki[df_dzialki["czy_inwestycja"] == True][["KW", "obreb"]]
-        .dropna()
-        .drop_duplicates()
-        .to_dict(orient="records"),
+        df_kw[["KW", "obreb"]].dropna().drop_duplicates().to_dict(orient="records"),
         key=lambda x: x["KW"],
     )
+
+    # dzialki w inwestycji bez KW
+    dzialki_bez_kw = df_inwestycja[df_inwestycja["KW"].isna()]
 
     # drukuje znalezionych numerów KW i obrębów
     print("LISTA ZNALEZIONYCH KW DO WNIOSKÓW")
@@ -89,11 +91,19 @@ def save_stats(lista_wnioskow: list[Wniosek], filepath="export"):
     data_to_export = [wniosek.stats_to_export() for wniosek in lista_wnioskow]
     # konwersja listy na DataFrame (pandas)
     df = pd.DataFrame(data_to_export)
-
     # zapis do pliku
-    with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
-        df.to_excel(writer, index=False, sheet_name="Wnioski")
-    print('Zapisano raport w folderze "EXPORT')
+    while True:
+        try:
+            with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
+                df.to_excel(writer, index=False, sheet_name="Wnioski")
+            print('Zapisano raport w folderze "EXPORT"')
+            break
+        except Exception:
+            print("Spróbować ponownie? (T/N)")
+            odp = input().strip().lower()
+            if odp != "t":
+                print("Zapis przerwany.")
+                break
 
 
 if __name__ == "__main__":
@@ -112,6 +122,7 @@ if __name__ == "__main__":
         # utwórz wniosek:
         print(f"[{num}/{ile_wnisokow}]", end=" ")
         wniosek = Wniosek(
+            "ODL",
             kw["KW"],
             kw["obreb"],
             df_dzialki,
@@ -127,6 +138,7 @@ if __name__ == "__main__":
             [
                 "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
                 "PEŁNOMOCNICTWO",
+                "dupa",
             ]
         )
         wniosek.print_forms()

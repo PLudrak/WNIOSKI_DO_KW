@@ -103,7 +103,7 @@ def merge_wnioski_obreb(base_dir="export"):
                     for page in reader.pages:
                         writer.add_page(page)
 
-            output_pdf_path = os.path.join(obreb_path, f"{obreb}_wnioski.pdf")
+            output_pdf_path = os.path.join(sad_path, f"{obreb}_wnioski.pdf")
             if writer.pages:
                 with open(output_pdf_path, "wb") as f:
                     writer.write(f)
