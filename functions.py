@@ -403,9 +403,11 @@ class Wniosek:
             data = {
                 "sad": self.sad,
                 "kw_odlaczane": self.kw,
-                "nr_kw": self.kw,
+                "kw_dolaczane": "-----",
                 "polozenie": polozenie,
+                "nr_kw": self.kw,
             }
+
             print_zal(
                 self,
                 data,
@@ -415,9 +417,30 @@ class Wniosek:
                 self.dzialki_oznaczenia,
                 output_path,
             )
+
+        # KW-ZAL zalozenie KW poprzez dołączenie jej do KW GDDKIA
         elif self.kw == "BRAK":
-            print("udaje ze generuje wpis dla dzialki co nie ma kw")
-        # jeżeli wniosek nie jest pierwszym wnioskiem w obrębie lub jest znana księga do której dołącza się działki:
+            polozenie = self.obreb
+            polozenie["dzielnica"] = "---"
+            data = {
+                "sad": self.sad,
+                "kw_odlaczane": "---",
+                "kw_dolaczane": self.kw_docelowa,
+                "polozenie": polozenie,
+                "nr_kw": self.kw,
+            }
+
+            print_zal(
+                self,
+                data,
+                self.wnioskodawca,
+                self.wlasciciele_dane,
+                self.zalaczniki,
+                self.dzialki_oznaczenia,
+                output_path,
+            )
+
+        # KW-WPIS jeżeli wniosek nie jest pierwszym wnioskiem w obrębie lub jest znana księga do której dołącza się działki:
         else:
             data = {
                 "sad": self.sad,

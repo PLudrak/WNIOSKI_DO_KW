@@ -172,6 +172,8 @@ if __name__ == "__main__":
             dzialki_inwestycja,
             kw["jr"],
         )
+        wniosek.print_forms()
+        wnioski.append(wniosek)
 
     print("Zakończono tworzenie wniosków")
 
