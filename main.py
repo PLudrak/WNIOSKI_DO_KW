@@ -68,7 +68,10 @@ def get_lista_kw(df_dzialki):
     ]
     df_kw = df_inwestycja.dropna(subset=["KW"])
     lista = sorted(
-        df_kw[["KW", "obreb"]].dropna().drop_duplicates().to_dict(orient="records"),
+        df_kw[["KW", "obreb", "jr"]]
+        .dropna()
+        .drop_duplicates()
+        .to_dict(orient="records"),
         key=lambda x: x["KW"],
     )
 
@@ -86,7 +89,7 @@ def get_lista_kw(df_dzialki):
     print("\nDZIAŁKI W INWESTYCJO DO ZALOZENIA KW")
     for dz in lista_bez_kw:
         print(dz)
-    return lista, len(lista)
+    return lista, len(lista), lista_bez_kw, len(lista_bez_kw)
 
 
 def save_stats(lista_wnioskow: list[Wniosek], filepath="export"):
@@ -120,10 +123,11 @@ if __name__ == "__main__":
         load_data(path="import")
     )
 
-    lista_kw, ile_wnisokow = get_lista_kw(df_dzialki)
+    lista_kw, ile_wnisokow, lista_bez_kw, ile_wnioskow_bez_kw = get_lista_kw(df_dzialki)
 
     wnioski = []
 
+    # generowanie kw wpis
     for num, kw in enumerate(lista_kw, start=1):
         # pasek_postepu(num,ile_wnisokow)
         print()
@@ -140,17 +144,35 @@ if __name__ == "__main__":
             dane_wnioskodawcy,
             df_GDDKIA,
             dzialki_inwestycja,
+            kw["jr"],
         )
         # utwórz plik pdf z wnioskiem i zalacznikami
         wniosek.dodaj_zalacznik(
             [
                 "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
                 "PEŁNOMOCNICTWO",
-                "dupa",
             ]
         )
         wniosek.print_forms()
         wnioski.append(wniosek)
+    # generowanie kw zal
+    for num, kw in enumerate(lista_bez_kw, start=1):
+        print()
+        print(f"[{num}/{ile_wnioskow_bez_kw}]", end=" ")
+        wniosek = Wniosek(
+            "ODL",
+            "BRAK",
+            kw["obreb"],
+            df_dzialki,
+            df_relacje,
+            df_osoby,
+            df_sady,
+            dane_wnioskodawcy,
+            df_GDDKIA,
+            dzialki_inwestycja,
+            kw["jr"],
+        )
+
     print("Zakończono tworzenie wniosków")
 
     save_stats(wnioski)

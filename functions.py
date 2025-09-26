@@ -156,31 +156,35 @@ class Wniosek:
         dane_wnioskodawcy: dict,
         df_GDDKIA,
         dzialki_inwestycja,
+        jr,
     ):
         self.initialize_stats()
         self.tryb = tryb  # "ODL" lub "OBC"
         self.kw = KW
+        self.jr = jr
         self.wnioskodawca = dane_wnioskodawcy
 
         self.find_dzialki(df_dzialki, obreb)
         self.dzialki_odlaczane = self.dzialki_w_inwestycji(dzialki_inwestycja)
-        self.obreb = self.ustal_obreb(
-            df_GDDKIA
-        )  # potencjalnie mylące - zmienic później
+        self.obreb = self.ustal_obreb(df_GDDKIA)  # potencjalnie mylące
 
         self.wlasciciele = []
         self.find_wlasciciele(df_relacje)
         self.ile_wlascicieli = len(self.wlasciciele)
         self.pobierz_dane_wlascicieli(df_wlasciciele)
 
-        self.okresl_sad(sady)
+        self.sad = self.okresl_sad(sady, df_dzialki)
 
         self.okresl_zalaczniki()
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
         self.dzialki_oznaczenia = self.oznaczenie_dzialek(dzialki_inwestycja)
 
-        print(f"Wniosek {self.kw} zainicjalizowano")
-        print('Zapis do folderu:"', f"{self.get_output_path()}", '" ')
+        self.output_path = self.get_output_path()
+        if self.kw == "BRAK":
+            print(f"Wniosek {self.jr} zainicjalizowano")
+        else:
+            print(f"Wniosek {self.kw} zainicjalizowano")
+        print(f'Zapis do folderu:"{self.output_path}"')
 
     def initialize_stats(self):
         self.stats = {}
@@ -188,9 +192,14 @@ class Wniosek:
 
     def find_dzialki(self, df_dzialki: pd.DataFrame, obreb):
         """znajdz dzialki zrodlowe i projektowane na podstawie nr KW"""
-
-        # selekcja rekordów z df_dzialki gdzie: kw wnisoku == kw dzialki źródłowej
-        df_kw = df_dzialki[df_dzialki["KW"] == self.kw]
+        if self.kw == "BRAK":
+            df_kw = df_dzialki[
+                (df_dzialki["jr"] == self.jr)
+                & (df_dzialki["KW"].isna() | (df_dzialki["KW"] == ""))
+            ]
+        else:
+            # selekcja rekordów z df_dzialki gdzie: kw wnisoku == kw dzialki źródłowej
+            df_kw = df_dzialki[df_dzialki["KW"] == self.kw]
 
         # filtrowanie działek które zaczynają się od numeru obrębu docelowego dla danego wniosku
         df_kw = df_kw[
@@ -265,10 +274,31 @@ class Wniosek:
             if not rekord.empty:
                 self.wlasciciele_dane.append(rekord.iloc[0].to_dict())
 
-    def okresl_sad(self, sady):
+    def okresl_sad(self, sady, df_dzialki):
         """Przypisz sąd rejonowy na podstawie numeru kw"""
-        prefix = self.kw.split("/")[0]
-        self.sad = sady.get(prefix, "-")
+        if self.kw != "BRAK":
+            prefix = self.kw.split("/")[0]
+            sad = sady.get(prefix, "-")
+        else:
+            slownik = self.polacz_obreby_sady(df_dzialki)
+            prefix = slownik[self.obreb["id"]]
+            sad = sady.get(prefix, "-")
+        return sad
+
+    def polacz_obreby_sady(self, df_dzialki):
+        # odfiltrowanie pustych KW
+        df_dzialki = df_dzialki[
+            df_dzialki["KW"].notna() & (df_dzialki["KW"] != "")
+        ].copy()
+
+        df_dzialki["teryt_obreb"] = (
+            df_dzialki["ID_zrodlowe"].astype(str).str.split(".").str[:2].str.join(".")
+        )
+        df_dzialki["kod_sadu"] = df_dzialki["KW"].astype(str).str.split("/").str[0]
+
+        result = dict(set(zip(df_dzialki["teryt_obreb"], df_dzialki["kod_sadu"])))
+
+        return result
 
     def dodaj_zalacznik(self, zalaczniki_do_dodania: list[str]):
         """dodaj inne zalaczniki, max 5"""
@@ -350,17 +380,20 @@ class Wniosek:
     def get_output_path(self):
         """określ ścieżkę zapisu wniosku wg wzoru:
         root\\export\\Sąd_rejonowy_w_{miejscowość}\\{Nazwa obrębu}\\{Nr KW}"""
+
         path = [
             "export",
             f"Sąd rejonowy {self.sad}".replace(" ", "_"),
             self.obreb["nazwa"],
             self.kw.replace("/", "."),
         ]
+        if self.kw == "BRAK":
+            path[3] = self.jr.split(".")[-1]
         return os.path.join(*path)
 
     def print_forms(self):
         """funkcja wybiera jaki wniosek powinien zostać wygenerowany i przekazuje atrybuty klasy do odpowienich funkcji"""
-        output_path = self.get_output_path()
+        output_path = self.output_path
 
         # jeżeli wniosek jest pierwszym wnioskiem dla swojego obrębu i nie określono docelowej księgi obrębu:
         if self.okresl_pierwszy_wniosek() and "." in self.kw_docelowa.replace("…", "."):
@@ -382,6 +415,8 @@ class Wniosek:
                 self.dzialki_oznaczenia,
                 output_path,
             )
+        elif self.kw == "BRAK":
+            print("udaje ze generuje wpis dla dzialki co nie ma kw")
         # jeżeli wniosek nie jest pierwszym wnioskiem w obrębie lub jest znana księga do której dołącza się działki:
         else:
             data = {
@@ -430,7 +465,7 @@ class Wniosek:
 
     def okresl_tresc_zadania(self, dzialki_inwestycja_wszystkie: dict):
         """Generuje treść żądania dla wnisosku KW-WPIS zawierającą informacje o numerze i powierzchni odłączanych działek"""
-        if self.tryb == "ODL":
+        if self.kw != "BRAK":
             tresc = (
                 f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
                 ' 2003 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH" '
@@ -474,7 +509,7 @@ class Wniosek:
             "dzialki": self.dzialki_zr_pr,
             "zalaczniki": self.zalaczniki,
             "czy_pierwszy_wniosek": self.okresl_pierwszy_wniosek(),
-            "path": self.get_output_path(),
+            "path": self.output_path,
         }
         return stats
 
@@ -501,7 +536,7 @@ class Wniosek:
                 dzialka = f"*{dzialka}"
             dzialki += dzialka + "; "
 
-        path = Path(self.get_output_path())
+        path = Path(self.output_path)
         relative_path = path.relative_to("export")
 
         stats_export = {
@@ -522,7 +557,7 @@ class Wniosek:
             "Liczba działek źródłowych": len(self.dzialki_zrodlowe),
             "Liczba działek projektowanych": len(self.dzialki),
             "Liczba działek odłączanych od kw": len(self.dzialki_odlaczane),
-            "PATH": self.get_output_path(),
+            "PATH": self.output_path,
         }
 
         zalaczniki = {}
