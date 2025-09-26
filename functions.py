@@ -12,6 +12,7 @@ def load_dzialki(filepath):
         ID_zrodlowe = row["ID_Dzialka"]
         ID_projektowane = row["ID_Projektowane"]
         powierzchnia = row["Powierzchnia"]
+        jr = row["J_REJESTR"]
 
         KW = row["KW"]
         if KW is None:
@@ -24,6 +25,7 @@ def load_dzialki(filepath):
             "czy_inwestycja": row["Inwestycja"],
             "KW": KW,
             "obreb": ".".join(ID_zrodlowe.split(".")[:-1]),
+            "jr": jr,
         }
         rows.append(new_row)
     df_dzialki = pd.DataFrame(rows)

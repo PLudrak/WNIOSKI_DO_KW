@@ -63,7 +63,9 @@ def get_lista_kw(df_dzialki):
     # numerów ksiąg wieczystych, usuwa duplikaty (obu wierszy razem), sortuje alfabetycznie wg klucza KW
     # (w przyszłości dobrze żeby zwracało też listę działek z inwestycji które nie mają KW, więc należy je założyć)
 
-    df_inwestycja = df_dzialki[df_dzialki["czy_inwestycja"] == True][["KW", "obreb"]]
+    df_inwestycja = df_dzialki[df_dzialki["czy_inwestycja"] == True][
+        ["KW", "obreb", "jr"]
+    ]
     df_kw = df_inwestycja.dropna(subset=["KW"])
     lista = sorted(
         df_kw[["KW", "obreb"]].dropna().drop_duplicates().to_dict(orient="records"),
@@ -71,13 +73,19 @@ def get_lista_kw(df_dzialki):
     )
 
     # dzialki w inwestycji bez KW
-    dzialki_bez_kw = df_inwestycja[df_inwestycja["KW"].isna()]
+    dzialki_bez_kw = df_inwestycja[
+        df_inwestycja["KW"].isna() | (df_inwestycja["KW"] == "")
+    ]
+
+    lista_bez_kw = dzialki_bez_kw.drop_duplicates().to_dict(orient="records")
 
     # drukuje znalezionych numerów KW i obrębów
     print("LISTA ZNALEZIONYCH KW DO WNIOSKÓW")
     for line in lista:
         print(line["KW"], line["obreb"])
-
+    print("\nDZIAŁKI W INWESTYCJO DO ZALOZENIA KW")
+    for dz in lista_bez_kw:
+        print(dz)
     return lista, len(lista)
 
 
