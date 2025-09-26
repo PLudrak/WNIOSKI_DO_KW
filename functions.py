@@ -240,7 +240,12 @@ class Wniosek:
             }
 
         print(f"UWAGA:dzialki we wniosku do: {self.kw} znajdują się w dwóch obrebach")
-        return
+        return {
+            "id": "0000",
+            "nazwa": "!nieznany",
+            "gmina": "!nieznany",
+            "powiat": "!nieznany",
+        }
 
     def find_wlasciciele(self, df_relacje):
         """Znajdz id wlascicieli kw na podstawie dzialek"""
