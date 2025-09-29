@@ -2,6 +2,7 @@ import pandas as pd
 from wniosek import *
 from rendering import *
 from pdf_handling import *
+from obciazenia import get_obciazenia
 
 # dane GDDKiA
 dane_wnioskodawcy = {
@@ -85,14 +86,21 @@ def save_stats(lista_wnioskow: list[Wniosek], filepath="export"):
 
 
 if __name__ == "__main__":
-
-    df_dzialki, df_relacje, df_osoby, df_sady, df_GDDKIA, dzialki_inwestycja = (
-        load_data(path="import")
-    )
+    print("Rozpoczeto ładowanie danych")
+    (
+        df_dzialki,
+        df_relacje,
+        df_osoby,
+        df_sady,
+        df_GDDKIA,
+        dzialki_inwestycja,
+        df_obciazenia,
+    ) = load_data(path="import")
 
     lista_kw, ile_wnisokow, lista_bez_kw, ile_wnioskow_bez_kw = get_lista_kw(df_dzialki)
 
     wnioski = []
+    obciazenia = get_obciazenia(df_obciazenia)
 
     # generowanie kw wpis
     for num, kw in enumerate(lista_kw, start=1):
@@ -112,6 +120,7 @@ if __name__ == "__main__":
             df_GDDKIA,
             dzialki_inwestycja,
             kw["jr"],
+            obciazenia,
         )
         # utwórz plik pdf z wnioskiem i zalacznikami
         wniosek.dodaj_zalacznik(
@@ -138,6 +147,7 @@ if __name__ == "__main__":
             df_GDDKIA,
             dzialki_inwestycja,
             kw["jr"],
+            obciazenia,
         )
         wniosek.print_forms()
         wnioski.append(wniosek)

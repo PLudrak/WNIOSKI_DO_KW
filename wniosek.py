@@ -25,6 +25,7 @@ class Wniosek:
         df_GDDKIA,
         dzialki_inwestycja,
         jr,
+        obciazenia,
     ):
         self.initialize_stats()
         self.tryb = tryb  # "ODL" lub "OBC"
@@ -43,6 +44,7 @@ class Wniosek:
 
         self.sad = self.okresl_sad(sady, df_dzialki)
 
+        self.obciazenia = self.find_obciazenia(obciazenia)
         self.okresl_zalaczniki()
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
         self.dzialki_oznaczenia = self.oznaczenie_dzialek(dzialki_inwestycja)
@@ -347,12 +349,18 @@ class Wniosek:
             oznaczenia.append(oznaczenie)
         return oznaczenia
 
-    def okresl_tresc_obciazenia(self):
-        if self.tryb == "OBC":
-            tresc = "lorem"
-            return tresc
+    def find_obciazenia(self, obciazenia):
+        if obciazenia.get(self.kw):
+            print("!OBCIAZENIE ZNALEZIONE")
         else:
-            return "---"
+            print("bez obciazen")
+
+    def okresl_tresc_obciazenia(self):
+
+        tresc = "lorem"
+        return tresc
+
+        return "---"
 
     def okresl_tresc_zadania(self, dzialki_inwestycja_wszystkie: dict):
         """Generuje treść żądania dla wnisosku KW-WPIS zawierającą informacje o numerze i powierzchni odłączanych działek"""

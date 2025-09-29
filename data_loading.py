@@ -9,9 +9,18 @@ def load_data(path="import"):
     df_osoby = load_osoby(os.path.join(path, "Wlasciciele.xlsx"))
     df_sady = load_sady(os.path.join(path, "Sady.xlsx"))
     df_GDDKIA = load_gddkia(os.path.join(path, "KW-GDDKIA.xlsx"))
+    df_obciazenia = load_obciazenia(os.path.join(path, "ograniczenia.xlsx"))
     dzialki_inwestycja = dzialki_w_inwestycji(df_dzialki)
 
-    return df_dzialki, df_relacje, df_osoby, df_sady, df_GDDKIA, dzialki_inwestycja
+    return (
+        df_dzialki,
+        df_relacje,
+        df_osoby,
+        df_sady,
+        df_GDDKIA,
+        dzialki_inwestycja,
+        df_obciazenia,
+    )
 
 
 def dzialki_w_inwestycji(df_dzialki):
@@ -67,6 +76,22 @@ def load_relacje(filepath):
     df_relacje = pd.DataFrame(rows)
     print("Zaladowano informacje o właścicielach")
     return df_relacje
+
+
+def load_obciazenia(filepath):
+    rows = []
+    df_excel = pd.read_excel(filepath)
+    for _, row in df_excel.iterrows():
+        new_row = {
+            "kw": row["kw"],
+            "ID_dzialki": row["identyfikator_dzialki"],
+            "kolor": row["linia_koloru"],
+            "tresc_obciazenia": row["tresc_obciazenia"],
+        }
+        rows.append(new_row)
+    df_obciazenia = pd.DataFrame(rows)
+    print('Zaladowano informacje o "CZASOWYCH OBCIAZENIACH"')
+    return df_obciazenia
 
 
 def load_osoby(filepath):
