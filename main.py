@@ -1,5 +1,5 @@
 import pandas as pd
-from functions import *
+from wniosek import *
 from rendering import *
 from pdf_handling import *
 
@@ -21,39 +21,6 @@ dane_wnioskodawcy = {
     "nr_lokalu": "---",
     "kod_pocztowy": "00-874",
 }
-
-
-def pasek_postepu(licznik, suma):
-    """wyswietla w terminalu pasek postępu"""
-    procent = int(round(licznik / suma * 100))
-    pasek = "[" + "|" * procent + "-" * (100 - procent) + "]"
-    pasek = (
-        pasek[:47] + f"{procent}%" + pasek[50:]
-    )  # Wstawienie procentu w odpowiednie miejsce
-    print("\n" * 20)
-    print(pasek)
-
-
-def load_data(path="import"):
-    """Ładowanie danych o działkach, relacjach, osobach, sądach, księgach gddkia z excela do programu jako DataFrame"""
-    df_dzialki = load_dzialki(os.path.join(path, "Dzialki.xlsx"))
-    print("Zaladowano informacje o działkach")
-
-    df_relacje = load_relacje(os.path.join(path, "Relacje.xlsx"))
-    print("Zaladowano informacje o właścicielach")
-
-    df_osoby = load_osoby(os.path.join(path, "Wlasciciele.xlsx"))
-    print("Załadowano informacje o osobach")
-
-    df_sady = load_sady(os.path.join(path, "Sady.xlsx"))
-    print("Załadowano informacje o sądach")
-
-    df_GDDKIA = load_gddkia(os.path.join(path, "KW-GDDKIA.xlsx"))
-    print("Załadowano informacje o Księgach GDDKIA i obrębach")
-
-    dzialki_inwestycja = dzialki_w_inwestycji(df_dzialki)
-
-    return df_dzialki, df_relacje, df_osoby, df_sady, df_GDDKIA, dzialki_inwestycja
 
 
 def get_lista_kw(df_dzialki):
