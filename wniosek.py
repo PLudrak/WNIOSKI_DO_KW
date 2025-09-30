@@ -316,7 +316,8 @@ class Wniosek:
                 "sad": self.sad,
                 "nr_kw": self.kw,
                 "tresc_zadania": self.tresc_zadania,
-                "tresc_obciazenia": self.okresl_tresc_obciazenia(),
+                "tresc_obciazenia1": self.obciazenia[0],
+                "tresc_obciazenia2": self.obciazenia[1],
             }
             print_wpis(
                 self,
@@ -350,17 +351,16 @@ class Wniosek:
         return oznaczenia
 
     def find_obciazenia(self, obciazenia):
-        if obciazenia.get(self.kw):
-            print("!OBCIAZENIE ZNALEZIONE")
+        obciazenia_aktualnej_kw = obciazenia.get(self.kw)
+        if not obciazenia_aktualnej_kw:
+            self.ogr_counter = 0
+            return ["---", "---"]
+        elif len(obciazenia_aktualnej_kw) == 1:
+            self.ogr_counter = 1
+            return [obciazenia_aktualnej_kw, "---"]
         else:
-            print("bez obciazen")
-
-    def okresl_tresc_obciazenia(self):
-
-        tresc = "lorem"
-        return tresc
-
-        return "---"
+            self.ogr_counter = len(obciazenia_aktualnej_kw)
+            return obciazenia_aktualnej_kw
 
     def okresl_tresc_zadania(self, dzialki_inwestycja_wszystkie: dict):
         """Generuje treść żądania dla wnisosku KW-WPIS zawierającą informacje o numerze i powierzchni odłączanych działek"""
@@ -456,6 +456,7 @@ class Wniosek:
             "Liczba działek źródłowych": len(self.dzialki_zrodlowe),
             "Liczba działek projektowanych": len(self.dzialki),
             "Liczba działek odłączanych od kw": len(self.dzialki_odlaczane),
+            "Liczba ograniczen": self.ogr_counter,
             "PATH": self.output_path,
         }
 

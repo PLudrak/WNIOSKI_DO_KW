@@ -51,12 +51,12 @@ def get_lista_kw(df_dzialki):
     lista_bez_kw = dzialki_bez_kw.drop_duplicates().to_dict(orient="records")
 
     # drukuje znalezionych numerów KW i obrębów
-    print("LISTA ZNALEZIONYCH KW DO WNIOSKÓW")
+    print(f"LISTA ZNALEZIONYCH KW DO WNIOSKÓW [{len(lista)}]")
     for line in lista:
         print(line["KW"], line["obreb"])
-    print("\nDZIAŁKI W INWESTYCJO DO ZALOZENIA KW")
+    print(f"\nDZIAŁKI W INWESTYCJO DO ZALOZENIA KW [{len(lista_bez_kw)}]")
     for dz in lista_bez_kw:
-        print(dz)
+        print(dz["jr"])
     return lista, len(lista), lista_bez_kw, len(lista_bez_kw)
 
 
@@ -131,6 +131,7 @@ if __name__ == "__main__":
         )
         wniosek.print_forms()
         wnioski.append(wniosek)
+
     # generowanie kw zal
     for num, kw in enumerate(lista_bez_kw, start=1):
         print()

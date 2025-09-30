@@ -41,11 +41,8 @@ def polacz_tresc_z_kw(df):
 def agreguj_obciazenia(df):
     wynik = {}
     for kw, grupa in df.groupby("kw"):
-        slownik = {
-            num: str(pelna_tresc)
-            for num, pelna_tresc in enumerate(grupa["pelna_tresc"])
-        }
-        wynik[kw] = slownik
+        lista_tresci = [str(tresc) for tresc in grupa["pelna_tresc"]]
+        wynik[kw] = lista_tresci
     return wynik
 
 
