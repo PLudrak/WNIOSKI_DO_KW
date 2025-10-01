@@ -7,10 +7,10 @@ def get_obciazone_kw(df_obciazenia):
     return df_obciazenia["kw"].dropna().unique()
 
 
-def stworz_tresc_obicazenia(id_dzialki, kolor: str, tresc_obciazenia, kw):
+def stworz_tresc_obicazenia(id_dzialki, kolor: str, tresc_obciazenia, kw, obreb):
+
     id_dzialki = krotkie_id(str(id_dzialki))
-    obreb = "SUCHOWOLA"
-    koloru = str(kolor).replace("ki", "kiego").replace("ny", "nego").upper()
+    koloru = str(kolor).replace("ki", "kiego").replace("wy", "wego").upper()
     tresc_obciazenia = str(tresc_obciazenia).replace(" \n", ", ")
     tresc = f"""
     WNOSZĘ O UJAWNIENIE W DZIALE III KW {kw} OGRANICZENIA SPOSOBU KORZYSTANIA Z NIERUCHOMOŚCI, STANOWIĄCEJ DZIAŁKĘ EW. 
@@ -28,10 +28,24 @@ def stworz_tresc_obicazenia(id_dzialki, kolor: str, tresc_obciazenia, kw):
     return tresc
 
 
-def polacz_tresc_z_kw(df):
+def okresl_obreb_obciazenia(df_obciazenia, df_GDDKIA):
+    df_GDDKIA["obreb_id"] = df_GDDKIA["obreb_id"].astype(str)
+    df_obciazenia["ID_dzialki"] = df_obciazenia["ID_dzialki"].astype(str)
+
+    df_obciazenia["obreb_id"] = df_obciazenia["ID_dzialki"].str[:13]
+    df_out = df_obciazenia.merge(df_GDDKIA, on="obreb_id", how="left")
+    return df_out
+
+
+def polacz_tresc_z_kw(df, df_gddkia):
+    df = okresl_obreb_obciazenia(df, df_gddkia)
     df["pelna_tresc"] = df.apply(
         lambda row: stworz_tresc_obicazenia(
-            row["ID_dzialki"], row["kolor"], row["tresc_obciazenia"], row["kw"]
+            row["ID_dzialki"],
+            row["kolor"],
+            row["tresc_obciazenia"],
+            row["kw"],
+            row["obreb"],
         ),
         axis=1,
     )
@@ -53,8 +67,8 @@ def print_all_obciazenia(agregowane_obciazenia):
             print(f"  [{num}] {pelna_tresc}\n")
 
 
-def get_obciazenia(df_obciazenia: pd.DataFrame):
-    df_obciazenia = polacz_tresc_z_kw(df_obciazenia)
+def get_obciazenia(df_obciazenia: pd.DataFrame, df_gddkia):
+    df_obciazenia = polacz_tresc_z_kw(df_obciazenia, df_gddkia)
     obciazenia_kw = agreguj_obciazenia(df_obciazenia)
     return obciazenia_kw
 
@@ -86,11 +100,3 @@ def get_obciazenia_bez_odlaczen(lista_kw, obciazenia, df_dzialki):
     for line in obciazenia_bez_odlaczen:
         print(line)
     return obciazenia_bez_odlaczen
-
-
-if __name__ == "__main__":
-    print("test")
-    obciazenia = load_obciazenia("import/ograniczenia.xlsx")
-    obciazenia = polacz_tresc_z_kw(obciazenia)
-    obciazenia_kw = agreguj_obciazenia(obciazenia)
-    print_all_obciazenia(obciazenia_kw)

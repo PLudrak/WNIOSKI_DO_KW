@@ -100,7 +100,7 @@ if __name__ == "__main__":
     lista_kw, ile_wnisokow, lista_bez_kw, ile_wnioskow_bez_kw = get_lista_kw(df_dzialki)
 
     wnioski = []
-    obciazenia = get_obciazenia(df_obciazenia)
+    obciazenia = get_obciazenia(df_obciazenia, df_GDDKIA)
     kw_obicazane_bez_odlaczen = get_obciazenia_bez_odlaczen(
         lista_kw, obciazenia, df_dzialki
     )
