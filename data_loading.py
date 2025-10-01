@@ -83,7 +83,7 @@ def load_obciazenia(filepath):
     df_excel = pd.read_excel(filepath)
     for _, row in df_excel.iterrows():
         new_row = {
-            "kw": row["kw"],
+            "kw": str(row["kw"]).strip(),
             "ID_dzialki": row["identyfikator_dzialki"],
             "kolor": row["linia_koloru"],
             "tresc_obciazenia": row["tresc_obciazenia"],

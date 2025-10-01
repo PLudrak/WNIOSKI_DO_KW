@@ -2,7 +2,7 @@ import pandas as pd
 from wniosek import *
 from rendering import *
 from pdf_handling import *
-from obciazenia import get_obciazenia
+from obciazenia import get_obciazenia, get_obciazenia_bez_odlaczen
 
 # dane GDDKiA
 dane_wnioskodawcy = {
@@ -101,10 +101,13 @@ if __name__ == "__main__":
 
     wnioski = []
     obciazenia = get_obciazenia(df_obciazenia)
+    kw_obicazane_bez_odlaczen = get_obciazenia_bez_odlaczen(
+        lista_kw, obciazenia, df_dzialki
+    )
 
     # generowanie kw wpis
     for num, kw in enumerate(lista_kw, start=1):
-        # pasek_postepu(num,ile_wnisokow)
+
         print()
         # utwórz wniosek:
         print(f"[{num}/{ile_wnisokow}]", end=" ")
@@ -138,7 +141,27 @@ if __name__ == "__main__":
         print(f"[{num}/{ile_wnioskow_bez_kw}]", end=" ")
         wniosek = Wniosek(
             "ODL",
-            "BRAK",
+            kw["KW"],
+            kw["obreb"],
+            df_dzialki,
+            df_relacje,
+            df_osoby,
+            df_sady,
+            dane_wnioskodawcy,
+            df_GDDKIA,
+            dzialki_inwestycja,
+            kw["jr"],
+            obciazenia,
+        )
+        wniosek.print_forms()
+        wnioski.append(wniosek)
+
+    for num, kw in enumerate(kw_obicazane_bez_odlaczen, start=1):
+        print()
+        print(f"[{num}/{len(kw_obicazane_bez_odlaczen)}]", end=" ")
+        wniosek = Wniosek(
+            "OBC",
+            kw["KW"],
             kw["obreb"],
             df_dzialki,
             df_relacje,

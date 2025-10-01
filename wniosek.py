@@ -29,7 +29,14 @@ class Wniosek:
     ):
         self.initialize_stats()
         self.tryb = tryb  # "ODL" lub "OBC"
-        self.kw = KW
+        if (
+            KW is None
+            or (isinstance(KW, float) and pd.isna(KW))
+            or str(KW).strip() == ""
+        ):
+            self.kw = "BRAK"
+        else:
+            self.kw = str(KW)
         self.jr = jr
         self.wnioskodawca = dane_wnioskodawcy
 
@@ -98,34 +105,30 @@ class Wniosek:
             obreby_id.append(obreb_id)
 
         obreby_id = set(obreby_id)
-        if len(obreby_id) == 1:
-            obreb_id = next(iter(obreby_id))
-            obreb_nazwa = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["obreb"].values[
-                0
-            ]
-            obreb_gmina = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["gmina"].values[
-                0
-            ]
-            obreb_powiat = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id][
-                "powiat"
-            ].values[0]
-            self.kw_docelowa = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id][
-                "kw_gddkia"
-            ].values[0]
-
+        if not obreby_id:
             return {
-                "id": str(obreb_id),
-                "nazwa": obreb_nazwa,
-                "gmina": obreb_gmina,
-                "powiat": obreb_powiat,
+                "id": "---",
+                "nazwa": "---",
+                "gmina": "---",
+                "powiat": "---",
             }
+        if len(obreby_id) != 1:
+            print(
+                f"UWAGA:dzialki we wniosku do: {self.kw} znajdują się w dwóch obrebach"
+            )
 
-        print(f"UWAGA:dzialki we wniosku do: {self.kw} znajdują się w dwóch obrebach")
+        obreb_id = next(iter(obreby_id))
+        obreb_nazwa = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["obreb"].values[0]
+        obreb_gmina = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["gmina"].values[0]
+        obreb_powiat = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id]["powiat"].values[0]
+        self.kw_docelowa = df_GDDKIA[df_GDDKIA["obreb_id"] == obreb_id][
+            "kw_gddkia"
+        ].values[0]
         return {
-            "id": "0000",
-            "nazwa": "!nieznany",
-            "gmina": "!nieznany",
-            "powiat": "!nieznany",
+            "id": str(obreb_id),
+            "nazwa": obreb_nazwa,
+            "gmina": obreb_gmina,
+            "powiat": obreb_powiat,
         }
 
     def find_wlasciciele(self, df_relacje):
@@ -266,7 +269,12 @@ class Wniosek:
         output_path = self.output_path
 
         # jeżeli wniosek jest pierwszym wnioskiem dla swojego obrębu i nie określono docelowej księgi obrębu:
-        if self.okresl_pierwszy_wniosek() and "." in self.kw_docelowa.replace("…", "."):
+
+        if (
+            self.tryb == "ODL"
+            and self.okresl_pierwszy_wniosek()
+            and "." in self.kw_docelowa.replace("…", ".")
+        ):
             polozenie = self.obreb
             polozenie["dzielnica"] = "---"
 
@@ -327,6 +335,8 @@ class Wniosek:
                 self.zalaczniki,
                 output_path,
             )
+            if self.ogr_counter > 2:
+                print_ZAD(self.obciazenia, output_path)
 
     def dzialki_w_inwestycji(self, dzialki_inwestycja_wszystkie):
         """Z listy wszsytkich działek w inwestycji zwraca tylko te których dotyczy wniosek"""
@@ -364,6 +374,8 @@ class Wniosek:
 
     def okresl_tresc_zadania(self, dzialki_inwestycja_wszystkie: dict):
         """Generuje treść żądania dla wnisosku KW-WPIS zawierającą informacje o numerze i powierzchni odłączanych działek"""
+        if self.tryb == "OBC":
+            return "---"
         if self.kw != "BRAK":
             tresc = (
                 f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"

@@ -97,6 +97,22 @@ def print_zal(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, dzialki, pat
         wniosek.stats["formularze"].append("KW-OZN")
 
 
+def print_ZAD(obciazenia, path):
+    base_path = os.path.abspath("forms")
+    output_path = os.path.join(path, "KW-ZAD.pdf")
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    template = load_template("KW-ZAD.html")
+    obciazenia_do_wniosku = []
+    i = 5
+    for obciazenie in obciazenia[1:]:
+
+        obciazenie_do_wniosku = {"lp": i, "tresc": obciazenie}
+        i += 1
+        obciazenia_do_wniosku.append(obciazenie_do_wniosku)
+    html = template.render(obciazenia=obciazenia_do_wniosku)
+    save_pdf(html, output_path, base_path)
+
+
 def print_OZN(dzialki, kw, path):
     base_path = os.path.abspath("forms")
     output_path = os.path.join(path, "KW-OZN.pdf")

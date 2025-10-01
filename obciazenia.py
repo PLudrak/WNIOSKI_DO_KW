@@ -59,6 +59,35 @@ def get_obciazenia(df_obciazenia: pd.DataFrame):
     return obciazenia_kw
 
 
+def get_obciazenia_bez_odlaczen(lista_kw, obciazenia, df_dzialki):
+    """
+    Zwracan listę słowników {KW, obreb, jr} dla KW z obciążeń, które nie są na liście KW z inwestycji
+    """
+    obciazenia_bez_odlaczen = []
+    lista_nr_kw = [item["KW"] for item in lista_kw]
+
+    for kw in obciazenia.keys():
+        if not kw or str(kw).strip() == "" or str(kw) == "nan":
+            continue
+
+        if kw not in lista_nr_kw:
+            # wyszukiwanie info o obrebie i jr na podstawie pierwszej dzialki w KW
+            print(kw)
+            rekord = df_dzialki[df_dzialki["KW"] == kw]
+
+            if not rekord.empty:
+                obreb = rekord.iloc[0]["obreb"]
+                jr = rekord.iloc[0]["jr"]
+            else:
+                obreb = "---"
+                jr = "---"
+            obciazenia_bez_odlaczen.append({"KW": kw, "obreb": obreb, "jr": jr})
+    print(f"\nKsiegi do obiciazenia spoza inwestycji [{len(obciazenia_bez_odlaczen)}]:")
+    for line in obciazenia_bez_odlaczen:
+        print(line)
+    return obciazenia_bez_odlaczen
+
+
 if __name__ == "__main__":
     print("test")
     obciazenia = load_obciazenia("import/ograniczenia.xlsx")
