@@ -152,10 +152,17 @@ if __name__ == "__main__":
             obciazenia,
         )
         # utwórz plik pdf z wnioskiem i zalacznikami
-        wniosek.dodaj_zalacznik(
+        wniosek.dodaj_zalaczniki(
             [
-                "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
-                "PEŁNOMOCNICTWO",
+                {
+                    "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
+                    "odnosnik": True,
+                },
+                {"tresc": "PEŁNOMOCNICTWO", "odnosnik": True},
+                {
+                    "tresc": "WYPIS I WYRYS Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "odnosnik": False,
+                },
             ]
         )
         wniosek.print_forms()
@@ -180,6 +187,23 @@ if __name__ == "__main__":
             kw["jr"],
             obciazenia,
         )
+        wniosek.dodaj_zalaczniki(
+            [
+                {
+                    "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
+                    "odnosnik": True,
+                },
+                {"tresc": "PEŁNOMOCNICTWO", "odnosnik": True},
+                {
+                    "tresc": "WYPIS I WYRYS Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "odnosnik": False,
+                },
+                {
+                    "tresc": "DOKUMENT POSWIADCZAJACY PRAWO WLASNOSCI DO NIERUCHOMOSCI",
+                    "odnosnik": False,
+                },
+            ]
+        )
         wniosek.print_forms()
         print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
@@ -200,6 +224,19 @@ if __name__ == "__main__":
             dzialki_inwestycja,
             kw["jr"],
             obciazenia,
+        )
+        wniosek.dodaj_zalaczniki(
+            [
+                {
+                    "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
+                    "odnosnik": True,
+                },
+                {"tresc": "PEŁNOMOCNICTWO", "odnosnik": True},
+                {
+                    "tresc": "WYPIS I WYRYS Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "odnosnik": False,
+                },
+            ]
         )
         wniosek.print_forms()
         print(f'\nZapis do folderu:"{wniosek.output_path}"')
