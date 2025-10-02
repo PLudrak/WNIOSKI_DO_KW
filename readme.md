@@ -58,8 +58,8 @@ Program służy do automatycznego generowania wniosków o wpis lub założenie k
 - [ ] Połączyć `dzialki_odlaczane` i `dzialki_oznaczone` w jedną zmienną
 - [ ] Funkcja `obreb` w klasie `Wniosek` → zamienić na „dane ewidencyjne”
 - [ ] Automatyczne przenoszenie załączników do folderów
-- [ ] Refaktoryzacja `main.py` i `functions.py`, klasa `Wniosek` do osobnego pliku
-- [ ] Logowanie do pliku `.txt`
+- [x] Refaktoryzacja `main.py` i `functions.py`, klasa `Wniosek` do osobnego pliku
+- [] Logowanie do pliku `.txt`
 
 ---
 
