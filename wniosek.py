@@ -52,7 +52,7 @@ class Wniosek:
         self.sad = self.okresl_sad(sady, df_dzialki)
 
         self.obciazenia = self.find_obciazenia(obciazenia)
-        self.okresl_zalaczniki()
+        self.okresl_zalaczniki_formularze()
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
         self.dzialki_oznaczenia = self.oznaczenie_dzialek(dzialki_inwestycja)
 
@@ -176,35 +176,20 @@ class Wniosek:
 
         return result
 
-    def dodaj_zalacznik(self, zalaczniki_do_dodania: list[str]):
+    def dodaj_zalaczniki(self, zalaczniki_do_dodania: list[dict]):
         """dodaj inne zalaczniki, max 5"""
-        zalaczniki_pola = ["inny1", "inny2", "inny3", "inny4", "inny5"]
+        zalaczniki_inne = []
 
-        # utwórz słownik jeżeli jeszcze nie istnieje
-        if not hasattr(self, "zalaczniki"):
-            self.zalaczniki = {}
+        for zalacznik in zalaczniki_do_dodania:
+            if zalacznik["odnosnik"] == True:
+                tresc = self.odnosnik_do_zalacznika(zalacznik["tresc"])
+                zalaczniki_inne.append(tresc)
+            else:
+                zalaczniki_inne.append(zalacznik["tresc"])
+        self.zalaczniki_inne = zalaczniki_inne + ["---"] * (5 - len(zalaczniki_inne))
+        print(self.zalaczniki_inne)
 
-        zalacznik_index = 0
-
-        # pobierz wartość wg klucza, jeżeli wolna ("---") wstaw załącznik, jeżeli nie, sprawdź następny klucz
-        for pole in zalaczniki_pola:
-            wartosc = self.zalaczniki.get(pole, "---")
-            if wartosc == "---" and zalacznik_index < len(zalaczniki_do_dodania):
-                self.zalaczniki[pole] = zalaczniki_do_dodania[zalacznik_index]
-                zalacznik_index += 1
-
-        # w pozostale pola wstaw ---
-        for pole in zalaczniki_pola:
-            if pole not in self.zalaczniki:
-                self.zalaczniki[pole] = "---"
-
-        self.okresl_zalaczniki()
-
-    def okresl_zalaczniki(self):
-        """
-        przygotuj dane do wpisania w Wykazie zalacznikow KW-WPIS/KW-ZAL
-        !!! Koniecznie _PO_ dodaniu już wszystkich zalacznikow
-        """
+    def okresl_zalaczniki_formularze(self):
 
         # utwórz słownik jeżeli jeszcze nie istnieje
         if not hasattr(self, "zalaczniki"):
@@ -215,16 +200,15 @@ class Wniosek:
 
         # jezeli jest wiecej niz dwoje uczesników (wlascicieli) wpisz liczbe załączników KW-WU
         if self.ile_wlascicieli > 2:
-            self.zalaczniki["kw_wu"] = self.ile_wlascicieli - 2
+            self.zalaczniki["kw_wu"] = 1
+        else:
+            self.zalaczniki["kw_wu"] = "---"
 
-        # na kazdym niepustym polu z sekcji inny załącznik wykonaj funkcję odnośnik_do_zalacznika
-        # dodany zostanie odnośnik wskazujący w którym wniosku znajduje sie załącznik
-        for pole in self.zalaczniki.keys():
-            if pole.startswith("inny"):
-                if self.zalaczniki[pole] != "---":
-                    self.zalaczniki[pole] = self.odnosnik_do_zalacznika(
-                        self.zalaczniki[pole]
-                    )
+        # jezeli jest wiecej niz dwa ograniczenia
+        if self.ogr_counter > 2:
+            self.zalaczniki["kw_zad"] = 1
+        else:
+            self.zalaczniki["kw_zad"] = "---"
 
     def odnosnik_do_zalacznika(self, zalacznik: str):
         """jezeli wniosek nie jest pierwszym w obrebie, dodaj odnośnik do pierwszego wniosku"""
@@ -295,6 +279,7 @@ class Wniosek:
                 self.wnioskodawca,
                 self.wlasciciele_dane,
                 self.zalaczniki,
+                self.zalaczniki_inne,
                 self.dzialki_oznaczenia,
                 output_path,
             )
@@ -317,6 +302,7 @@ class Wniosek:
                 self.wnioskodawca,
                 self.wlasciciele_dane,
                 self.zalaczniki,
+                self.zalaczniki_inne,
                 self.dzialki_oznaczenia,
                 output_path,
             )
@@ -336,6 +322,7 @@ class Wniosek:
                 self.wnioskodawca,
                 self.wlasciciele_dane,
                 self.zalaczniki,
+                self.zalaczniki_inne,
                 output_path,
             )
             if self.ogr_counter > 2:

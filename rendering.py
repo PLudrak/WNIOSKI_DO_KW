@@ -71,7 +71,9 @@ def wlasciciele_do_druku(wlasciciele: list[dict]):
     return uczestnik1, uczestnik2, pozostali_uczestnicy
 
 
-def print_zal(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, dzialki, path):
+def print_zal(
+    wniosek, data, wnioskodawca, wlasciciele, zalaczniki, zalaczniki_inne, dzialki, path
+):
     base_path = os.path.abspath("forms")
     output_path = os.path.join(path, "KW-ZAL.pdf")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -81,6 +83,7 @@ def print_zal(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, dzialki, pat
     html = template.render(
         **data,
         zalaczniki=zalaczniki,
+        zalaczniki_inne=zalaczniki_inne,
         wnioskodawca=wnioskodawca,
         oznaczenie=dzialka,
         uczestnik=u1,
@@ -128,7 +131,9 @@ def print_OZN(dzialki, kw, path):
     print(" KW-OZN", end="")
 
 
-def print_wpis(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, path):
+def print_wpis(
+    wniosek, data, wnioskodawca, wlasciciele, zalaczniki, zalaczniki_inne, path
+):
     base_path = os.path.abspath("forms")
     output_path = os.path.join(path, "KW-WPIS.pdf")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -144,7 +149,12 @@ def print_wpis(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, path):
         ),
         (
             "KW-WPIS_4.html",
-            {"numer_strony": "4", "uczestnik": u2, "zalaczniki": zalaczniki},
+            {
+                "numer_strony": "4",
+                "uczestnik": u2,
+                "zalaczniki": zalaczniki,
+                "zalaczniki_inne": zalaczniki_inne,
+            },
         ),
     ]
     rendered_pages = []
