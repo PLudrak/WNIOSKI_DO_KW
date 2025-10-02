@@ -75,14 +75,33 @@ def save_stats(lista_wnioskow: list[Wniosek], filepath="export"):
         try:
             with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
                 df.to_excel(writer, index=False, sheet_name="Wnioski")
+                setup_excel(df, writer)
             print('Zapisano raport w folderze "EXPORT"')
             break
-        except Exception:
+        except Exception as e:
+            print(f"Błąd zapisu statystyk: {e}")
             print("Spróbować ponownie? (T/N)")
             odp = input().strip().lower()
-            if odp != "t":
+            if odp != "t" and odp != "y":
                 print("Zapis przerwany.")
                 break
+
+
+def setup_excel(df, writer):
+    workbook = writer.book
+    worksheet = writer.sheets["Wnioski"]
+    # formatowanie nagłowka
+
+    # zamrozenie pierwszego wiersza
+    worksheet.freeze_panes(1, 0)
+
+    # filter do naglowkow
+    worksheet.autofilter(0, 0, 0, len(df.columns) - 1)
+
+    # dopasowanie szerokosci na podstawie ngałówka
+    for i, col in enumerate(df.columns):
+        col_width = len(str(col)) + 4
+        worksheet.set_column(i, i, col_width)
 
 
 if __name__ == "__main__":
