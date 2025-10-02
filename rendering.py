@@ -87,7 +87,7 @@ def print_zal(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, dzialki, pat
         uczestnik2=u2,
     )
     save_pdf(html, output_path, base_path)
-    print("KW-ZAL - zapisano")
+    print(" KW-ZAL", end="")
     wniosek.stats["formularze"].append("KW-ZAL")
     if pozostali_uczestnicy:
         print_WU(pozostali_uczestnicy, path)
@@ -125,7 +125,7 @@ def print_OZN(dzialki, kw, path):
     template = load_template("KW-OZN.html")
     html = template.render(oznaczenia=dzialki)
     save_pdf(html, output_path, base_path)
-    print("KW-OZN - zapisano")
+    print(" KW-OZN", end="")
 
 
 def print_wpis(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, path):
@@ -159,7 +159,7 @@ def print_wpis(wniosek, data, wnioskodawca, wlasciciele, zalaczniki, path):
     while True:
         try:
             save_pdf(combined_html, output_path, base_path)
-            print("KW-WPIS - zapisano")
+            print(" KW-WPIS", end="")
             wniosek.stats["formularze"].append("KW-WPIS")
             if pozostali_uczestnicy:
                 print_WU(pozostali_uczestnicy, path)
@@ -190,7 +190,7 @@ def print_WU(uczestnicy, path):
 
     try:
         save_pdf(combined_html, output_path, base_path)
-        print(f"KW-WU - zapisano")
+        print(f" KW-WU", end="")
     except Exception as e:
         print(f"[!] KW-WU - błąd zapisu {e}")
         raise

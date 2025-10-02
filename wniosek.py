@@ -58,10 +58,13 @@ class Wniosek:
 
         self.output_path = self.get_output_path()
         if self.kw == "BRAK":
-            print(f"Wniosek {self.jr} zainicjalizowano")
+            print(
+                f"{str(self.jr).split(".")[-1]} wnioski:",
+            )
         else:
-            print(f"Wniosek {self.kw} zainicjalizowano")
-        print(f'Zapis do folderu:"{self.output_path}"')
+            print(
+                f"{self.kw} wnioski:",
+            )
 
     def initialize_stats(self):
         self.stats = {}

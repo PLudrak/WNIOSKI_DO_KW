@@ -92,8 +92,12 @@ def setup_excel(df, writer):
     worksheet = writer.sheets["Wnioski"]
     # formatowanie nagłowka
     header_fromat = workbook.add_format(
-        {"bold": True, "algin": "left", "valign": "vcenter"}
+        {"bold": True, "align": "left", "valign": "vcenter"}
     )
+
+    # ustawienie formatu nagłówka
+    for col_num, value in enumerate(df.columns.values):
+        worksheet.write(0, col_num, value, header_fromat)
 
     # zamrozenie pierwszego wiersza
     worksheet.freeze_panes(1, 0)
@@ -102,9 +106,9 @@ def setup_excel(df, writer):
     worksheet.autofilter(0, 0, 0, len(df.columns) - 1)
 
     # dopasowanie szerokosci na podstawie ngałówka
-    for i, col in enumerate(df.columns):
-        col_width = len(str(col)) + 2
-        worksheet.set_column(i, i, col_width)
+    width = [16, 6, 17, 9, 9, 9, 9, 16, 8, 10, 12, 10, 12, 12, 10, 10, 10, 10, 5, 6, 6]
+    for i, width in enumerate(width):
+        worksheet.set_column(i, i, width)
 
 
 if __name__ == "__main__":
@@ -155,6 +159,7 @@ if __name__ == "__main__":
             ]
         )
         wniosek.print_forms()
+        print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
 
     # generowanie kw zal
@@ -176,6 +181,7 @@ if __name__ == "__main__":
             obciazenia,
         )
         wniosek.print_forms()
+        print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
 
     for num, kw in enumerate(kw_obicazane_bez_odlaczen, start=1):
@@ -196,6 +202,7 @@ if __name__ == "__main__":
             obciazenia,
         )
         wniosek.print_forms()
+        print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
 
     print("Zakończono tworzenie wniosków")
