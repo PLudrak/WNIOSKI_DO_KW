@@ -103,7 +103,7 @@ def setup_excel(df, writer):
 
     # dopasowanie szerokosci na podstawie ngałówka
     for i, col in enumerate(df.columns):
-        col_width = len(str(col)) + 4
+        col_width = len(str(col)) + 2
         worksheet.set_column(i, i, col_width)
 
 
