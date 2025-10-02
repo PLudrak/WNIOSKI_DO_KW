@@ -91,6 +91,9 @@ def setup_excel(df, writer):
     workbook = writer.book
     worksheet = writer.sheets["Wnioski"]
     # formatowanie nagłowka
+    header_fromat = workbook.add_format(
+        {"bold": True, "algin": "left", "valign": "vcenter"}
+    )
 
     # zamrozenie pierwszego wiersza
     worksheet.freeze_panes(1, 0)
