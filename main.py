@@ -3,6 +3,7 @@ from wniosek import *
 from rendering import *
 from pdf_handling import *
 from obciazenia import get_obciazenia, get_obciazenia_bez_odlaczen
+from attachments import przenies_zalaczniki
 
 # dane GDDKiA
 dane_wnioskodawcy = {
@@ -121,6 +122,7 @@ if __name__ == "__main__":
         df_GDDKIA,
         dzialki_inwestycja,
         df_obciazenia,
+        df_zalaczniki,
     ) = load_data(path="import")
 
     lista_kw, ile_wnisokow, lista_bez_kw, ile_wnioskow_bez_kw = get_lista_kw(df_dzialki)
@@ -166,6 +168,7 @@ if __name__ == "__main__":
             ]
         )
         wniosek.print_forms()
+        przenies_zalaczniki(df_zalaczniki, wniosek)
         print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
 
@@ -203,8 +206,11 @@ if __name__ == "__main__":
                     "odnosnik": False,
                 },
             ]
+            + zalaczniki_dokumenty_wlasnosci(wniosek.jr, df_zalaczniki)
         )
         wniosek.print_forms()
+        przenies_zalaczniki(df_zalaczniki, wniosek)
+
         print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
 
@@ -239,6 +245,7 @@ if __name__ == "__main__":
             ]
         )
         wniosek.print_forms()
+        przenies_zalaczniki(df_zalaczniki, wniosek)
         print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
 

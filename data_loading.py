@@ -11,6 +11,7 @@ def load_data(path="import"):
     df_GDDKIA = load_gddkia(os.path.join(path, "KW-GDDKIA.xlsx"))
     df_obciazenia = load_obciazenia(os.path.join(path, "ograniczenia.xlsx"))
     dzialki_inwestycja = dzialki_w_inwestycji(df_dzialki)
+    df_zalaczniki = load_zalaczniki(os.path.join(path, "Zalaczniki.xlsx"))
 
     return (
         df_dzialki,
@@ -20,6 +21,7 @@ def load_data(path="import"):
         df_GDDKIA,
         dzialki_inwestycja,
         df_obciazenia,
+        df_zalaczniki,
     )
 
 
@@ -60,6 +62,16 @@ def load_dzialki(filepath):
     df_dzialki = pd.DataFrame(rows)
     print("Zaladowano informacje o działkach")
     return df_dzialki
+
+
+def load_zalaczniki(file_path):
+    rows = []
+    df_excel = pd.read_excel(file_path)
+    for _, row in df_excel.iterrows():
+        new_row = {"jr": row["jr"], "dokument": row["dokument"], "file": row["file"]}
+        rows.append(new_row)
+    df_zalaczniki = pd.DataFrame(rows)
+    return df_zalaczniki
 
 
 def load_relacje(filepath):

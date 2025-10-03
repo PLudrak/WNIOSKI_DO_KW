@@ -2,6 +2,7 @@ import pandas as pd
 from rendering import *
 from data_loading import *
 from pathlib import Path
+from attachments import zalaczniki_dokumenty_wlasnosci
 
 
 def krotkie_id(nr_dzialki):
@@ -187,7 +188,6 @@ class Wniosek:
             else:
                 zalaczniki_inne.append(zalacznik["tresc"])
         self.zalaczniki_inne = zalaczniki_inne + ["---"] * (5 - len(zalaczniki_inne))
-        print(self.zalaczniki_inne)
 
     def okresl_zalaczniki_formularze(self):
 
@@ -313,8 +313,8 @@ class Wniosek:
                 "sad": self.sad,
                 "nr_kw": self.kw,
                 "tresc_zadania": self.tresc_zadania,
-                "tresc_obciazenia1": self.obciazenia[0],
-                "tresc_obciazenia2": self.obciazenia[1],
+                "tresc_obciazenia1": self.obciazenia[0][0],
+                "tresc_obciazenia2": self.obciazenia[1][0],
             }
             print_wpis(
                 self,
