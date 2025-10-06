@@ -103,7 +103,16 @@
 								</tr>
 								<tr>
 									<td class="white">
-										<h3 class="checkbox"><img class="checkbox-img" src="../static/tak.svg">Odłączenie/wyodrębnienie części nieruchomości i przyłączenie tej części do innej, istniejącej księgi wieczystej</h3></td>
+										<h3 class="checkbox">
+											
+											{% if tryb == "ODL" %}
+											<img class="checkbox-img" src="../static/tak.svg">
+											{% elif tryb =="OBC" %}
+											<img class="checkbox-img" src="../static/nie.svg">
+											{% else  %}
+											ERROR
+											{% endif %}
+											Odłączenie/wyodrębnienie części nieruchomości i przyłączenie tej części do innej, istniejącej księgi wieczystej</h3></td>
 								</tr>
 								<tr>
 									<td> <ul class="info">
