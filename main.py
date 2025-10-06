@@ -1,3 +1,4 @@
+import time
 import pandas as pd
 from wniosek import *
 from rendering import *
@@ -113,6 +114,7 @@ def setup_excel(df, writer):
 
 
 if __name__ == "__main__":
+    start = time.time()
     print("Rozpoczeto ładowanie danych")
     (
         df_dzialki,
@@ -194,15 +196,11 @@ if __name__ == "__main__":
             [
                 {
                     "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
-                    "odnosnik": True,
+                    "odnosnik": False,
                 },
                 {"tresc": "PEŁNOMOCNICTWO", "odnosnik": True},
                 {
                     "tresc": "WYPIS I WYRYS Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
-                    "odnosnik": False,
-                },
-                {
-                    "tresc": "DOKUMENT POSWIADCZAJACY PRAWO WLASNOSCI DO NIERUCHOMOSCI",
                     "odnosnik": False,
                 },
             ]
@@ -254,3 +252,9 @@ if __name__ == "__main__":
     save_stats(wnioski)
     merge_wniosek()
     merge_wnioski_obreb()
+    stop = time.time()
+    duration = stop - start
+    duration_m = int(duration / 60)
+    duration_s = int(duration - duration_m * 60)
+    print("\nZakończono działanie programu")
+    print("Czas trwania", f"{duration_m}m {duration_s}s")
