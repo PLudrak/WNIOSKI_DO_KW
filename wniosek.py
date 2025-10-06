@@ -357,7 +357,7 @@ class Wniosek:
             return ["---", "---"]
         elif len(obciazenia_aktualnej_kw) == 1:
             self.ogr_counter = 1
-            return [obciazenia_aktualnej_kw, "---"]
+            return [obciazenia_aktualnej_kw[0], "---"]
         else:
             self.ogr_counter = len(obciazenia_aktualnej_kw)
             return obciazenia_aktualnej_kw
