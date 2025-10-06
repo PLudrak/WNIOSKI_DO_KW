@@ -255,6 +255,21 @@ img{
 	line-height: 0.7rem;
 }
 
+.zwolnienie{
+	text-align: center;
+	line-height: 50px;
+}
+
+.footer {
+
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+.footer td {
+width: 33.33%;
+text-align: center;
+}
+
 .crossed-table {
 	position: relative;
 	display: inline-block;
