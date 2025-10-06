@@ -315,6 +315,7 @@ class Wniosek:
                 "tresc_zadania": self.tresc_zadania,
                 "tresc_obciazenia1": self.obciazenia[0],
                 "tresc_obciazenia2": self.obciazenia[1],
+                "tryb": self.tryb,
             }
             print_wpis(
                 self,
