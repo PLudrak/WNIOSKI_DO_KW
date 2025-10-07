@@ -76,7 +76,8 @@ def merge_wniosek():
         for path in files:
             writer.append(path)
 
-        output_file = os.path.join(folder, "Wniosek.pdf")
+        folder_name = os.path.basename(os.path.normpath(folder))
+        output_file = os.path.join(folder, f"WNIOSEK_{folder_name}.pdf")
         with open(output_file, "wb") as f:
             writer.write(f)
         writer.close()
