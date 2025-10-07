@@ -6,17 +6,29 @@ import shutil
 
 def przenies_zalaczniki(df_zalaczniki, wniosek: "Wniosek"):
     path = ["import", "zalaczniki"]
+    przenies_kwpp(path, wniosek)
+
     for zalacznik in wniosek.zalaczniki_inne:
         if "znajduje się w aktach" not in zalacznik:
             if file := get_filename_zalacznik(zalacznik, df_zalaczniki):
                 org_path = os.path.join(*path, file)
-                print(org_path)
                 new_path = os.path.join(wniosek.output_path, file)
                 try:
                     shutil.copy2(org_path, new_path)
                     PDFRegistry.add(new_path)
                 except:
                     print(f'Nie znaleziono pliku "{file}"')
+
+
+def przenies_kwpp(path, wniosek):
+    file = "KW-PP.pdf"
+    org_path = os.path.join(*path, file)
+    new_path = os.path.join(wniosek.output_path, file)
+    try:
+        shutil.copy2(org_path, new_path)
+        PDFRegistry.add(new_path)
+    except:
+        print(f'Nie znaleziono pliku "{file}"')
 
 
 def get_filename_zalacznik(zalacznik: str, df_zalaczniki):
