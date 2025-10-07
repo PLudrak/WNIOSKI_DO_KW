@@ -162,9 +162,13 @@ def nazwisko_zlozone(nazwa):
 def poprawny_numer(numer):
     """funkcja pomocznicza do 'load_osoby(filepath)
     Sprawdź czy numer pesel, regon, nip == 0, jezeli tak zastap go '---'"""
-    if numer == 0 or numer == None:
-        numer = "---"
-    return numer
+    if pd.isna(numer) or numer is None or str(numer).strip() in ("", "-", "0"):
+        return "---"
+
+    try:
+        return str(numer)
+    except (ValueError, TypeError):
+        return "---"
 
 
 def load_sady(filepath):
@@ -192,3 +196,8 @@ def load_gddkia(filepath):
     df_GDDKIA = pd.DataFrame(rows)
     print("Załadowano informacje o Księgach GDDKIA i obrębach")
     return df_GDDKIA
+
+
+if __name__ == "__main__":
+    print(poprawny_numer(0))
+    print(poprawny_numer(17511575))
