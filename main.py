@@ -159,13 +159,16 @@ if __name__ == "__main__":
         wniosek.dodaj_zalaczniki(
             [
                 {
-                    "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
-                    "odnosnik": True,
-                },
-                {"tresc": "PEŁNOMOCNICTWO", "odnosnik": True},
-                {
-                    "tresc": "WYPIS I WYRYS Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "tresc": "DECYZJA WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023R. ZNAK: AB-I.7820.5.2.2022.IA - znajduje się we wniosku do BI1S/00003973/6",
                     "odnosnik": False,
+                },
+                {
+                    "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do BI1S/00003973/6",
+                    "odnosnik": False,
+                },
+                {
+                    "tresc": "WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "odnosnik": True,
                 },
             ]
         )
@@ -195,13 +198,16 @@ if __name__ == "__main__":
         wniosek.dodaj_zalaczniki(
             [
                 {
-                    "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
+                    "tresc": "DECYZJA WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023R. ZNAK: AB-I.7820.5.2.2022.IA - znajduje się we wniosku do BI1S/00003973/6",
                     "odnosnik": False,
                 },
-                {"tresc": "PEŁNOMOCNICTWO", "odnosnik": True},
                 {
-                    "tresc": "WYPIS I WYRYS Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do BI1S/00003973/6",
                     "odnosnik": False,
+                },
+                {
+                    "tresc": "WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "odnosnik": True,
                 },
             ]
             + zalaczniki_dokumenty_wlasnosci(wniosek.jr, df_zalaczniki)
@@ -232,13 +238,16 @@ if __name__ == "__main__":
         wniosek.dodaj_zalaczniki(
             [
                 {
-                    "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024",
-                    "odnosnik": True,
-                },
-                {"tresc": "PEŁNOMOCNICTWO", "odnosnik": True},
-                {
-                    "tresc": "WYPIS I WYRYS Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024 - znajduje się we wniosku do KWXXXXX",
                     "odnosnik": False,
+                },
+                {
+                    "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do KWXXXXX",
+                    "odnosnik": False,
+                },
+                {
+                    "tresc": "WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "odnosnik": True,
                 },
             ]
         )
