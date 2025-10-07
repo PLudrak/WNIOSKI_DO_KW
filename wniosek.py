@@ -367,6 +367,11 @@ class Wniosek:
         """Generuje treść żądania dla wnisosku KW-WPIS zawierającą informacje o numerze i powierzchni odłączanych działek"""
         if self.tryb == "OBC":
             return "---"
+        if any(
+            "GENERALNA" in wlasciciel["nazwa"] for wlasciciel in self.wlasciciele_dane
+        ):
+            return "---"
+
         if self.kw != "BRAK":
             tresc = (
                 f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
@@ -375,7 +380,7 @@ class Wniosek:
             )
 
             dzialki_opisy = [
-                f"DZIAŁKI NR {krotkie_id(d)} o POW. {dzialki_inwestycja_wszystkie[d]} HA"
+                f"DZIAŁKI NR {krotkie_id(d)} O POW. {dzialki_inwestycja_wszystkie[d]} HA"
                 for d in self.dzialki_odlaczane
             ]
 
