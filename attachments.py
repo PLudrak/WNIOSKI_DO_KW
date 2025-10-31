@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from wniosek import *
 import shutil
+from logger import logger
 
 
 def przenies_zalaczniki(df_zalaczniki, wniosek: "Wniosek"):
@@ -39,7 +40,7 @@ def get_filename_zalacznik(zalacznik: str, df_zalaczniki):
     if zalacznik != "---" and not filename.empty:
         return filename.iloc[0]
     elif zalacznik != "---" and "WYRYS" not in zalacznik.upper():
-        print(f"Nie znaleziono pliku załącznika: {zalacznik}")
+        logger.info(f"Nie znaleziono pliku załącznika: {zalacznik}")
     else:
         return None
 

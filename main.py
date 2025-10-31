@@ -55,10 +55,12 @@ def get_lista_kw(df_dzialki):
     # drukuje znalezionych numerów KW i obrębów
     print(f"LISTA ZNALEZIONYCH KW DO WNIOSKÓW [{len(lista)}]")
     for line in lista:
-        print(line["KW"], line["obreb"])
+        print(line["KW"], line["obreb"], line["jr"])
+
     print(f"\nDZIAŁKI W INWESTYCJO DO ZALOZENIA KW [{len(lista_bez_kw)}]")
     for dz in lista_bez_kw:
         print(dz["jr"])
+
     return lista, len(lista), lista_bez_kw, len(lista_bez_kw)
 
 
@@ -78,7 +80,8 @@ def save_stats(lista_wnioskow: list[Wniosek], filepath="export"):
             with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
                 df.to_excel(writer, index=False, sheet_name="Wnioski")
                 setup_excel(df, writer)
-            print('Zapisano raport w folderze "EXPORT"')
+            abspath = os.path.abspath(path)
+            print(f'Zapisano raport: "{abspath}"')
             break
         except Exception as e:
             print(f"Błąd zapisu statystyk: {e}")
@@ -167,7 +170,7 @@ if __name__ == "__main__":
                     "odnosnik": False,
                 },
                 {
-                    "tresc": "WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "tresc": f"ZBIORCZE WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW DOT. OBRĘBU {krotkie_id(wniosek.obreb['id'])} {wniosek.obreb['nazwa']}",
                     "odnosnik": True,
                 },
             ]
@@ -195,23 +198,27 @@ if __name__ == "__main__":
             kw["jr"],
             obciazenia,
         )
-        wniosek.dodaj_zalaczniki(
-            [
-                {
-                    "tresc": "DECYZJA WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023R. ZNAK: AB-I.7820.5.2.2022.IA - znajduje się we wniosku do BI1S/00003973/6",
-                    "odnosnik": False,
-                },
-                {
-                    "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do BI1S/00003973/6",
-                    "odnosnik": False,
-                },
-                {
-                    "tresc": "WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
-                    "odnosnik": True,
-                },
+        zalaczniki_kw_zal = [
+            {
+                "tresc": "DECYZJA WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023R. ZNAK: AB-I.7820.5.2.2022.IA - znajduje się we wniosku do BI1S/00003973/6",
+                "odnosnik": False,
+            },
+            {
+                "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do BI1S/00003973/6",
+                "odnosnik": False,
+            },
+            {
+                "tresc": "WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                "odnosnik": True,
+            },
+        ] + zalaczniki_dokumenty_wlasnosci(wniosek.jr, df_zalaczniki)
+
+        if len(wniosek.dzialki_inwestycja) > 1:
+            zalaczniki_kw_zal += [
+                {"tresc": "KW-OZN Oznaczenie dzialki ewidencyjnej", "odnosnik": False}
             ]
-            + zalaczniki_dokumenty_wlasnosci(wniosek.jr, df_zalaczniki)
-        )
+
+        wniosek.dodaj_zalaczniki(zalaczniki_kw_zal)
         wniosek.print_forms()
         przenies_zalaczniki(df_zalaczniki, wniosek)
 
@@ -238,11 +245,11 @@ if __name__ == "__main__":
         wniosek.dodaj_zalaczniki(
             [
                 {
-                    "tresc": "DECYZJA WOJEWODY MAZOWIECKIEGO Z DNIA 06.12.2024R. ZNAK: 176/SPEC/2024 - znajduje się we wniosku do KWXXXXX",
+                    "tresc": "DECYZJA WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023R. ZNAK: AB-I.7820.5.2.2022.IA - znajduje się we wniosku do BI1S/00003973/6",
                     "odnosnik": False,
                 },
                 {
-                    "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do KWXXXXX",
+                    "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do KW BI1S/00003973/6",
                     "odnosnik": False,
                 },
                 {
@@ -255,12 +262,11 @@ if __name__ == "__main__":
         przenies_zalaczniki(df_zalaczniki, wniosek)
         print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
-
+    merge_all()
     print("Zakończono tworzenie wniosków")
 
     save_stats(wnioski)
-    merge_wniosek()
-    merge_wnioski_obreb()
+
     stop = time.time()
     duration = stop - start
     duration_m = int(duration / 60)
