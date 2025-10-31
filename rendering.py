@@ -80,6 +80,13 @@ def print_zal(
     u1, u2, pozostali_uczestnicy = wlasciciele_do_druku(wlasciciele)
     template = load_template("KW-ZAL_1.html")
     dzialka, pozostale_dzialki = rozdziel_dzialki(dzialki)
+
+    kw = data.get("kw_dolaczane", "")
+    if "." in kw or "…" in kw:
+        data["kw_dolaczane"] = (
+            "PIERWSZA KW ZAŁOŻONA W DANYM OBREBIE W RAMACH INWESTYCJI"
+        )
+        data["style_text"] = "shortened"
     html = template.render(
         **data,
         zalaczniki=zalaczniki,

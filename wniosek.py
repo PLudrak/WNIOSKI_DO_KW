@@ -200,7 +200,7 @@ class Wniosek:
 
         # jezeli jest wiecej niz dwoje uczesników (wlascicieli) wpisz liczbe załączników KW-WU
         if self.ile_wlascicieli > 2:
-            self.zalaczniki["kw_wu"] = 1
+            self.zalaczniki["kw_wu"] = self.ile_wlascicieli - 2
         else:
             self.zalaczniki["kw_wu"] = "---"
 
@@ -288,6 +288,7 @@ class Wniosek:
         elif self.kw == "BRAK":
             polozenie = self.obreb
             polozenie["dzielnica"] = "---"
+            polozenie["wojewodztwo"] = "PODLASKIE"  # do poprawy później
             data = {
                 "sad": self.sad,
                 "kw_odlaczane": "---",
@@ -374,9 +375,9 @@ class Wniosek:
 
         if self.kw != "BRAK":
             tresc = (
-                f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE NIERUCHOMOŚCI Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
+                f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
                 ' 2003 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH" '
-                "(DZ.U. 2023 POZ. 162):"
+                "(DZ.U. 2023 POZ. 162): "
             )
 
             dzialki_opisy = [
@@ -390,9 +391,14 @@ class Wniosek:
             else:
                 tresc += dzialki_opisy[0]
 
+            if "." in self.kw_docelowa.replace("…", "."):
+                kw_do_przylaczenia = f"PIERWSZEJ KSIEGI ZAŁOŻONEJ W OBRĘBIE {self.obreb['nazwa']} W RAMACH INWESTYCJI ZATWIERDZONEJ DECYZJĄ WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023"
+            else:
+                kw_do_przylaczenia = f"KSIĘGI {self.kw_docelowa}"
+
             tresc += (
-                f", POŁOŻONEJ W OBEBIE {krotkie_id(self.obreb['id'])} {self.obreb['nazwa']}, GMINA {self.obreb['gmina']}, "
-                f"POWIAT {self.obreb['powiat']} I PRZYŁĄCZENIE JEJ DO KSIĘGI {self.kw_docelowa}."
+                f", POŁOŻONEJ W OBREBIE {krotkie_id(self.obreb['id'])} {self.obreb['nazwa']}, GMINA {self.obreb['gmina']}, "
+                f"POWIAT {self.obreb['powiat']} I PRZYŁĄCZENIE JEJ DO {kw_do_przylaczenia}."
             )
 
             # zmiana liczby na mnogą jeżeli konieczne
