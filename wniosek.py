@@ -30,7 +30,7 @@ class Wniosek:
         jr,
         obciazenia,
     ):
-        Wniosek._counter = +1
+        Wniosek._counter += 1
         self.id = Wniosek._counter
 
         self.initialize_stats()
