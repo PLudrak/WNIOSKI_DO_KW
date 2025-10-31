@@ -52,7 +52,13 @@
 				</tr>
 				<tr>
 					<td class="white inside">
-						<h3><input type="checkbox"> Wpis prawa, ograniczenia w rozporządzaniu nieruchomością, roszczenia lub hipoteki:</h3></td>
+						<h3 class="checkbox"> 
+							{% if tresc_obciazenia1 != "---" %}
+							<img class="checkbox-img" src="../static/tak.svg">
+							{% else  %}
+							<img class="checkbox-img" src="../static/nie.svg">											
+							{% endif %}
+							Wpis prawa, ograniczenia w rozporządzaniu nieruchomością, roszczenia lub hipoteki:</h3></td>
 					</td>
 				</tr>
 				<tr>

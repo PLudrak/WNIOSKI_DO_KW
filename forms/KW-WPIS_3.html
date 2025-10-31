@@ -157,7 +157,14 @@
 								<td colspan="3">35. Numer w Krajowym Rejestrze Sądowym: <div class="input"> {{uczestnik.krs}} </div></td>
 							</tr>
 							<tr>
-								<td colspan="3">36. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego* <div class="input"> {{uczestnik.nazwisko}} </div></td>
+								<td colspan="3">
+									{% if uczestnik.czy_osoba_prawna %}
+									36. Nazwa lub firma/<s>Nazwisko lub pierwszy człon nazwiska złożonego*</s>
+									{% else %}
+									36. <s>Nazwa lub firma</s>/Nazwisko lub pierwszy człon nazwiska złożonego*
+									{% endif %}
+									<div class="input"> {{uczestnik.nazwisko}} </div>
+								</td>
 							</tr>
 							<tr>
 								<td colspan="3">37. Drugi człon nazwiska złożonego: <div class="input"> {{uczestnik.nazwisko2}} </div></td>

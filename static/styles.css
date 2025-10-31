@@ -320,3 +320,7 @@ text-align: center;
 	}
   }
   
+  .shortened {
+	transform: scaleX(0.80); 
+	display: inline-block
+  }

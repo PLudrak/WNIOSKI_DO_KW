@@ -15,7 +15,7 @@
 			<table class="main outside dark">
 				<tr class="part">
 					<td>
-						<h2>DANE WNIOSKODAWCY/UCZESTNIKA POSTĘPOWANIA*:</h2>
+						<h2><s>DANE WNIOSKODAWCY</s>/UCZESTNIKA POSTĘPOWANIA*:</h2>
 						<table class="inside white">
 							<tr>
 								<td>
@@ -29,7 +29,14 @@
 								<td colspan="3">59. Numer w Krajowym Rejestrze Sądowym: <div class="input"> {{uczestnik.krs}} </div></td>
 							</tr>
 							<tr>
-								<td colspan="3">60. Nazwa lub firma/Nazwisko lub pierwszy człon nazwiska złożonego*: <div class="input"> {{uczestnik.nazwisko}} </div></td>
+								<td colspan="3">
+									{% if uczestnik.czy_osoba_prawna %}
+									60. Nazwa lub firma/<s>Nazwisko lub pierwszy człon nazwiska złożonego*</s>
+									{% else %}
+									60. <s>Nazwa lub firma</s>/Nazwisko lub pierwszy człon nazwiska złożonego*
+									{% endif %} 
+									
+									<div class="input"> {{uczestnik.nazwisko}} </div></td>
 							</tr>
 							<tr>
 								<td colspan="3">61. Drugi człon nazwiska złożonego:<div class="input"> {{uczestnik.nazwisko2}} </div></td>
@@ -91,7 +98,7 @@
 							<tr>
 								<td colspan="3">
 									<div class="pole-wyboru">
-										<div>73. Czy wnioskodwaca/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
+										<div>73. Czy <s>wnioskodwaca</s>/uczestnik postępowania* ma pełnomocnika/przedstawiciela ustawowego?</div>
 										<div class="checkbox"><img src="../static/nie.svg" alt="TAK"><span>TAK</span></div>
 										<div class="checkbox"><img src="../static/tak.svg" alt="NIE"><span>NIE</span></div>
 									</div> 
