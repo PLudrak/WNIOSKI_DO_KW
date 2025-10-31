@@ -2,10 +2,11 @@ import pandas as pd
 import os
 from wniosek import *
 import shutil
-from logger import logger
+from logger import logger, shorten_back, shorten_front
 
 
 def przenies_zalaczniki(df_zalaczniki, wniosek: "Wniosek"):
+    logger.info(f"Wniosek: {wniosek.kw} Przenoszenie załączników")
     path = ["import", "zalaczniki"]
     przenies_kwpp(path, wniosek)
 
@@ -17,8 +18,11 @@ def przenies_zalaczniki(df_zalaczniki, wniosek: "Wniosek"):
                 try:
                     shutil.copy2(org_path, new_path)
                     PDFRegistry.add(new_path)
+                    logger.info(
+                        f"Plik '{shorten_front(org_path)}' przeniesiono do {shorten_front(new_path)}"
+                    )
                 except:
-                    print(f'Nie znaleziono pliku "{file}"')
+                    logger.error(f'Nie znaleziono pliku "{shorten_back(file)}"')
 
 
 def przenies_kwpp(path, wniosek):
@@ -28,8 +32,11 @@ def przenies_kwpp(path, wniosek):
     try:
         shutil.copy2(org_path, new_path)
         PDFRegistry.add(new_path)
+        logger.info(
+            f"Plik {shorten_front(org_path)} przeniesiono do {shorten_front(new_path)}"
+        )
     except:
-        print(f'Nie znaleziono pliku "{file}"')
+        logger.error(f'Nie znaleziono pliku "{shorten_back(file)}"')
 
 
 def get_filename_zalacznik(zalacznik: str, df_zalaczniki):
@@ -40,7 +47,9 @@ def get_filename_zalacznik(zalacznik: str, df_zalaczniki):
     if zalacznik != "---" and not filename.empty:
         return filename.iloc[0]
     elif zalacznik != "---" and "WYRYS" not in zalacznik.upper():
-        logger.info(f"Nie znaleziono pliku załącznika: {zalacznik}")
+        logger.warning(
+            f"Brak załącznika w tabeli 'ZALACZNIKI.xlsx : {shorten_back(zalacznik)}"
+        )
     else:
         return None
 

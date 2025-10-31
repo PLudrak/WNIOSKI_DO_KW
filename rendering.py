@@ -2,6 +2,7 @@ from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 from pdf_handling import PDFRegistry
 import os
+from logger import logger
 
 
 def load_template(template_name: str):
@@ -217,6 +218,7 @@ def save_pdf(html_string: str, output_path: str, base_url: str):
     try:
         HTML(string=html_string, base_url=base_url).write_pdf(output_path)
         PDFRegistry.add(output_path)
+        logger.info(f"Zapisano '{output_path}'")
     except Exception as e:
         print(f"Błąd zapisu: {e}")
         try:

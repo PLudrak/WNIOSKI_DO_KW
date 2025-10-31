@@ -5,6 +5,7 @@ from rendering import *
 from pdf_handling import *
 from obciazenia import get_obciazenia, get_obciazenia_bez_odlaczen
 from attachments import przenies_zalaczniki
+from logger import logger
 
 # dane GDDKiA
 dane_wnioskodawcy = {
@@ -273,3 +274,6 @@ if __name__ == "__main__":
     duration_s = int(duration - duration_m * 60)
     print("\nZakończono działanie programu")
     print("Czas trwania", f"{duration_m}m {duration_s}s")
+    logger.info(
+        f" ###  ZAKOŃCZONO DZIAŁANIE PROGRAMU  ### (czas trwania {duration_m}m{duration_s}s) "
+    )

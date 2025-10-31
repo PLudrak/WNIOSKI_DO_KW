@@ -3,6 +3,7 @@ from rendering import *
 from data_loading import *
 from pathlib import Path
 from attachments import zalaczniki_dokumenty_wlasnosci
+from logger import logger
 
 
 def krotkie_id(nr_dzialki):
@@ -12,6 +13,7 @@ def krotkie_id(nr_dzialki):
 
 class Wniosek:
     pierwszy_wniosek = {}
+    _counter = 0
 
     def __init__(
         self,
@@ -28,6 +30,9 @@ class Wniosek:
         jr,
         obciazenia,
     ):
+        Wniosek._counter = +1
+        self.id = Wniosek._counter
+
         self.initialize_stats()
         self.tryb = tryb  # "ODL" lub "OBC"
         if (
@@ -66,6 +71,9 @@ class Wniosek:
             print(
                 f"{self.kw} wnioski:",
             )
+        logger.info(
+            f"ZAINICJALIZOWANO WNIOSEK #{self.id} TRYB:{self.tryb} KW: {self.kw}\n JR: {self.jr}"
+        )
 
     def initialize_stats(self):
         self.stats = {}
