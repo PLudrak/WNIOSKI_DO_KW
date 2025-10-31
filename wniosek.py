@@ -54,9 +54,7 @@ class Wniosek:
         self.find_wlasciciele(df_relacje)
         self.ile_wlascicieli = len(self.wlasciciele)
         self.pobierz_dane_wlascicieli(df_wlasciciele)
-
         self.sad = self.okresl_sad(sady, df_dzialki)
-
         self.obciazenia = self.find_obciazenia(obciazenia)
         self.okresl_zalaczniki_formularze()
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
@@ -72,7 +70,7 @@ class Wniosek:
                 f"{self.kw} wnioski:",
             )
         logger.info(
-            f"ZAINICJALIZOWANO WNIOSEK #{self.id} TRYB:{self.tryb} KW: {self.kw}\n JR: {self.jr}"
+            f"ZAINICJALIZOWANO WNIOSEK #{self.id}\nTRYB:{self.tryb}\nKW:{self.kw}\nJR:{self.jr}"
         )
 
     def initialize_stats(self):

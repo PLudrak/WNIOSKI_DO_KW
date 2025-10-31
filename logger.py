@@ -8,7 +8,7 @@ LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 
 # Unikalna nazwa pliku logu z datą i godziną
-timestamp = time.strftime("%Y-%m-%d_%H-%M-%S")
+timestamp = time.strftime("%Y%m%d%H%M%S")
 LOG_FILE = os.path.join(LOG_DIR, f"app_{timestamp}.log")
 
 # dodanie poziomu "SAVED"
