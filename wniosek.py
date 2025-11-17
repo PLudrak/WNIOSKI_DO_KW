@@ -270,6 +270,7 @@ class Wniosek:
         ):
             polozenie = self.obreb
             polozenie["dzielnica"] = "---"
+            polozenie["wojewodztwo"] = "PODLASKIE"  # do poprawy
 
             data = {
                 "sad": self.sad,
