@@ -7,6 +7,10 @@ from obciazenia import get_obciazenia, get_obciazenia_bez_odlaczen
 from attachments import przenies_zalaczniki
 from logger import logger
 
+robota = "SZTABIN-AUGUSTOWSKI"
+decyzja = "DECYZJA WOJEWODY PODLASKIEGO NR 10/2023 Z DNIA 11.09.2023R. ZNAK: AB-I.7820.5.1.2022.IA - znajduje się we wniosku do BI1S/00019183/6"
+pelnomocnictwo = "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do BI1S/00019183/6"
+
 # dane GDDKiA
 dane_wnioskodawcy = {
     "pesel": "----------",
@@ -129,7 +133,7 @@ if __name__ == "__main__":
         dzialki_inwestycja,
         df_obciazenia,
         df_zalaczniki,
-    ) = load_data(path="import")
+    ) = load_data(path=f"import/{robota}")
 
     lista_kw, ile_wnisokow, lista_bez_kw, ile_wnioskow_bez_kw = get_lista_kw(df_dzialki)
 
@@ -163,11 +167,11 @@ if __name__ == "__main__":
         wniosek.dodaj_zalaczniki(
             [
                 {
-                    "tresc": "DECYZJA WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023R. ZNAK: AB-I.7820.5.2.2022.IA - znajduje się we wniosku do BI1S/00003973/6",
+                    "tresc": decyzja,
                     "odnosnik": False,
                 },
                 {
-                    "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do BI1S/00003973/6",
+                    "tresc": pelnomocnictwo,
                     "odnosnik": False,
                 },
                 {
@@ -201,15 +205,15 @@ if __name__ == "__main__":
         )
         zalaczniki_kw_zal = [
             {
-                "tresc": "DECYZJA WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023R. ZNAK: AB-I.7820.5.2.2022.IA - znajduje się we wniosku do BI1S/00003973/6",
+                "tresc": decyzja,
                 "odnosnik": False,
             },
             {
-                "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do BI1S/00003973/6",
+                "tresc": pelnomocnictwo,
                 "odnosnik": False,
             },
             {
-                "tresc": "WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                "tresc": f"ZBIORCZE WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW DOT. OBRĘBU {krotkie_id(wniosek.obreb['id'])} {wniosek.obreb['nazwa']}",
                 "odnosnik": True,
             },
         ] + zalaczniki_dokumenty_wlasnosci(wniosek.jr, df_zalaczniki)
@@ -246,15 +250,15 @@ if __name__ == "__main__":
         wniosek.dodaj_zalaczniki(
             [
                 {
-                    "tresc": "DECYZJA WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023R. ZNAK: AB-I.7820.5.2.2022.IA - znajduje się we wniosku do BI1S/00003973/6",
+                    "tresc": decyzja,
                     "odnosnik": False,
                 },
                 {
-                    "tresc": "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do KW BI1S/00003973/6",
+                    "tresc": pelnomocnictwo,
                     "odnosnik": False,
                 },
                 {
-                    "tresc": "WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW",
+                    "tresc": f"ZBIORCZE WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW DOT. OBRĘBU {krotkie_id(wniosek.obreb['id'])} {wniosek.obreb['nazwa']}",
                     "odnosnik": True,
                 },
             ]
