@@ -17,6 +17,7 @@ class Wniosek:
 
     def __init__(
         self,
+        robota: str,
         tryb: str,
         KW: str,
         obreb: str,
@@ -32,8 +33,8 @@ class Wniosek:
     ):
         Wniosek._counter += 1
         self.id = Wniosek._counter
-
         self.initialize_stats()
+        self.robota = robota
         self.tryb = tryb  # "ODL" lub "OBC"
         if (
             KW is None
@@ -60,7 +61,7 @@ class Wniosek:
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
         self.dzialki_oznaczenia = self.oznaczenie_dzialek(dzialki_inwestycja)
 
-        self.output_path = self.get_output_path()
+        self.output_path = self.get_output_path(self.robota)
         if self.kw == "BRAK":
             print(
                 f"{str(self.jr).split(".")[-1]} wnioski:",
@@ -243,12 +244,13 @@ class Wniosek:
         else:
             return False
 
-    def get_output_path(self):
+    def get_output_path(self, robota):
         """określ ścieżkę zapisu wniosku wg wzoru:
         root\\export\\Sąd_rejonowy_w_{miejscowość}\\{Nazwa obrębu}\\{Nr KW}"""
 
         path = [
             "export",
+            robota,
             f"Sąd rejonowy {self.sad}".replace(" ", "_"),
             self.obreb["nazwa"],
             self.kw.replace("/", "."),

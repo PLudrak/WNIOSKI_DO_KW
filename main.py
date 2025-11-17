@@ -69,7 +69,7 @@ def get_lista_kw(df_dzialki):
     return lista, len(lista), lista_bez_kw, len(lista_bez_kw)
 
 
-def save_stats(lista_wnioskow: list[Wniosek], filepath="export"):
+def save_stats(lista_wnioskow: list[Wniosek], filepath=f"export\\{robota}"):
     """Połącz statystyki każdego z wniosków i zapisz je w formacie '.xslx'"""
 
     # ścieżka zapisu
@@ -150,6 +150,7 @@ if __name__ == "__main__":
         # utwórz wniosek:
         print(f"[{num}/{ile_wnisokow}]", end=" ")
         wniosek = Wniosek(
+            robota,
             "ODL",
             kw["KW"],
             kw["obreb"],
@@ -190,6 +191,7 @@ if __name__ == "__main__":
         print()
         print(f"[{num}/{ile_wnioskow_bez_kw}]", end=" ")
         wniosek = Wniosek(
+            robota,
             "ODL",
             kw["KW"],
             kw["obreb"],
@@ -234,6 +236,7 @@ if __name__ == "__main__":
         print()
         print(f"[{num}/{len(kw_obicazane_bez_odlaczen)}]", end=" ")
         wniosek = Wniosek(
+            robota,
             "OBC",
             kw["KW"],
             kw["obreb"],
@@ -267,7 +270,7 @@ if __name__ == "__main__":
         przenies_zalaczniki(df_zalaczniki, wniosek)
         print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
-    merge_all()
+    merge_all(robota)
     print("Zakończono tworzenie wniosków")
 
     save_stats(wnioski)

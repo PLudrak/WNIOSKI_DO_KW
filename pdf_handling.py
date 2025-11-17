@@ -41,7 +41,7 @@ class PDFRegistry:
         return set(dirs_list)
 
 
-def merge_all():
+def merge_all(robota):
     if (
         input(
             "Czy łączyć wnioski? (T/N)\nPrzed połączeniem możesz wprowadzić zmiany w plikach pdf"
@@ -49,8 +49,10 @@ def merge_all():
         == "T"
     ):
         merge_wniosek()
-        merge_wnioski_obreb()
-        merge_first_pages_wnioski()
+        merge_wnioski_obreb(base_dir=f"export\\{robota}")
+        merge_first_pages_wnioski(
+            output_name="pierwsze_strony_wnioski.pdf", robota=robota
+        )
     else:
         print("Wnioski i załączniki znajdują się w poszczególnych podfolderach")
 
@@ -140,12 +142,14 @@ def merge_wnioski_obreb(base_dir="export"):
                 print(f"Brak wniosków do połączenia w: {obreb_path}")
 
 
-def merge_first_pages_wnioski(output_name="pierwsze_strony_wnioski.pdf"):
+def merge_first_pages_wnioski(
+    output_name="pierwsze_strony_wnioski.pdf", robota="robocze"
+):
     """
     Tworzy nowy plik PDF zawierający pierwsze strony wszystkich plików
     z PDFRegistry._wnioski.
     """
-    output_path = os.path.join("export", output_name)
+    output_path = os.path.join("export", robota, output_name)
     writer = PdfWriter()
 
     for pdf_path in PDFRegistry.get_all(wniosek=True):
