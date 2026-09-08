@@ -10,7 +10,7 @@ def load_data(path="import"):
     df_sady = load_sady(os.path.join(path, "Sady.xlsx"))
     df_GDDKIA = load_gddkia(os.path.join(path, "KW-GDDKIA.xlsx"))
     df_obciazenia = load_obciazenia(os.path.join(path, "ograniczenia.xlsx"))
-    dzialki_inwestycja = dzialki_w_inwestycji(df_dzialki)
+    dzialki_inwestycja = get_dzialki_w_inwestycji(df_dzialki)
     df_zalaczniki = load_zalaczniki(os.path.join(path, "Zalaczniki.xlsx"))
 
     return (
@@ -25,7 +25,7 @@ def load_data(path="import"):
     )
 
 
-def dzialki_w_inwestycji(df_dzialki):
+def get_dzialki_w_inwestycji(df_dzialki):
     """zwroc liste dzialek ktore po podziale znajda sie w inwestycji"""
     df_filtered = df_dzialki[df_dzialki["czy_inwestycja"] == True]
     dzialki = {
@@ -150,6 +150,7 @@ def nazwisko_zlozone(nazwa):
     """funkcja pomocznicza do 'load_osoby(filepath)
     z 'nazwy' osoby wydziela dwa człony nazwiska złożonego lub nazwisko i None w przypadku nazwiska prostego
     """
+    # print(nazwa)
     nazwisko = nazwa.split()[0]
     if "-" in nazwisko:
         nazwisko = nazwisko.split("-")

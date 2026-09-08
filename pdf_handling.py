@@ -40,6 +40,10 @@ class PDFRegistry:
 
         return set(dirs_list)
 
+    @classmethod
+    def reset(cls):
+        cls._wnioski.clear()
+
 
 def merge_all(robota):
     if (

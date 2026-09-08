@@ -36,23 +36,13 @@ class Wniosek:
         self.initialize_stats()
         self.robota = robota
         self.tryb = tryb  # "ODL" lub "OBC"
-        if (
-            KW is None
-            or (isinstance(KW, float) and pd.isna(KW))
-            or str(KW).strip() == ""
-        ):
-            self.kw = "BRAK"
-        else:
-            self.kw = str(KW)
+        self.kw = self.clean_value(KW)
         self.jr = jr
         self.wnioskodawca = dane_wnioskodawcy
-
-        self.find_dzialki(df_dzialki, obreb)
+        self.dzialki_zr_pr = self.find_dzialki(df_dzialki, obreb)
         self.dzialki_odlaczane = self.dzialki_w_inwestycji(dzialki_inwestycja)
         self.obreb = self.ustal_obreb(df_GDDKIA)  # potencjalnie mylące
-
-        self.wlasciciele = []
-        self.find_wlasciciele(df_relacje)
+        self.wlasciciele = self.find_wlasciciele(df_relacje)
         self.ile_wlascicieli = len(self.wlasciciele)
         self.pobierz_dane_wlascicieli(df_wlasciciele)
         self.sad = self.okresl_sad(sady, df_dzialki)
@@ -74,12 +64,28 @@ class Wniosek:
             f"ZAINICJALIZOWANO WNIOSEK #{self.id}\nTRYB:{self.tryb}\nKW:{self.kw}\nJR:{self.jr}"
         )
 
+    @classmethod
+    def reset(cls):
+        cls.pierwszy_wniosek.clear()
+        cls._counter = 0
+
     def initialize_stats(self):
         self.stats = {}
         self.stats["formularze"] = []
 
+    def clean_value(self, value) -> str:
+        """Jeżel NaN albo pusta zwraca wartośc 'BRAK'"""
+        if (
+            value is None
+            or (isinstance(value, float) and pd.isna(value))
+            or str(value).strip() == ""
+        ):
+            return "BRAK"
+        else:
+            return str(value)
+
     def find_dzialki(self, df_dzialki: pd.DataFrame, obreb):
-        """znajdz dzialki zrodlowe i projektowane na podstawie nr KW"""
+        """znajdz dzialki zrodlowe i projektowane na podstawie nr KW, zwraca dict dzialki_zr_pr"""
         if self.kw == "BRAK":
             df_kw = df_dzialki[
                 (df_dzialki["jr"] == self.jr)
@@ -100,13 +106,13 @@ class Wniosek:
         # tworzy listę działek projektowanych:
         self.dzialki = df_kw["ID_projektowane"].tolist()
 
-        # {dzialka_zrodlowa:[lista_projektowanych]
-        self.dzialki_zr_pr = {}
+        dzialki_zr_pr = {}
         for _, row in df_kw.iterrows():
             zrodlowa = row["ID_zrodlowe"]
             projektowana = row["ID_projektowane"]
             if pd.notna(zrodlowa) and pd.notna(projektowana):
-                self.dzialki_zr_pr.setdefault(zrodlowa, []).append(projektowana)
+                dzialki_zr_pr.setdefault(zrodlowa, []).append(projektowana)
+        return dzialki_zr_pr
 
     def ustal_obreb(self, df_GDDKIA):
 
@@ -144,12 +150,12 @@ class Wniosek:
 
     def find_wlasciciele(self, df_relacje):
         """Znajdz id wlascicieli kw na podstawie dzialek"""
+        wlasciciele = []
         for dzialka in self.dzialki_zrodlowe:
-            wlasciciele = df_relacje[df_relacje["ID_dzialki"] == dzialka][
+            wlasciciele += df_relacje[df_relacje["ID_dzialki"] == dzialka][
                 "ID_wlasciciela"
             ].tolist()
-            self.wlasciciele += wlasciciele
-        self.wlasciciele = list(set(self.wlasciciele))
+        return list(set(wlasciciele))
 
     def pobierz_dane_wlascicieli(self, df_wlasiciele: pd.DataFrame):
         self.wlasciciele_dane = []
@@ -256,7 +262,7 @@ class Wniosek:
             self.kw.replace("/", "."),
         ]
         if self.kw == "BRAK":
-            path[3] = self.jr.split(".")[-1]
+            path[-1] = self.jr.split(".")[-1]
         return os.path.join(*path)
 
     def print_forms(self):
@@ -401,7 +407,7 @@ class Wniosek:
                 tresc += dzialki_opisy[0]
 
             if "." in self.kw_docelowa.replace("…", "."):
-                kw_do_przylaczenia = f"PIERWSZEJ KSIEGI ZAŁOŻONEJ W OBRĘBIE {self.obreb['nazwa']} W RAMACH INWESTYCJI ZATWIERDZONEJ DECYZJĄ WOJEWODY PODLASKIEGO NR 11/2023 Z DNIA 27.09.2023"
+                kw_do_przylaczenia = f"PIERWSZEJ KSIEGI ZAŁOŻONEJ W OBRĘBIE {self.obreb['nazwa']} W RAMACH INWESTYCJI ZATWIERDZONEJ DECYZJĄ WOJEWODY PODLASKIEGO NR 10/2023 Z DNIA 11.09.2023"
             else:
                 kw_do_przylaczenia = f"KSIĘGI {self.kw_docelowa}"
 
@@ -419,39 +425,7 @@ class Wniosek:
         else:
             return "---"
 
-    def get_stats(self):
-        """Generowanie informacji o danym wniosku, głównie na potrzeby kontroli-debugu, nieużywane w głównej pętli programu"""
-        stats = {
-            "kw": self.kw,
-            "formularze": self.stats["formularze"],
-            "liczba_wlascicieli": self.ile_wlascicieli,
-            "wlasciciele": [w["nazwa"] for w in self.wlasciciele_dane],
-            "ile_dzialek_zrodlowych": len(self.dzialki),
-            "ile_dzialek_odlaczanych": len(self.dzialki_odlaczane),
-            "dzialki": self.dzialki_zr_pr,
-            "zalaczniki": self.zalaczniki,
-            "czy_pierwszy_wniosek": self.okresl_pierwszy_wniosek(),
-            "path": self.output_path,
-        }
-        return stats
-
-    def show_stats(self):
-        """wyświetla statystyki ze słownika pozyskanego metodą get_stats()"""
-        print()
-        for key, value in self.get_stats().items():
-            if key == "dzialki":
-                print("dzialki:")
-                for dzialka_zrodlowa, projektowane in value.items():
-                    print(f" {dzialka_zrodlowa}:")
-                    for p in projektowane:
-                        if p in self.dzialki_odlaczane:
-                            print(f"  *{p}")
-                        else:
-                            print(f"   {p}")
-            else:
-                print(f"{key}: {value}")
-
-    def stats_to_export(self):
+    def stats_to_export(self, robota):
         dzialki = ""
         for dzialka in self.dzialki:
             if dzialka in self.dzialki_odlaczane:
@@ -459,7 +433,7 @@ class Wniosek:
             dzialki += dzialka + "; "
 
         path = Path(self.output_path)
-        relative_path = path.relative_to("export")
+        relative_path = path.relative_to(f"export\\{robota}")
 
         stats_export = {
             "KW": self.kw,

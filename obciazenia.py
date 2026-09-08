@@ -24,6 +24,7 @@ def popraw_przypadek_obciazenia(tresc_obciazenia: str) -> str:
 
 
 def popraw_tresc_obciazenia(tresc_obciazenia: str) -> str:
+    print(type(tresc_obciazenia), tresc_obciazenia)
     tresc_obciazenia = popraw_przypadek_obciazenia(tresc_obciazenia.upper())
     tresc_obciazenia = str(tresc_obciazenia).replace(" \n", ", ")
     tresc_obciazenia = usun_spacje_przed_znakami(tresc_obciazenia)
@@ -42,7 +43,7 @@ def stworz_tresc_obicazenia(id_dzialki, kolor: str, tresc_obciazenia, kw, obreb)
     AUTOSTRAD ZEZWOLENIA NA PROWADZENIE NA WSKAZANEJ CZESCI NIERUCHOMOSCI PRAC ZWIĄZANYCH Z {tresc_obciazenia}.
     WNOSZĘ O WPISANIE, ŻE WŁAŚCICIEL NIERUCHOMOŚCI JEST ZOBOWIĄZANY DO UDOSTĘPNIENIA OPISANEJ WYŻEJ NIERUCHOMOŚCI NA RZECZ KAŻDOCZESNEGO
     WŁAŚCICIELA SIECI W CELU WYKONANIA CZYNNOŚCI ZWIĄZANYCH Z KONSERWACJĄ ORAZ USUWANIEM AWARII CIĄGÓW, PRZEWODÓW I URZĄDZEŃ NA PODSTAWIE
-    OSTATECZNEJ DECYJI WOJEWODY PODLASKIEGO NR. 11/2023 O ZEZWOLENIU NA REALIZACJĘ INWESTYCJI DROGOWEJ Z DNIA 27 WRZEŚNIA 2024. 
+    OSTATECZNEJ DECYJI WOJEWODY MAZOWIECKIEGO NR. 176/SPEC/2024 O ZEZWOLENIU NA REALIZACJĘ INWESTYCJI DROGOWEJ Z DNIA 6 GRUDNIA 2024 R. 
     DO OGRANICZEŃ O KTÓRYCH MOWA POWYŻEJ STOSUJE SIĘ ODPOWIEDNIO PRZEPISY ART.124 UST. 4-8 I ART. 124A USTAWY Z DNIA 21 SIERPNIA 1997 R.
     O GOSPODARCE NIERUCHOMOŚCIAMI.
     """

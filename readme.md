@@ -54,12 +54,12 @@ Program służy do automatycznego generowania wniosków o wpis lub założenie k
 - [x] Jeżeli więcej niż 1 działka we wniosku ZAL → dodanie ich do wniosków OZN
 - [x] Zbiorczy PDF do druku z kontrolą parzystości stron
 - [x] Raportowanie do Excela
+- [x] Automatyczne przenoszenie załączników do folderów
+- [x] Refaktoryzacja `main.py` i `functions.py`, klasa `Wniosek` do osobnego pliku
+- [x] Logowanie do pliku `.log`
 - [ ] Załączniki są definiowane wewnątrz funkcji – **zautomatyzować**
 - [ ] Połączyć `dzialki_odlaczane` i `dzialki_oznaczone` w jedną zmienną
 - [ ] Funkcja `obreb` w klasie `Wniosek` → zamienić na „dane ewidencyjne”
-- [ ] Automatyczne przenoszenie załączników do folderów
-- [x] Refaktoryzacja `main.py` i `functions.py`, klasa `Wniosek` do osobnego pliku
-- [] Logowanie do pliku `.txt`
 
 ---
 

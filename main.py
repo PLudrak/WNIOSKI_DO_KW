@@ -1,3 +1,8 @@
+import os
+
+os.environ["WEASYPRINT_DLL_DIRECTORIES"] = r"C:\msys64\mingw64\bin"
+
+from weasyprint import HTML
 import time
 import pandas as pd
 from wniosek import *
@@ -7,9 +12,10 @@ from obciazenia import get_obciazenia, get_obciazenia_bez_odlaczen
 from attachments import przenies_zalaczniki
 from logger import logger
 
-robota = "SZTABIN-AUGUSTOWSKI"
-decyzja = "DECYZJA WOJEWODY PODLASKIEGO NR 10/2023 Z DNIA 11.09.2023R. ZNAK: AB-I.7820.5.1.2022.IA - znajduje się we wniosku do BI1S/00019183/6"
-pelnomocnictwo = "PEŁNOMOCNICTWO z dnia 24.09.2025 oznaczenie: O.BI.D-1.011.80.2025 - znajduje się we wniosku do BI1S/00019183/6"
+robota = "C-L"
+decyzja = "DECYZJA WOJEWODY MAZOWIECKIEGO NR 176/SPEC/2024 Z DNIA 6.06.2024R. ZNAK: WIR-I.7820.1.5.2024.AW - znajduje się we wniosku do RA1L/00004537/0"
+pelnomocnictwo = "PEŁNOMOCNICTWO z dnia xxx oznaczenie: xxxx - znajduje się w aktach KW  RA1L/00004537/0"
+pelnomocnik = "JAN KOWALSKI"
 
 # dane GDDKiA
 dane_wnioskodawcy = {
@@ -28,6 +34,13 @@ dane_wnioskodawcy = {
     "nr_budynku": "53",
     "nr_lokalu": "---",
     "kod_pocztowy": "00-874",
+    "d_nazwa": "GENERALNA DYREKCJA DRÓG KRAJOWYCH I AUTOSTRAD - Oddział w Warszawie",
+    "d_miejscowosc": "WARSZAWA",
+    "d_ulica": "MIŃSKA",
+    "d_numer_budynku": "25",
+    "d_numer_lokalu": "---",
+    "d_kod": "03-808",
+    "d_poczta": "WARSZAWA",
 }
 
 
@@ -36,7 +49,6 @@ def get_lista_kw(df_dzialki):
 
     # filtruj wiersze gdzie "czy_inwestycja" == True, wybiera tylko pola KW i obręb, usuwa wiersze w których brakuje
     # numerów ksiąg wieczystych, usuwa duplikaty (obu wierszy razem), sortuje alfabetycznie wg klucza KW
-    # (w przyszłości dobrze żeby zwracało też listę działek z inwestycji które nie mają KW, więc należy je założyć)
 
     df_inwestycja = df_dzialki[df_dzialki["czy_inwestycja"] == True][
         ["KW", "obreb", "jr"]
@@ -76,7 +88,7 @@ def save_stats(lista_wnioskow: list[Wniosek], filepath=f"export\\{robota}"):
     path = os.path.join(filepath, "Stats.xlsx")
 
     # łączenie danych z poszczególnych wniosków w jedną listę
-    data_to_export = [wniosek.stats_to_export() for wniosek in lista_wnioskow]
+    data_to_export = [wniosek.stats_to_export(robota) for wniosek in lista_wnioskow]
     # konwersja listy na DataFrame (pandas)
     df = pd.DataFrame(data_to_export)
     # zapis do pliku
@@ -121,8 +133,11 @@ def setup_excel(df, writer):
         worksheet.set_column(i, i, width)
 
 
-if __name__ == "__main__":
+def main():
     start = time.time()
+    Wniosek.reset()
+    PDFRegistry.reset()
+
     print("Rozpoczeto ładowanie danych")
     (
         df_dzialki,
@@ -232,6 +247,7 @@ if __name__ == "__main__":
         print(f'\nZapis do folderu:"{wniosek.output_path}"')
         wnioski.append(wniosek)
 
+    # generowanie wnisoków obciążeń poza inwestycją
     for num, kw in enumerate(kw_obicazane_bez_odlaczen, start=1):
         print()
         print(f"[{num}/{len(kw_obicazane_bez_odlaczen)}]", end=" ")
@@ -260,10 +276,6 @@ if __name__ == "__main__":
                     "tresc": pelnomocnictwo,
                     "odnosnik": False,
                 },
-                {
-                    "tresc": f"ZBIORCZE WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW DOT. OBRĘBU {krotkie_id(wniosek.obreb['id'])} {wniosek.obreb['nazwa']}",
-                    "odnosnik": True,
-                },
             ]
         )
         wniosek.print_forms()
@@ -284,3 +296,7 @@ if __name__ == "__main__":
     logger.info(
         f" ###  ZAKOŃCZONO DZIAŁANIE PROGRAMU  ### (czas trwania {duration_m}m{duration_s}s) "
     )
+
+
+if __name__ == "__main__":
+    main()
