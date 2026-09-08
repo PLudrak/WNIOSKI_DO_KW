@@ -5,7 +5,7 @@ from pathlib import Path
 from attachments import zalaczniki_dokumenty_wlasnosci
 from logger import logger
 
-from config import WOJEWODZTWO
+import config as cfg
 
 
 def krotkie_id(nr_dzialki):
@@ -280,7 +280,7 @@ class Wniosek:
         ):
             polozenie = self.obreb
             polozenie["dzielnica"] = "---"
-            polozenie["wojewodztwo"] = WOJEWODZTWO
+            polozenie["wojewodztwo"] = cfg.WOJEWODZTWO
 
             data = {
                 "sad": self.sad,
