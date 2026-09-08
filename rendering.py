@@ -3,6 +3,7 @@ from weasyprint import HTML
 from pdf_handling import PDFRegistry
 import os
 from logger import logger
+import config as cfg
 
 
 def load_template(template_name: str):
@@ -84,9 +85,7 @@ def print_zal(
 
     kw = data.get("kw_dolaczane", "")
     if "." in kw or "…" in kw:
-        data["kw_dolaczane"] = (
-            "PIERWSZA KW ZAŁOŻONA W DANYM OBREBIE W RAMACH INWESTYCJI"
-        )
+        data["kw_dolaczane"] = cfg.NIEZALOZONA_KW_DOCELOWA
         data["style_text"] = "shortened"
     html = template.render(
         **data,

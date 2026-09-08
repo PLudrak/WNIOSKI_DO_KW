@@ -5,6 +5,8 @@ from pathlib import Path
 from attachments import zalaczniki_dokumenty_wlasnosci
 from logger import logger
 
+from config import WOJEWODZTWO
+
 
 def krotkie_id(nr_dzialki):
     """wyodrebnij numer dzialki z id dzialki"""
@@ -278,7 +280,7 @@ class Wniosek:
         ):
             polozenie = self.obreb
             polozenie["dzielnica"] = "---"
-            polozenie["wojewodztwo"] = "PODLASKIE"  # do poprawy
+            polozenie["wojewodztwo"] = WOJEWODZTWO
 
             data = {
                 "sad": self.sad,
@@ -407,7 +409,7 @@ class Wniosek:
                 tresc += dzialki_opisy[0]
 
             if "." in self.kw_docelowa.replace("…", "."):
-                kw_do_przylaczenia = f"PIERWSZEJ KSIEGI ZAŁOŻONEJ W OBRĘBIE {self.obreb['nazwa']} W RAMACH INWESTYCJI ZATWIERDZONEJ DECYZJĄ WOJEWODY PODLASKIEGO NR 10/2023 Z DNIA 11.09.2023"
+                kw_do_przylaczenia = cfg.NIEZALOZONA_KW_DOCELOWA
             else:
                 kw_do_przylaczenia = f"KSIĘGI {self.kw_docelowa}"
 
