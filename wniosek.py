@@ -50,9 +50,9 @@ class Wniosek:
         self.sad = self.okresl_sad(sady, df_dzialki)
         self.obciazenia = self.find_obciazenia(obciazenia)
         self.okresl_zalaczniki_formularze()
+        self.powierzchnie_dzialek_projektowanych = self.get_pow_proj(df_dzialki)
         self.tresc_zadania = self.okresl_tresc_zadania(dzialki_inwestycja)
         self.dzialki_oznaczenia = self.oznaczenie_dzialek(dzialki_inwestycja)
-
         self.output_path = self.get_output_path(self.robota)
         if self.kw == "BRAK":
             print(
@@ -65,6 +65,25 @@ class Wniosek:
         logger.info(
             f"ZAINICJALIZOWANO WNIOSEK #{self.id}\nTRYB:{self.tryb}\nKW:{self.kw}\nJR:{self.jr}"
         )
+
+    def get_pow_proj(self, df_dzialki):
+        dzialki_projektowane = []
+        for dzialka_zrodlowa in self.dzialki_zr_pr.values():
+            for dzialka_projektwana in dzialka_zrodlowa:
+                dzialki_projektowane.append(dzialka_projektwana)
+
+        powierzchnie = dict(
+            zip(
+                df_dzialki[df_dzialki["ID_projektowane"].isin(dzialki_projektowane)][
+                    "ID_projektowane"
+                ],
+                df_dzialki[df_dzialki["ID_projektowane"].isin(dzialki_projektowane)][
+                    "powierzchnia"
+                ],
+            )
+        )
+
+        return powierzchnie
 
     @classmethod
     def reset(cls):
@@ -390,38 +409,54 @@ class Wniosek:
         ):
             return "---"
 
+        tresc = ""
+
         if self.kw != "BRAK":
-            tresc = (
-                f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
-                ' 2003 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH" '
-                "(DZ.U. 2023 POZ. 162): "
-            )
+            if cfg.PODZIAL:
+                tresc += "WNOSZĘ O SPROSTOWANIE NUMERU DZIAŁKI POPRZEZ UJAWNIENIE PODZIAŁU DZIAŁKI O NUMERZE EWIDENCYJNYM"
+                for zrodlowa in self.dzialki_zr_pr.keys():
+                    tresc += f" {krotkie_id(zrodlowa)} NA DZIAŁKI: "
+                    for d in self.dzialki_zr_pr[zrodlowa]:
+                        tresc += f"{krotkie_id(d)} O POW {self.powierzchnie_dzialek_projektowanych[d]} HA, "
+                tresc = tresc[:-2] + "."
+                if cfg.ODLACZENIE:
+                    tresc += "/n"
+                print(tresc)
 
-            dzialki_opisy = [
-                f"DZIAŁKI NR {krotkie_id(d)} O POW. {dzialki_inwestycja_wszystkie[d]} HA"
-                for d in self.dzialki_odlaczane
-            ]
+            if cfg.ODLACZENIE:
+                tresc += (
+                    f"WNOSZĘ O BEZOBCIĄŻENIOWE ODŁĄCZENIE Z KSIĘGI WIECZYSTEJ {self.kw} ZGODNIE Z USTAWĄ Z DNIA 10 KWIETNIA"
+                    ' 2003 R. "O SZCZEGÓLNYCH ZASADACH PRZYGOTOWANIA I REALIZACJI INWESTYCJI W ZAKRESIE DRÓG PUBLICZNYCH" '
+                    "(DZ.U. 2023 POZ. 162): "
+                )
 
-            # jeżeli więcej niż jedna działka jest odłączana dodaje "ORAZ przed ostatnim opisem"
-            if len(dzialki_opisy) > 1:
-                tresc += ", ".join(dzialki_opisy[:-1]) + " ORAZ " + dzialki_opisy[-1]
-            else:
-                tresc += dzialki_opisy[0]
+                dzialki_opisy = [
+                    f"DZIAŁKI NR {krotkie_id(d)} O POW. {dzialki_inwestycja_wszystkie[d]} HA"
+                    for d in self.dzialki_odlaczane
+                ]
 
-            if "." in self.kw_docelowa.replace("…", "."):
-                kw_do_przylaczenia = cfg.NIEZALOZONA_KW_DOCELOWA
-            else:
-                kw_do_przylaczenia = f"KSIĘGI {self.kw_docelowa}"
+                # jeżeli więcej niż jedna działka jest odłączana dodaje "ORAZ przed ostatnim opisem"
+                if len(dzialki_opisy) > 1:
+                    tresc += (
+                        ", ".join(dzialki_opisy[:-1]) + " ORAZ " + dzialki_opisy[-1]
+                    )
+                else:
+                    tresc += dzialki_opisy[0]
 
-            tresc += (
-                f", POŁOŻONEJ W OBREBIE {krotkie_id(self.obreb['id'])} {self.obreb['nazwa']}, GMINA {self.obreb['gmina']}, "
-                f"POWIAT {self.obreb['powiat']} I PRZYŁĄCZENIE JEJ DO {kw_do_przylaczenia}."
-            )
+                if "." in self.kw_docelowa.replace("…", "."):
+                    kw_do_przylaczenia = cfg.NIEZALOZONA_KW_DOCELOWA
+                else:
+                    kw_do_przylaczenia = f"KSIĘGI {self.kw_docelowa}"
 
-            # zmiana liczby na mnogą jeżeli konieczne
-            if len(self.dzialki_odlaczane) > 1:
-                tresc = tresc.replace("POŁOŻONEJ", "POŁOŻONYCH")
-                tresc = tresc.replace("JEJ", "ICH")
+                tresc += (
+                    f", POŁOŻONEJ W OBREBIE {krotkie_id(self.obreb['id'])} {self.obreb['nazwa']}, GMINA {self.obreb['gmina']}, "
+                    f"POWIAT {self.obreb['powiat']} I PRZYŁĄCZENIE JEJ DO {kw_do_przylaczenia}."
+                )
+
+                # zmiana liczby na mnogą jeżeli konieczne
+                if len(self.dzialki_odlaczane) > 1:
+                    tresc = tresc.replace("POŁOŻONEJ", "POŁOŻONYCH")
+                    tresc = tresc.replace("JEJ", "ICH")
 
             return tresc
         else:

@@ -51,3 +51,7 @@ ZBIORCZE_WYPISY = True
 
 # do którego wniosku
 DECYZJA_W_AKTACH = "RA1L/00004537/0"
+
+# Rodzaj rządania do wniosku
+ODLACZENIE = True
+PODZIAL = True
