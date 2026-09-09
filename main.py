@@ -108,6 +108,7 @@ def setup_excel(df, writer):
 
 
 def wypisy(czy_zbiorcze, obreb="", nazwa=""):
+    """Formatuje opis załącznika zależnie czy"""
     if czy_zbiorcze == True:
         return {
             "tresc": f"ZBIORCZE WYPISY I WYRYSY Z EWIDENCJI GRUNTÓW I BUDYNKÓW DOT. OBRĘBU {krotkie_id(obreb)} {nazwa}",
@@ -115,6 +116,16 @@ def wypisy(czy_zbiorcze, obreb="", nazwa=""):
         }
     else:
         return {"tresc": "WYPIS I WYRYS Z EWIDENCJI GRUNTÓW", "odnosnik": False}
+
+
+def decyzja_w_aktach(nr_akt=None):
+    if nr_akt:
+        return {
+            "tresc": f"{cfg.DECYZJA} - znajduje się w aktach {nr_akt}",
+            "odnosnik": False,
+        }
+    else:
+        return {"tresc": f"{cfg.DECYZJA}", "odnosnik": True}
 
 
 def main():
@@ -166,10 +177,7 @@ def main():
         # utwórz plik pdf z wnioskiem i zalacznikami
         wniosek.dodaj_zalaczniki(
             [
-                {
-                    "tresc": "DECYZJA" + cfg.DECYZJA,
-                    "odnosnik": False,
-                },
+                decyzja_w_aktach(cfg.DECYZJA_W_AKTACH),
                 {
                     "tresc": cfg.PELNOMOCNICTWO,
                     "odnosnik": False,
@@ -204,10 +212,7 @@ def main():
             obciazenia,
         )
         zalaczniki_kw_zal = [
-            {
-                "tresc": "DECYZJA" + cfg.DECYZJA,
-                "odnosnik": False,
-            },
+            decyzja_w_aktach(cfg.DECYZJA_W_AKTACH),
             {
                 "tresc": cfg.PELNOMOCNICTWO,
                 "odnosnik": False,
@@ -248,10 +253,7 @@ def main():
         )
         wniosek.dodaj_zalaczniki(
             [
-                {
-                    "tresc": "DECYZJA" + cfg.DECYZJA,
-                    "odnosnik": False,
-                },
+                decyzja_w_aktach(cfg.DECYZJA_W_AKTACH),
                 {
                     "tresc": cfg.PELNOMOCNICTWO,
                     "odnosnik": False,

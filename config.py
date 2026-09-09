@@ -1,9 +1,10 @@
 # wykreslenie pustego pola
 WYKR = "-" * 10
 
-# Informacje podstawowe o pracy:
+#### Informacje podstawowe o pracy:
 ROBOTA = "C-L"
-DECYZJA = "DECYZJA WOJEWODY MAZOWIECKIEGO NR 176/SPEC/2024 Z DNIA 6.06.2024R. ZNAK: WIR-I.7820.1.5.2024.AW - znajduje się we wniosku do RA1L/00004537/0"
+
+DECYZJA = "DECYZJA WOJEWODY MAZOWIECKIEGO NR 176/SPEC/2024 Z DNIA 6.06.2024R. ZNAK: WIR-I.7820.1.5.2024.AW"
 PELNOMOCNICTWO = "PEŁNOMOCNICTWO z dnia xxx oznaczenie: xxxx - znajduje się w aktach KW  RA1L/00004537/0"
 PELNOMOCNIK = "JAN KOWALSKI"
 WOJEWODZTWO = "PODLASKIE"
@@ -47,3 +48,6 @@ NIEZALOZONA_KW_DOCELOWA = "PIERWSZA KW ZAŁOŻONA W OBREBIE W RAMACH INWESTYCJI"
 # True - wszystkie wypisy z obrębu dołączone do pierwszego winosku
 # False - do każdego
 ZBIORCZE_WYPISY = True
+
+# do którego wniosku
+DECYZJA_W_AKTACH = "RA1L/00004537/0"

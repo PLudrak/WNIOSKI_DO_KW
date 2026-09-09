@@ -95,6 +95,7 @@ def print_zal(
         oznaczenie=dzialka,
         uczestnik=u1,
         uczestnik2=u2,
+        pelnomocnik=cfg.PELNOMOCNIK,
     )
     save_pdf(html, output_path, base_path)
     print(" KW-ZAL", end="")
@@ -161,6 +162,7 @@ def print_wpis(
                 "uczestnik": u2,
                 "zalaczniki": zalaczniki,
                 "zalaczniki_inne": zalaczniki_inne,
+                "pelnomocnik": cfg.PELNOMOCNIK,
             },
         ),
     ]
@@ -198,7 +200,11 @@ def print_WU(uczestnicy, path):
     rendered_pages = []
 
     for i, uczestnik in enumerate(uczestnicy, start=1):
-        context = {"numer_strony": str(i), "uczestnik": uczestnik}
+        context = {
+            "numer_strony": str(i),
+            "uczestnik": uczestnik,
+            "pelnomocnik": cfg.PELNOMOCNIK,
+        }
         template = load_template("KW-WU.html")
         html = template.render(**context)
         rendered_pages.append(html)
